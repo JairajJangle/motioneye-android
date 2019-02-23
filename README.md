@@ -16,3 +16,4 @@ If you are a developer and you wish to contribute to the app please fork the pro
 
 ###### Licensing
 motionEye app - Home Surveillance System application is licensed under [GNU GPL v3](https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE)
+[![Foo](https://www.gnu.org/graphics/gplv3-with-text-136x68.png)](https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE)
