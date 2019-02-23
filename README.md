@@ -5,4 +5,8 @@ Google Play Store link: https://play.google.com/store/apps/details?id=com.jairaj
 
 Apply for the Beta Program for the app as this repo is currently in sync with Beta Release, becasue, unfortunately I lost my sources for Production Release :(
 
-Please fork this repo for contributing to this app and make it even better.
+###### Want to contribute?
+If you are a developer and you wish to contribute to the app please fork the project and submit a pull request on the dev branch.
+
+###### Licensing
+motionEye app - Home Surveillance System application is licensed under [GNU GPL v3](https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE)
