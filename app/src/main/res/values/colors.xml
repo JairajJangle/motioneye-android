@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="motioneye_blue">#3598DA</color>
+    <color name="motioneye_grey">#424242</color>
+    <color name="motioneye_dark_grey">#212121</color>
+    <color name="motioneye_darker_grey">#101010</color>
+    <color name="text_dark_grey">#666666</color>
+    <color name="alert_text">#FFFFFF</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="button_bg">#383838</color>
+</resources>

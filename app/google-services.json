@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "537103910407",
+    "firebase_url": "https://motioneye-b6e3a.firebaseio.com",
+    "project_id": "motioneye-b6e3a",
+    "storage_bucket": "motioneye-b6e3a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537103910407:android:436b64ddb7e8c7c8",
+        "android_client_info": {
+          "package_name": "com.jairaj.janglegmail.motioneye"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537103910407-bga73kq2rql2vn7hdrrhjil7na8u9p0q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jairaj.janglegmail.motioneye",
+            "certificate_hash": "a178fd96f37dfdea900d9b488311333160544c8d"
+          }
+        },
+        {
+          "client_id": "537103910407-hsiq4ifi9vuk1r955kla33ncckhnqho4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDri4C7zkjK3QgvthfPYMAETOIGr8zMIKU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537103910407-hsiq4ifi9vuk1r955kla33ncckhnqho4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      },
+      "admob_app_id": "ca-app-pub-7081069887552324~4679468464"
+    }
+  ],
+  "configuration_version": "1"
+}
