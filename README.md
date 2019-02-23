@@ -14,6 +14,9 @@ Apply for the Beta Program for the app as this repo is currently in sync with Be
 ###### Want to contribute?
 If you are a developer and you wish to contribute to the app please fork the project and submit a pull request on the dev branch.
 
+---
 ###### Licensing
 motionEye app - Home Surveillance System application is licensed under [GNU GPL v3](https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE)
+
 [![Foo](https://www.gnu.org/graphics/gplv3-with-text-136x68.png)](https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE)
+---
