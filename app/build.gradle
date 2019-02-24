@@ -11,6 +11,7 @@ android {
         versionCode 34
         versionName "0.9.4.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {

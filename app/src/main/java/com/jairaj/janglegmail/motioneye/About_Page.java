@@ -11,7 +11,6 @@ import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class About_Page extends AppCompatActivity
@@ -22,7 +21,8 @@ public class About_Page extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about__page);
 
-        Button send_fb = findViewById((R.id.send_feedb));
+        Button send_fb = findViewById(R.id.send_feedb);
+        Button join_dev = findViewById(R.id.join_dev);
         Button view_steps = findViewById(R.id.button_install_steps);
         ImageButton back_button = findViewById(R.id.about_backbutton);
 
@@ -43,6 +43,9 @@ public class About_Page extends AppCompatActivity
 
         credits_showcase.setText(Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt'> MaterialTapTargetPrompt</a>"));
         credits_showcase.setMovementMethod(LinkMovementMethod.getInstance());
+
+        join_dev.setText(Html.fromHtml("<a href= 'https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem'> Be a Dev</a>"));
+        join_dev.setMovementMethod(LinkMovementMethod.getInstance());
 
         apache_1.setText(Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/LICENSE'> Apache License</a>"));
         apache_1.setMovementMethod(LinkMovementMethod.getInstance());

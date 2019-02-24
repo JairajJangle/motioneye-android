@@ -12,11 +12,11 @@
 
     <application
         android:label="Motion Eye"
-        android:banner="@drawable/motion_eye_banner"
         android:icon="@mipmap/me_adp_ic"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:banner="@drawable/motion_eye_banner">
 
         <activity
             android:name=".Add_Cam"

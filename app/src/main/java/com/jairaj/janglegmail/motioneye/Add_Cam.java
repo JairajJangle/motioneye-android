@@ -2,29 +2,21 @@
 package com.jairaj.janglegmail.motioneye;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -40,9 +32,6 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;*/
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -320,7 +309,7 @@ public class Add_Cam extends AppCompatActivity
 
         toolbar.setTitle(R.string.Camera_List);
 
-        fab.setVisibility(View.VISIBLE);
+        fab.show();
 
         //display_ad();
         checked = false;
@@ -807,9 +796,9 @@ public class Add_Cam extends AppCompatActivity
             toolbar.setTitle("");
 
         if(fab.getVisibility() == View.GONE)
-            fab.setVisibility(View.VISIBLE);
+            fab.show();
         else
-            fab.setVisibility(View.GONE);
+            fab.hide();
 
         checked = !checked;
     }
