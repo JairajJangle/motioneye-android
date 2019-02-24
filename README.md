@@ -1,6 +1,6 @@
 # Get it on Play Store
 
-[[Clck me to get the app](https://lh3.googleusercontent.com/oP-cPUAKRhaikPnu6FI3EISNcypEbyxZej3P9xNHvJSzk1F00ArtnYbotDvpEGDCJzJB=s180-rw)](https://play.google.com/store/apps/details?id=com.jairaj.janglegmail.motioneye)
+[![Foo](https://lh3.googleusercontent.com/oP-cPUAKRhaikPnu6FI3EISNcypEbyxZej3P9xNHvJSzk1F00ArtnYbotDvpEGDCJzJB=s180-rw)](https://play.google.com/store/apps/details?id=com.jairaj.janglegmail.motioneye)
 
 ---
 
