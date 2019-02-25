@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -41,8 +42,6 @@ import java.util.Map;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class Add_Cam extends AppCompatActivity
 {
@@ -133,8 +132,24 @@ public class Add_Cam extends AppCompatActivity
             @Override
             public void run()
             {
-                show_hide_drive_button();
-                show_hide_prev();
+                final Handler handler =  new Handler()
+                {
+                    @Override
+                    public void handleMessage(Message msg)
+                    {
+                        show_hide_drive_button();
+                        show_hide_prev();
+                    }
+                };
+
+                Thread t = new Thread() {
+                    @Override
+                    public void run() {
+                        handler.sendEmptyMessage(0);
+                    }
+                };
+
+                t.run();
             }
         });
 
@@ -241,7 +256,25 @@ public class Add_Cam extends AppCompatActivity
                 label_url_port.put(label, url_port);
             }
         }
-        add_to_list();
+
+        final Handler handler =  new Handler()
+        {
+            @Override
+            public void handleMessage(Message msg)
+            {
+                add_to_list();
+            }
+        };
+
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                handler.sendEmptyMessage(0);
+            }
+        };
+
+        t.run();
+
         res.close();
     }
 
@@ -319,8 +352,25 @@ public class Add_Cam extends AppCompatActivity
             @Override
             public void run()
             {
-                show_hide_drive_button();
-                show_hide_prev();
+                final Handler handler =  new Handler()
+                {
+                    @Override
+                    public void handleMessage(Message msg)
+                    {
+                        show_hide_drive_button();
+                        show_hide_prev();
+                    }
+                };
+
+                Thread t = new Thread() {
+                    @Override
+                    public void run() {
+                        handler.sendEmptyMessage(0);
+                    }
+                };
+
+                t.run();
+
                 if(resultCode != 2)
                 {
                     boolean shit_b;
