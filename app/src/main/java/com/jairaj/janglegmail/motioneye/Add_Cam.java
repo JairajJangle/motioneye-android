@@ -57,7 +57,6 @@ public class Add_Cam extends AppCompatActivity
     //AdListener adListener; //Listener for ads
     short isFirstTimeDrive_v = 0; //0 = never appeared before; 1 = First Time; 2 = not First Time
     int target_for_drive_icon = 0;
-    volatile boolean display_tut_recursion = false;
 
     FloatingActionButton fab; //object storing id of FAB in linked layout xml
     // Create a HashMap List from String Array elements
