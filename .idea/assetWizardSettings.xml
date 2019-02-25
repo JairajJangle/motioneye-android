@@ -24,7 +24,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="trimmed" value="true" />
+                                                <entry key="paddingPercent" value="10" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -60,7 +60,7 @@
                                       <entry key="imageAsset" value="$USER_HOME$/Desktop/github_mark.svg" />
                                       <entry key="outputName" value="ic_mail" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="161616" />
+                                      <entry key="themeColor" value="424242" />
                                     </map>
                                   </option>
                                 </PersistentState>

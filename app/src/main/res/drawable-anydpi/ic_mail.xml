@@ -14,7 +14,7 @@
   ~   The licenses for most software and other practical works are designed
   ~ to take away your freedom to share and change the works.  By contrast,
   ~ the GNU General Public License is intended to guarantee your freedom to
-  ~ share and change all versions of a program-to make sure it remains free
+  ~ share and change all versions of a program--to make sure it remains free
   ~ software for all its users.  We, the Free Software Foundation, use the
   ~ GNU General Public License for most of our software; it applies also to
   ~ any other work released this way by its authors.  You can apply it to
@@ -678,11 +678,11 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
-    android:viewportWidth="20"
-    android:viewportHeight="20"
-    android:tint="#161616">
-  <group android:translateX="-2"
-      android:translateY="-2">
+    android:viewportWidth="28.8"
+    android:viewportHeight="28.8"
+    android:tint="#424242">
+  <group android:translateX="2.4"
+      android:translateY="2.4">
       <path
           android:fillColor="#FF000000"
           android:pathData="M20,4L4,4c-1.1,0 -1.99,0.9 -1.99,2L2,18c0,1.1 0.9,2 2,2h16c1.1,0 2,-0.9 2,-2L22,6c0,-1.1 -0.9,-2 -2,-2zM20,8l-8,5 -8,-5L4,6l8,5 8,-5v2z"/>
