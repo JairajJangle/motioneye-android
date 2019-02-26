@@ -1,4 +1,3 @@
-//Resolve Call Numbers
 package com.jairaj.janglegmail.motioneye;
 
 import android.Manifest;
@@ -860,7 +859,7 @@ public class Add_Cam extends AppCompatActivity
             // first time
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("RanBefore", true);
-            editor.commit();
+            editor.apply();
         }
         return !ranBefore;
     }
@@ -873,7 +872,7 @@ public class Add_Cam extends AppCompatActivity
             // first time
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("Device_added_before", true);
-            editor.commit();
+            editor.apply();
         }
         return !ranBefore;
     }
@@ -887,7 +886,7 @@ public class Add_Cam extends AppCompatActivity
             // first time
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("Drive_RanBefore", true);
-            editor.commit();
+            editor.apply();
         }
         return !ranBefore;
     }
@@ -958,7 +957,7 @@ public class Add_Cam extends AppCompatActivity
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("Fab_x", Integer.parseInt(Integer.toString(pos_fab_x)));
             editor.putInt("Fab_y", Integer.parseInt(Integer.toString(pos_fab_y)));
-            editor.commit();
+            editor.apply();
 */
             finish();
         }

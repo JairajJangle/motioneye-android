@@ -53,4 +53,7 @@
     <string name="tut_sub_drive_icon">Click to access motionEye drive folder to view videos and photos triggered by motion detection</string>
     <string name="invalid_drive_warning">Invalid Google drive link!</string>
     <string name="be_a_developer">Be a Developer</string>
+    <string name="button_for_cloud_drive">Button for Cloud Drive</string>
+    <string name="button_to_collapse_and_expand_stream_preview">Button to collapse and expand stream preview</string>
+    <string name="checkbox_to_select_specific_network_camera">Checkbox to select specific network camera</string>
 </resources>

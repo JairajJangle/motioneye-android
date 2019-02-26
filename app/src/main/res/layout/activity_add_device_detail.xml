@@ -42,18 +42,18 @@
         android:id="@+id/textInputLayout3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/inputlayout_for_url"
         android:labelFor="@+id/url_input"
+        android:paddingStart="0dp"
         android:paddingEnd="15dp"
-        android:paddingRight="15dp"
         android:textColorHint="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.500"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/include"
-        android:contentDescription="@string/inputlayout_for_url">
+        app:layout_constraintTop_toTopOf="@+id/include">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/url_input"
@@ -64,7 +64,7 @@
             android:singleLine="true"
             android:textColor="@android:color/background_light"
             android:textColorHint="@android:color/darker_gray"
-            android:visibility="visible"/>
+            android:visibility="visible" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -75,8 +75,8 @@
         android:layout_marginTop="8dp"
         android:contentDescription="@string/inputlayout_for_port"
         android:labelFor="@+id/port_input"
+        android:paddingStart="0dp"
         android:paddingEnd="15dp"
-        android:paddingRight="15dp"
         android:textColorHint="@android:color/darker_gray"
         app:layout_constraintEnd_toStartOf="@+id/buttons_ll"
         app:layout_constraintHorizontal_bias="0.0"
