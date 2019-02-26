@@ -228,7 +228,7 @@ public class Add_Cam extends AppCompatActivity
             @Override
             public void run() {
                 Log.v("List_Count", Integer.toString(d_list.getCount()));
-                //TODO need fix
+                //TODO add option to open by default
                 if (d_list.getChildCount() == 1) {
                     String url = listItems.get(0).get("Second Line");
                     int mode = TextUtils.isEmpty(
