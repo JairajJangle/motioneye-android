@@ -59,7 +59,7 @@ public class web_motion_eye extends AppCompatActivity implements SwipeRefreshLay
     Handler mHandler = new Handler();
     private WebView mContentView;
     String url_port = "";
-    String mode = "";
+    int mode = -1;
     private SwipeRefreshLayout swipe;
 
     private final Runnable mHidePart2Runnable = new Runnable() {
@@ -125,8 +125,8 @@ public class web_motion_eye extends AppCompatActivity implements SwipeRefreshLay
         //Extract the data…
         if (bundle != null)
         {
-            url_port = bundle.getString("URL_PORT");
-            mode = bundle.getString("MODE");
+            url_port = bundle.getString(Constants.KEY_URL_PORT);
+            mode = bundle.getInt(Constants.KEY_MODE);
         }
 
         super.onCreate(savedInstanceState);
@@ -157,10 +157,10 @@ public class web_motion_eye extends AppCompatActivity implements SwipeRefreshLay
 
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
-        if(mode.equals("CAMERA"))
+        if(mode == Constants.MODE_CAMERA)
             progressBar = ProgressDialog.show(web_motion_eye.this, getString(R.string.connecting_mE), getString(R.string.loading));
 
-        else if(mode.equals("DRIVE"))
+        else if(mode == Constants.MODE_DRIVE)
             progressBar = ProgressDialog.show(web_motion_eye.this, getString(R.string.connecting_gD), getString(R.string.loading));
 
         progressBar.setCancelable(true);
