@@ -2,29 +2,22 @@
 package com.jairaj.janglegmail.motioneye;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebSettings;
+import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -36,14 +29,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/*import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;*/
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +38,10 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
-import static android.content.Context.MODE_PRIVATE;
+/*import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;*/
 
 public class Add_Cam extends AppCompatActivity
 {
@@ -157,17 +145,7 @@ public class Add_Cam extends AppCompatActivity
                 if (!checked)
                 {
                     String selected_url_port = ((TextView) view.findViewById(R.id.subtitle_url_port_text)).getText().toString();
-                    //Toast.makeText(getBaseContext(), selected_url_port, Toast.LENGTH_SHORT).show();
-
-                    //Create the bundle
-                    Bundle bundle = new Bundle();
-                    //Add your data from getFactualResults method to bundle
-                    bundle.putString("URL_PORT", selected_url_port);
-                    bundle.putString("MODE", "CAMERA");
-                    Intent i = new Intent(Add_Cam.this, web_motion_eye.class);
-                    //Add the bundle to the intent
-                    i.putExtras(bundle);
-                    startActivity(i);
+                    goToWebMotionEye(selected_url_port, Constants.MODE_CAMERA);
                 }
                 else
                 {
@@ -224,6 +202,24 @@ public class Add_Cam extends AppCompatActivity
                 return true;
             }
         });
+
+        if(listItems.size() == 1){
+            String url = listItems.get(0).get("Second Line");
+            int mode = TextUtils.isEmpty(
+                    myDb.getDrive_from_Label(listItems.get(0).get("First Line")))?
+                    Constants.MODE_CAMERA: Constants.MODE_DRIVE;
+            goToWebMotionEye(url, mode);
+        }
+    }
+
+    private void goToWebMotionEye(String urlPort, @Constants.ServerMode int mode){
+        Bundle bundle = new Bundle();
+        //Add your data from getFactualResults method to bundle
+        bundle.putString(Constants.KEY_URL_PORT, urlPort);
+        bundle.putInt(Constants.KEY_MODE, mode);
+        Intent i = new Intent(Add_Cam.this, web_motion_eye.class);
+        i.putExtras(bundle);
+        startActivity(i);
     }
 
     private void fetch_data()
@@ -437,15 +433,7 @@ public class Add_Cam extends AppCompatActivity
         String Label_text_at_drive_ic_click = LabelView_at_Drive_ic_click.getText().toString();
         String drive_link = myDb.getDrive_from_Label(Label_text_at_drive_ic_click);
 
-        //Create the bundle
-        Bundle bundle = new Bundle();
-        bundle.putString("URL_PORT", drive_link);
-        bundle.putString("MODE", "DRIVE");
-        Intent i = new Intent(Add_Cam.this, web_motion_eye.class);
-        //Add the bundle to the intent
-        i.putExtras(bundle);
-        startActivity(i);
-        //Button btnChild = (Button)vwParentRow.getChildAt(1);
+        goToWebMotionEye(drive_link, Constants.MODE_DRIVE);
     }
 
     public void onExpandCamClick(View v)
