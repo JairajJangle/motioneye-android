@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +19,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -29,6 +34,11 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/*import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;*/
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,11 +47,6 @@ import java.util.Map;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
-
-/*import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;*/
 
 public class Add_Cam extends AppCompatActivity
 {
@@ -57,7 +62,6 @@ public class Add_Cam extends AppCompatActivity
     //AdListener adListener; //Listener for ads
     short isFirstTimeDrive_v = 0; //0 = never appeared before; 1 = First Time; 2 = not First Time
     int target_for_drive_icon = 0;
-    volatile boolean display_tut_recursion = false;
 
     FloatingActionButton fab; //object storing id of FAB in linked layout xml
     // Create a HashMap List from String Array elements
@@ -132,8 +136,24 @@ public class Add_Cam extends AppCompatActivity
             @Override
             public void run()
             {
-                show_hide_drive_button();
-                show_hide_prev();
+                final Handler handler =  new Handler()
+                {
+                    @Override
+                    public void handleMessage(Message msg)
+                    {
+                        show_hide_drive_button();
+                        show_hide_prev();
+                    }
+                };
+
+                Thread t = new Thread() {
+                    @Override
+                    public void run() {
+                        handler.sendEmptyMessage(0);
+                    }
+                };
+
+                t.run();
             }
         });
 
@@ -248,7 +268,25 @@ public class Add_Cam extends AppCompatActivity
                 label_url_port.put(label, url_port);
             }
         }
-        add_to_list();
+
+        final Handler handler =  new Handler()
+        {
+            @Override
+            public void handleMessage(Message msg)
+            {
+                add_to_list();
+            }
+        };
+
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                handler.sendEmptyMessage(0);
+            }
+        };
+
+        t.run();
+
         res.close();
     }
 
@@ -316,7 +354,7 @@ public class Add_Cam extends AppCompatActivity
 
         toolbar.setTitle(R.string.Camera_List);
 
-        fab.setVisibility(View.VISIBLE);
+        fab.show();
 
         //display_ad();
         checked = false;
@@ -326,8 +364,25 @@ public class Add_Cam extends AppCompatActivity
             @Override
             public void run()
             {
-                show_hide_drive_button();
-                show_hide_prev();
+                final Handler handler =  new Handler()
+                {
+                    @Override
+                    public void handleMessage(Message msg)
+                    {
+                        show_hide_drive_button();
+                        show_hide_prev();
+                    }
+                };
+
+                Thread t = new Thread() {
+                    @Override
+                    public void run() {
+                        handler.sendEmptyMessage(0);
+                    }
+                };
+
+                t.run();
+
                 if(resultCode != 2)
                 {
                     boolean shit_b;
@@ -795,9 +850,9 @@ public class Add_Cam extends AppCompatActivity
             toolbar.setTitle("");
 
         if(fab.getVisibility() == View.GONE)
-            fab.setVisibility(View.VISIBLE);
+            fab.show();
         else
-            fab.setVisibility(View.GONE);
+            fab.hide();
 
         checked = !checked;
     }

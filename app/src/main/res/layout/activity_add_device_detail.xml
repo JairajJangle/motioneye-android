@@ -98,10 +98,12 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="30dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
+        android:background="@drawable/circle_bg"
+        android:backgroundTint="@color/button_bg"
         android:contentDescription="@string/imageview_for_url_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/include"
@@ -109,11 +111,13 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="30dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/circle_bg"
+        android:backgroundTint="@color/button_bg"
         android:contentDescription="@string/imageview_for_port_icon"
         app:layout_constraintEnd_toStartOf="@+id/textInputLayout2"
         app:layout_constraintHorizontal_bias="0.0"
@@ -150,12 +154,14 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="30dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:adjustViewBounds="false"
+        android:background="@drawable/circle_bg"
+        android:backgroundTint="@color/button_bg"
         android:contentDescription="@string/imageview_for_label_icon"
         app:layout_constraintEnd_toStartOf="@+id/textInputLayout"
         app:layout_constraintHorizontal_bias="0.0"
@@ -165,10 +171,12 @@
 
     <ImageView
         android:id="@+id/imageView6"
-        android:layout_width="30dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
+        android:background="@drawable/circle_bg"
+        android:backgroundTint="@color/button_bg"
         app:layout_constraintEnd_toStartOf="@+id/textInputLayout4"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -208,7 +216,8 @@
         android:layout_height="0dp"
         android:layout_margin="0dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/button_bg"
+        android:background="@drawable/buttonshape"
+        android:backgroundTint="@color/button_bg"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:padding="0dp"

@@ -52,4 +52,5 @@
     <string name="tut_title_drive_icon">This is the Drive icon</string>
     <string name="tut_sub_drive_icon">Click to access motionEye drive folder to view videos and photos triggered by motion detection</string>
     <string name="invalid_drive_warning">Invalid Google drive link!</string>
+    <string name="be_a_developer">Be a Developer</string>
 </resources>

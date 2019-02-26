@@ -7,10 +7,47 @@
     android:background="@color/motioneye_grey"
     tools:context=".About_Page">
 
+    <LinearLayout
+        android:id="@+id/LinearLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/github_mark_ic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/email_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_install_steps"
+            app:srcCompat="@drawable/github_mark" />
+
+        <Button
+            android:id="@+id/join_dev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/buttonshape"
+            android:text="@string/be_a_developer"
+            android:textColorLink="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.204"
+            app:layout_constraintStart_toEndOf="@+id/github_mark_ic"
+            app:layout_constraintTop_toBottomOf="@+id/button_install_steps" />
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="200dp"
-        android:layout_height="168dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginTop="24dp"
         android:contentDescription="@string/motion_eye_logo"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,6 +85,7 @@
         android:layout_height="wrap_content"
         android:text="@string/credits"
         android:textColor="@android:color/background_light"
+        android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -56,17 +94,20 @@
         android:id="@+id/button_install_steps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/buttonshape"
         android:text="@string/steps_to_install_motioneye"
+        android:textColorLink="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="20dp"
         android:baselineAligned="false"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -76,26 +117,40 @@
 
         <ImageView
             android:id="@+id/send_fb_ic"
-            android:layout_width="22dp"
-            android:layout_height="25dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
+            android:background="@drawable/buttonshape_lesspad"
             android:contentDescription="@string/email_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_install_steps"
-            app:srcCompat="@drawable/white_mail" />
+            app:srcCompat="@drawable/ic_mail" />
 
         <Button
             android:id="@+id/send_feedb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/buttonshape"
             android:text="@string/send_feedback"
+            android:textColorLink="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.204"
-            app:layout_constraintStart_toEndOf="@+id/send_fb_ic"
+            app:layout_constraintStart_toEndOf="@+id/github_mark_ic"
             app:layout_constraintTop_toBottomOf="@+id/button_install_steps" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -113,13 +168,14 @@
             android:id="@+id/Credit_ShowCase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:text="MaterialTapTargetPrompt"
             android:textColor="@android:color/background_light"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout"
             app:layout_constraintStart_toStartOf="@+id/linearLayout"
@@ -130,11 +186,12 @@
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:text="-"
-            android:textColor="@android:color/background_light" />
+            android:textColor="@android:color/background_light"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/Apache_1"
@@ -145,14 +202,15 @@
             android:autoLink="none"
             android:linksClickable="false"
             android:text="Apache License"
-            android:textColor="@android:color/background_light" />
+            android:textColor="@android:color/background_light"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -166,17 +224,19 @@
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:text="Icons"
-            android:textColor="@android:color/background_light" />
+            android:textColor="@android:color/background_light"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:text="-"
-            android:textColor="@android:color/background_light" />
+            android:textColor="@android:color/background_light"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/Apache_2"
@@ -185,7 +245,8 @@
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:text="Apache License"
-            android:textColor="@android:color/background_light" />
+            android:textColor="@android:color/background_light"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <ImageButton
