@@ -13,7 +13,8 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="Camera_List">Camera List</string>
     <string name="action_about">About</string>
-    <string name="tut_sub_device_list">Tap once to connect  Tap and Hold to reveal edit and delete options</string>
+    <string name="tut_sub_device_list">Tap once to connect  Tap and Hold to reveal edit and delete options\n
+    Click on - button to hide the preview</string>
     <string name="tut_title_device_list">This is your first device</string>
     <string name="tut_title_add_button">Add your first device</string>
     <string name="tut_sub_add_button">Tap the + button to get started \nThis button can be dragged and dropped</string>

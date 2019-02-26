@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -151,7 +152,6 @@ public class Add_Cam extends AppCompatActivity
                         handler.sendEmptyMessage(0);
                     }
                 };
-
                 t.run();
             }
         });
@@ -222,13 +222,22 @@ public class Add_Cam extends AppCompatActivity
             }
         });
 
-        if(listItems.size() == 1){
-            String url = listItems.get(0).get("Second Line");
-            int mode = TextUtils.isEmpty(
-                    myDb.getDrive_from_Label(listItems.get(0).get("First Line")))?
-                    Constants.MODE_CAMERA: Constants.MODE_DRIVE;
-            goToWebMotionEye(url, mode);
-        }
+        Log.v("Status", "Above if");
+        // Add this Runnable
+        d_list.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.v("List_Count", Integer.toString(d_list.getCount()));
+                //TODO need fix
+                if (d_list.getChildCount() == 1) {
+                    String url = listItems.get(0).get("Second Line");
+                    int mode = TextUtils.isEmpty(
+                            myDb.getDrive_from_Label(listItems.get(0).get("First Line"))) ?
+                            Constants.MODE_CAMERA : Constants.MODE_DRIVE;
+                    goToWebMotionEye(url, mode);
+                }
+            }
+        });
     }
 
     private void goToWebMotionEye(String urlPort, @Constants.ServerMode int mode){
