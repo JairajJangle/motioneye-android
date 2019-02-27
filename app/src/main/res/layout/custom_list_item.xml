@@ -2,13 +2,15 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
+    android:id="@+id/custom_list_rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:animationCache="true"
-    android:background="@color/motioneye_grey"
-    android:descendantFocusability="blocksDescendants">
+    android:background="@drawable/buttonshape_lesspad"
+    android:backgroundTint="@color/motioneye_dark_grey"
+    android:descendantFocusability="blocksDescendants"
+    android:paddingBottom="0dp">
 
     <TextView
         android:id="@+id/title_label_text"
@@ -52,8 +54,8 @@
         android:layout_height="62dp"
         android:buttonTint="#3598DA"
         android:clickable="false"
-        android:focusable="false"
         android:contentDescription="@string/checkbox_to_select_specific_network_camera"
+        android:focusable="false"
         android:focusableInTouchMode="false"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,11 +65,11 @@
         android:id="@+id/button_drive"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginTop="6dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/circle_button"
-        android:onClick="onDriveIconClick"
         android:contentDescription="@string/button_for_cloud_drive"
+        android:onClick="onDriveIconClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/white_g_drive" />
@@ -79,8 +81,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="8dp"
-        android:onClick="onExpandCamClick"
         android:contentDescription="@string/button_to_collapse_and_expand_stream_preview"
+        android:onClick="onExpandCamClick"
         app:layout_constraintEnd_toStartOf="@+id/title_label_text"
         app:layout_constraintStart_toEndOf="@+id/checkBox"
         app:layout_constraintTop_toTopOf="parent"
@@ -91,7 +93,7 @@
         android:layout_width="0dp"
         android:layout_height="250dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="8dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -99,12 +101,12 @@
         app:layout_constraintTop_toBottomOf="@+id/subtitle_url_port_text" />
 
     <!--<WebView-->
-        <!--android:id="@+id/preview_wv"-->
-        <!--android:layout_width="79dp"-->
-        <!--android:layout_height="62dp"-->
-        <!--android:visibility="visible"-->
-        <!--app:layout_constraintBottom_toBottomOf="@+id/subtitle_url_port_text"-->
-        <!--app:layout_constraintStart_toEndOf="@+id/checkBox"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
+    <!--android:id="@+id/preview_wv"-->
+    <!--android:layout_width="79dp"-->
+    <!--android:layout_height="62dp"-->
+    <!--android:visibility="visible"-->
+    <!--app:layout_constraintBottom_toBottomOf="@+id/subtitle_url_port_text"-->
+    <!--app:layout_constraintStart_toEndOf="@+id/checkBox"-->
+    <!--app:layout_constraintTop_toTopOf="parent" />-->
 
 </android.support.constraint.ConstraintLayout>

@@ -37,19 +37,22 @@
         android:id="@+id/dummy_show_case_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="14dp"
         android:background="@color/transparent"
         android:clickable="false"
+        android:contentDescription="@string/dummy_button_for_showcaseview"
+        android:labelFor="@+id/device_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/device_list"
-        android:labelFor="@+id/device_list"
-        android:contentDescription="@string/dummy_button_for_showcaseview"/>
+        app:layout_constraintTop_toTopOf="@+id/device_list" />
 
     <ListView
         android:id="@+id/device_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:dividerHeight="10dp"
+        android:divider="@color/motioneye_grey"
         android:footerDividersEnabled="false"
         app:layout_constraintBottom_toBottomOf="@+id/include2"
         app:layout_constraintEnd_toEndOf="parent"

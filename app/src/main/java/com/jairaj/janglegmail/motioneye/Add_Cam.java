@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -26,6 +27,7 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -539,6 +541,8 @@ public class Add_Cam extends AppCompatActivity
 
             preview_view.setVisibility(View.VISIBLE);
 
+            ((ConstraintLayout)preview_view.getParent()).setPadding(0, 0, 0, 60);
+
             preview_view.getSettings().setJavaScriptEnabled(true);
             preview_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
             preview_view.setWebViewClient(new WebViewClient());
@@ -556,6 +560,8 @@ public class Add_Cam extends AppCompatActivity
             boolean isUpdate = myDb.updatePrevStat(Label_text_at_expand_ic_click, "0");
             if(!isUpdate)
                 Toast.makeText(Add_Cam.this, R.string.error_try_delete,Toast.LENGTH_LONG).show();
+
+            ((ConstraintLayout)preview_view.getParent()).setPadding(0, 0, 0, 0);
 
             expand_button.setImageResource(R.drawable.expand_down);
             preview_view.loadUrl("about:blank");
@@ -760,87 +766,7 @@ public class Add_Cam extends AppCompatActivity
             }
             i++;
         }
-
-        //new LoadPreview(d_list, myDb).execute();
-//
-//        i = 0;
-//        while (i < d_list.getChildCount())
-//        {
-//            view = d_list.getChildAt(i);
-//            TextView Each_Label = view.findViewById(R.id.title_label_text);
-//            String Each_label_text = Each_Label.getText().toString();
-//
-//            //TODO in Background Test Unstable
-//            String url_link = myDb.getUrl_from_Label(Each_label_text);
-//            WebView mContentView = view.findViewById(R.id.preview_wv);
-//            mContentView.getSettings().setJavaScriptEnabled(true);
-//            mContentView.setWebViewClient(new WebViewClient());
-//            mContentView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-//            mContentView.loadUrl(url_link);
-//            mContentView.setInitialScale(50);
-//            i++;
-//        }
     }
-
-//    private boolean mRunning;
-//
-//    static Handler mHandler = new Handler();
-//
-//    Runnable mUpdater = new Runnable()
-//    {
-//        @Override
-//        public void run() {
-//            // check if still in focus
-//            if (!mRunning) return;
-//
-//            View view;
-//            int i = 0;
-//            while (i < d_list.getChildCount())
-//            {
-//                view = d_list.getChildAt(i);
-//                TextView Each_Label = view.findViewById(R.id.title_label_text);
-//                String Each_label_text = Each_Label.getText().toString();
-//
-//                //TODO in Background Test Unstable
-//                String url_link = myDb.getUrl_from_Label(Each_label_text);
-//                WebView mContentView = view.findViewById(R.id.preview_wv);
-//                mContentView.getSettings().setJavaScriptEnabled(true);
-//                mContentView.setWebViewClient(new WebViewClient());
-//                mContentView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-//
-////                mContentView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-////                if (Build.VERSION.SDK_INT >= 19) {
-////                    mContentView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-////                }
-////                else {
-////                    mContentView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-////                }
-//
-//                mContentView.loadUrl(url_link);
-//                mContentView.setInitialScale(50);
-//                i++;
-//            }
-//            // upadte your list view
-//
-//            // schedule next run
-//            //mHandler.postDelayed(this, 1000); // set time here to refresh views
-//        }
-//    };
-//
-//
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        mRunning = true;
-//        // start first run by hand
-//        mHandler.post(mUpdater);
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        mRunning= false;
-//    }
 
     private int getItemCheckedCount_in_d_list()
     {
