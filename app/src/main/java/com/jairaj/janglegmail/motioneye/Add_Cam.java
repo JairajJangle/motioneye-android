@@ -19,10 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -130,7 +126,21 @@ public class Add_Cam extends AppCompatActivity
             }
         });
 
-        fetch_data();
+        final Handler handler_fetch_data =  new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                fetch_data();
+            }
+        };
+
+        Thread t_fetch_data = new Thread() {
+            @Override
+            public void run() {
+                handler_fetch_data.sendEmptyMessage(0);
+            }
+        };
+        t_fetch_data.run();
+
         // Add this Runnable
         d_list.post(new Runnable() {
             @Override
@@ -240,7 +250,8 @@ public class Add_Cam extends AppCompatActivity
         });
     }
 
-    private void goToWebMotionEye(String urlPort, @Constants.ServerMode int mode){
+    private void goToWebMotionEye(String urlPort, @Constants.ServerMode int mode)
+    {
         Bundle bundle = new Bundle();
         //Add your data from getFactualResults method to bundle
         bundle.putString(Constants.KEY_URL_PORT, urlPort);
@@ -393,21 +404,21 @@ public class Add_Cam extends AppCompatActivity
 
                 if(resultCode != 2)
                 {
-                    boolean shit_b;
-                    String shit_s = "";
-                    int shit_i;
+                    boolean foo_b;
+                    String foo_s = "";
+                    int foo_i;
 
-                    shit_b = isFirstTimeDevice();
-                    shit_i = isFirstTimeDrive_v;
+                    foo_b = isFirstTimeDevice();
+                    foo_i = isFirstTimeDrive_v;
 
-                    shit_s = "Boolean is: " + Boolean.toString(shit_b) + " Integer is: " + Integer.toString(shit_i);
-                    //Toast.makeText(getBaseContext(), shit_s, Toast.LENGTH_SHORT).show();
+                    foo_s = "Boolean is: " + Boolean.toString(foo_b) + " Integer is: " + Integer.toString(foo_i);
+                    //Toast.makeText(getBaseContext(), foo_s, Toast.LENGTH_SHORT).show();
 
-                    if(shit_b && (isFirstTimeDrive_v == 0))
+                    if(foo_b && (isFirstTimeDrive_v == 0))
                         display_tutorial(2);
-                    else if(!shit_b && (isFirstTimeDrive_v == 1))
+                    else if(!foo_b && (isFirstTimeDrive_v == 1))
                         display_tutorial(3);
-                    else if(shit_b && (isFirstTimeDrive_v == 1))
+                    else if(foo_b && (isFirstTimeDrive_v == 1))
                         display_tutorial(4);
                 }
             }
