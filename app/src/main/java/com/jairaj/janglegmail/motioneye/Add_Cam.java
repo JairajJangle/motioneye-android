@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -27,7 +26,6 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -148,13 +146,22 @@ public class Add_Cam extends AppCompatActivity
             @Override
             public void run()
             {
-                final Handler handler =  new Handler()
+                final Handler handler =  new  Handler()
                 {
                     @Override
                     public void handleMessage(Message msg)
                     {
                         show_hide_drive_button();
                         show_hide_prev();
+
+                        if (d_list.getCount() == 1)
+                        {
+                            String url = listItems.get(0).get("Second Line");
+                            int mode = TextUtils.isEmpty(
+                                    myDb.getDrive_from_Label(listItems.get(0).get("First Line"))) ?
+                                    Constants.MODE_CAMERA : Constants.MODE_DRIVE;
+                            goToWebMotionEye(url, mode);
+                        }
                     }
                 };
 
@@ -233,27 +240,11 @@ public class Add_Cam extends AppCompatActivity
                 return true;
             }
         });
-
-        Log.v("Status", "Above if");
-        // Add this Runnable
-        d_list.post(new Runnable() {
-            @Override
-            public void run() {
-                Log.v("List_Count", Integer.toString(d_list.getCount()));
-                //TODO add option to open by default
-                if (d_list.getChildCount() == 1) {
-                    String url = listItems.get(0).get("Second Line");
-                    int mode = TextUtils.isEmpty(
-                            myDb.getDrive_from_Label(listItems.get(0).get("First Line"))) ?
-                            Constants.MODE_CAMERA : Constants.MODE_DRIVE;
-                    goToWebMotionEye(url, mode);
-                }
-            }
-        });
     }
 
     private void goToWebMotionEye(String urlPort, @Constants.ServerMode int mode)
     {
+        Log.v("In_goToWebMotionEye", "In_goToWebMotionEye");
         Bundle bundle = new Bundle();
         //Add your data from getFactualResults method to bundle
         bundle.putString(Constants.KEY_URL_PORT, urlPort);
@@ -716,6 +707,8 @@ public class Add_Cam extends AppCompatActivity
                 expand_button.setImageResource(R.drawable.collapse_button);
 
                 preview_view.setVisibility(View.VISIBLE);
+
+                ((ConstraintLayout)preview_view.getParent()).setPadding(0, 0, 0, 60);
 
                 preview_view.getSettings().setJavaScriptEnabled(true);
                 preview_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);

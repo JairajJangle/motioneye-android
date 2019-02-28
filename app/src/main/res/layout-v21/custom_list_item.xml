@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:animationCache="true"
-    android:background="@drawable/lv_element_bg"
+    android:background="@drawable/buttonshape_lesspad"
+    android:backgroundTint="@color/listview_bg"
     android:descendantFocusability="blocksDescendants"
     android:paddingBottom="0dp">
 

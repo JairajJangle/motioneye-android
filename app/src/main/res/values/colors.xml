@@ -8,6 +8,7 @@
     <color name="motioneye_blue">#3598DA</color>
     <color name="motioneye_grey">#424242</color>
     <color name="motioneye_dark_grey">#212121</color>
+    <color name="listview_bg">#A1212121</color>
     <color name="motioneye_darker_grey">#101010</color>
     <color name="text_dark_grey">#666666</color>
     <color name="alert_text">#FFFFFF</color>
