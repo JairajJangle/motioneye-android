@@ -74,14 +74,16 @@ public class About_Page extends AppCompatActivity
 
     public void open_in_chrome(String url)
     {
-        try {
+        try
+        {
             Intent i = new Intent("android.intent.action.MAIN");
             i.setComponent(ComponentName.unflattenFromString("com.android.chrome/com.android.chrome.Main"));
             i.addCategory("android.intent.category.LAUNCHER");
             i.setData(Uri.parse(url));
             startActivity(i);
         }
-        catch(ActivityNotFoundException e) {
+        catch(ActivityNotFoundException e)
+        {
             // Chrome is not installed
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(i);

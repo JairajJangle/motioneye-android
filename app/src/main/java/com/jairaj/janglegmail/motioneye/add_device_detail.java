@@ -24,9 +24,8 @@ public class add_device_detail extends AppCompatActivity
     private static final String TAG = "GG";
     DataBase myDb;
 
-    String edit_mode = "";
+    int edit_mode = 0;
     String edit_label = "";
-    String edit_url_port = "";
     String edit_port = "";
     String edit_url = "";
     String edit_drive_link = "";
@@ -48,7 +47,7 @@ public class add_device_detail extends AppCompatActivity
         //Extract the data…
         if (bundle != null)
         {
-            edit_mode = bundle.getString("EDIT");
+            edit_mode = bundle.getInt("EDIT");
             edit_label = bundle.getString("LABEL");
         }
 
@@ -64,7 +63,6 @@ public class add_device_detail extends AppCompatActivity
         label_input_j = findViewById(R.id.label_input);
         drive_link_input_j = findViewById(R.id.drive_input);
 
-        //TODO: Check working
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
@@ -77,7 +75,7 @@ public class add_device_detail extends AppCompatActivity
 
         setSupportActionBar(toolbar);
 
-        if(edit_mode.equals("1"))
+        if(edit_mode == Constants.EDIT_MODE_EXIST_DEV)
         {
             edit_url = myDb.getUrl_from_Label(edit_label);
             edit_port = myDb.getPort_from_Label(edit_label);
@@ -116,7 +114,7 @@ public class add_device_detail extends AppCompatActivity
                 Intent previousScreen = new Intent(getApplicationContext(), Add_Cam.class);
                 previousScreen.putExtra("Code",0);
 
-                edit_mode = "2";
+                edit_mode = Constants.EDIT_CANCELLED;
                 save_to_file();
 
                 setResult(2, previousScreen);
@@ -138,7 +136,7 @@ public class add_device_detail extends AppCompatActivity
         {
             switch (edit_mode)
             {
-                case "0":
+                case Constants.EDIT_MODE_NEW_DEV:
                     boolean isInserted = myDb.insertData(label_input, url_input, port_input, drive_link_input, "1");
                     if(isInserted)
                         Toast.makeText(getBaseContext(), R.string.toast_added,
@@ -148,7 +146,7 @@ public class add_device_detail extends AppCompatActivity
                                 Toast.LENGTH_SHORT).show();
                     break;
 
-                case "1":
+                case Constants.EDIT_MODE_EXIST_DEV:
                     boolean isUpdate = myDb.updateData(edit_label, label_input, url_input, port_input, drive_link_input);
                     if(!isUpdate)
                         Toast.makeText(add_device_detail.this, R.string.error_try_delete,Toast.LENGTH_LONG).show();
@@ -159,28 +157,28 @@ public class add_device_detail extends AppCompatActivity
 
         else if (!URLUtil.isValidUrl(url_input))
         {
-            if(!edit_mode.equals("2"))
+            if(edit_mode != Constants.EDIT_CANCELLED)
                 Toast.makeText(getBaseContext(), R.string.warning_invalid_url, Toast.LENGTH_SHORT).show();
             should_proceed = 0;
         }
 
         else if (url_input.equals(""))
         {
-            if(!edit_mode.equals("2"))
+            if(edit_mode != Constants.EDIT_CANCELLED)
                 Toast.makeText(getBaseContext(), R.string.warning_empty_url, Toast.LENGTH_SHORT).show();
             should_proceed = 0;
         }
 
         else if (label_input.equals(""))
         {
-            if(!edit_mode.equals("2"))
+            if(edit_mode != Constants.EDIT_CANCELLED)
                 Toast.makeText(getBaseContext(), R.string.warning_empty_label, Toast.LENGTH_SHORT).show();
             should_proceed = 0;
         }
 
         else if(!URLUtil.isValidUrl(drive_link_input))
         {
-            if(!edit_mode.equals("2"))
+            if(edit_mode != Constants.EDIT_CANCELLED)
                 Toast.makeText(getBaseContext(), R.string.invalid_drive_warning, Toast.LENGTH_SHORT).show();
             should_proceed = 0;
         }

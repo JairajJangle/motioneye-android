@@ -31,7 +31,9 @@
 
     <include
         android:id="@+id/include2"
-        layout="@layout/content_add__cam" />
+        layout="@layout/content_add__cam"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/dummy_show_case_button"

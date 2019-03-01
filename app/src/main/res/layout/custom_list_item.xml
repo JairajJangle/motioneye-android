@@ -32,7 +32,6 @@
         android:id="@+id/subtitle_url_port_text"
         android:layout_width="0dp"
         android:layout_height="27dp"
-        android:layout_gravity="start"
         android:paddingStart="10dp"
         android:paddingEnd="5dp"
         android:paddingBottom="0dp"
@@ -70,9 +69,10 @@
         android:background="@drawable/circle_button"
         android:contentDescription="@string/button_for_cloud_drive"
         android:onClick="onDriveIconClick"
+        android:src="@drawable/white_g_drive"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/white_g_drive" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/expand_button"
@@ -81,12 +81,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="8dp"
+        app:srcCompat="@drawable/expand_down"
         android:contentDescription="@string/button_to_collapse_and_expand_stream_preview"
         android:onClick="onExpandCamClick"
         app:layout_constraintEnd_toStartOf="@+id/title_label_text"
         app:layout_constraintStart_toEndOf="@+id/checkBox"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/expand_down" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <WebView
         android:id="@+id/preview_webview"
@@ -95,10 +95,14 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subtitle_url_port_text" />
+        app:layout_constraintTop_toBottomOf="@+id/subtitle_url_port_text"
+        app:layout_constraintVertical_bias="0.0" />
 
     <!--<WebView-->
     <!--android:id="@+id/preview_wv"-->

@@ -127,7 +127,7 @@ public class Add_Cam extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                goto_add_device_detail("0");
+                goto_add_device_detail(Constants.EDIT_MODE_NEW_DEV);
             }
         });
 
@@ -326,12 +326,12 @@ public class Add_Cam extends AppCompatActivity
         adapter.notifyDataSetChanged();
     }
 
-    private void goto_add_device_detail(String edit_mode)
+    private void goto_add_device_detail(int edit_mode)
     {
         String delete_label = "";
         Bundle bundle = new Bundle();
 
-        if(edit_mode.equals("1"))
+        if(edit_mode == Constants.EDIT_MODE_EXIST_DEV)
         {
             int i = 0;
             while (i < CameraList_ListView.getChildCount())
@@ -353,7 +353,7 @@ public class Add_Cam extends AppCompatActivity
             bundle.putString("LABEL", delete_label);
         }
 
-        bundle.putString("EDIT", edit_mode);
+        bundle.putInt("EDIT", edit_mode);
 
         Intent intent_for_add_device = new Intent(Add_Cam.this, add_device_detail.class);
         //Add the bundle to the intent
@@ -480,7 +480,7 @@ public class Add_Cam extends AppCompatActivity
                     Toast.makeText(getBaseContext(), "Select only one entry to edit", Toast.LENGTH_SHORT).show();
                 }
                 else
-                    goto_add_device_detail("1");
+                    goto_add_device_detail(Constants.EDIT_MODE_EXIST_DEV);
             }
         }
 
@@ -539,7 +539,7 @@ public class Add_Cam extends AppCompatActivity
 
             preview_view.setVisibility(View.VISIBLE);
 
-            ((ConstraintLayout)preview_view.getParent()).setPadding(0, 0, 0, 60);
+            ((ConstraintLayout)preview_view.getParent()).setPadding(0, 0, 0, Constants.PREVIEW_PADDING);
 
             preview_view.getSettings().setJavaScriptEnabled(true);
             preview_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -715,7 +715,7 @@ public class Add_Cam extends AppCompatActivity
 
                 preview_view.setVisibility(View.VISIBLE);
 
-                ((ConstraintLayout)preview_view.getParent()).setPadding(0, 0, 0, 60);
+                ((ConstraintLayout)preview_view.getParent()).setPadding(0, 0, 0, Constants.PREVIEW_PADDING);
 
                 preview_view.getSettings().setJavaScriptEnabled(true);
                 preview_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
