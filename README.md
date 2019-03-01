@@ -17,7 +17,7 @@ If you are a developer and you wish to contribute to the app please fork the pro
 2. Fix required: (Drag down to refresh sensitivity) On scrolling the webview in downward direction, it causes page to refresh instead on scrolling the page.
 2. Android TV support
 3. Bugfix for entered port not attached at the url end while opening webview.
-4. Improve camera stream preview in home screen.
+4. Improve camera stream preview in home screen by using RecycleView instead of Listview
 
 ---
 ###### Licensing
