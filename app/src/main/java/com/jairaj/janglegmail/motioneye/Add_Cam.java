@@ -47,17 +47,17 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFoc
 public class Add_Cam extends AppCompatActivity
 {
     DataBase myDb;
-    private ListView d_list; //For displaying device list
-    boolean checked = false; //Flag to store state of ListView d_list' items: checked or not checked
+    private ListView CameraList_ListView; //For displaying device list
+    boolean checked = false; //Flag to store state of ListView CameraList_ListView' items: checked or not checked
     Toolbar toolbar; //Tool bar holding ToolBar title and edit, delete buttons and about option
     MenuItem dummy_delete; //for storing layout item of delete button in toolbar
     MenuItem dummy_edit; //for storing layout item of edit button in toolbar
     MenuItem dummy_about; //for storing layout item of about option in toolbar
-    //private AdView mAdView; //for storing layout item of adview
+    //private AdView mAdView; //for storing layout item of Ad view
     //AdRequest adRequest; //for storing ad request to adUnit id in linked layout file
     //AdListener adListener; //Listener for ads
     short isFirstTimeDrive_v = 0; //0 = never appeared before; 1 = First Time; 2 = not First Time
-    int target_for_drive_icon = 0;
+    int target_for_drive_icon = 0; //Resource target for tutorial
 
     FloatingActionButton fab; //object storing id of FAB in linked layout xml
     // Create a HashMap List from String Array elements
@@ -73,8 +73,10 @@ public class Add_Cam extends AppCompatActivity
     {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
 
-        myDb = new DataBase(this);
+        myDb = new DataBase(this); // init DataBase object
 
+        //Insert Preview status column in Data Base if the previous version of app didn't have it
+        //TODO: Find if there is better way to handle SQL Table column addition over previous app version
         myDb.insertNewColumn();
 
         super.onCreate(savedInstanceState);
@@ -83,17 +85,20 @@ public class Add_Cam extends AppCompatActivity
         //MobileAds.initialize(this, "ca-app-pub-7081069887552324~4679468464");
         fab = findViewById(R.id.fab);
         toolbar = findViewById(R.id.toolbar);
+
         adapter = new SimpleAdapter(this, listItems, R.layout.custom_list_item,
                 new String[]{"First Line", "Second Line"},
                 new int[]{R.id.title_label_text, R.id.subtitle_url_port_text});
 
-        if (d_list == null)
-            d_list = findViewById(R.id.device_list);
+        //TODO: Check necessity
+        if (CameraList_ListView == null)
+            CameraList_ListView = findViewById(R.id.device_list);
 
 
         setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.Camera_List);
 
+        //If this is the first run of the app show tutorial
         if(isFirstTime())
         {
             display_tutorial(1);
@@ -126,6 +131,7 @@ public class Add_Cam extends AppCompatActivity
             }
         });
 
+        //Handler to handle data fetching from SQL in BG
         final Handler handler_fetch_data =  new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -142,7 +148,7 @@ public class Add_Cam extends AppCompatActivity
         t_fetch_data.run();
 
         // Add this Runnable
-        d_list.post(new Runnable() {
+        CameraList_ListView.post(new Runnable() {
             @Override
             public void run()
             {
@@ -151,10 +157,10 @@ public class Add_Cam extends AppCompatActivity
                     @Override
                     public void handleMessage(Message msg)
                     {
-                        show_hide_drive_button();
-                        show_hide_prev();
+                        toggle_visibility_of_drive_button();
+                        toggle_visibility_of_prev();
 
-                        if (d_list.getCount() == 1)
+                        if (CameraList_ListView.getCount() == 1)
                         {
                             String url = listItems.get(0).get("Second Line");
                             int mode = TextUtils.isEmpty(
@@ -165,17 +171,17 @@ public class Add_Cam extends AppCompatActivity
                     }
                 };
 
-                Thread t = new Thread() {
+                Thread thread_toggle_drive_prev = new Thread() {
                     @Override
                     public void run() {
                         handler.sendEmptyMessage(0);
                     }
                 };
-                t.run();
+                thread_toggle_drive_prev.run();
             }
         });
 
-        d_list.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        CameraList_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -187,18 +193,18 @@ public class Add_Cam extends AppCompatActivity
                 }
                 else
                 {
-                    CheckBox cb = view.findViewById(R.id.checkBox);
-                    cb.setChecked(!cb.isChecked());
+                    CheckBox checkbox = view.findViewById(R.id.checkBox);
+                    checkbox.setChecked(!checkbox.isChecked());
 
-                    int f = getItemCheckedCount_in_d_list();
+                    int no_of_checked_items = getItemCheckedCount_in_CameraList_ListView();
 
-                    if (f == 0)
+                    if (no_of_checked_items == 0)
                     {
-                        for (int i = 0; i < d_list.getChildCount(); i++)
+                        for (int i = 0; i < CameraList_ListView.getChildCount(); i++)
                         {
-                            view = d_list.getChildAt(i);
-                            cb = view.findViewById(R.id.checkBox);
-                            cb.setVisibility(View.GONE);
+                            view = CameraList_ListView.getChildAt(i);
+                            checkbox = view.findViewById(R.id.checkBox);
+                            checkbox.setVisibility(View.GONE);
                         }
                         toggle_ActionBar_elements();
                     }
@@ -206,7 +212,7 @@ public class Add_Cam extends AppCompatActivity
             }
         });
 
-        d_list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        CameraList_ListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
@@ -214,12 +220,13 @@ public class Add_Cam extends AppCompatActivity
                 if(!checked)
                 {
                     int i = 0;
-                    while (i < d_list.getChildCount()) {
-                        view = d_list.getChildAt(i);
-                        CheckBox cb = view.findViewById(R.id.checkBox);
-                        cb.setVisibility(View.VISIBLE);
+                    while (i < CameraList_ListView.getChildCount())
+                    {
+                        view = CameraList_ListView.getChildAt(i);
+                        CheckBox checkbox = view.findViewById(R.id.checkBox);
+                        checkbox.setVisibility(View.VISIBLE);
                         if (i == position)
-                            cb.setChecked(true);
+                            checkbox.setChecked(true);
                         i++;
                     }
                     toggle_ActionBar_elements();
@@ -227,12 +234,12 @@ public class Add_Cam extends AppCompatActivity
                 else
                 {
                     int i = 0;
-                    while (i < d_list.getChildCount()) {
-                        view = d_list.getChildAt(i);
-                        CheckBox cb = view.findViewById(R.id.checkBox);
-                        cb.setVisibility(View.GONE);
+                    while (i < CameraList_ListView.getChildCount()) {
+                        view = CameraList_ListView.getChildAt(i);
+                        CheckBox checkbox = view.findViewById(R.id.checkBox);
+                        checkbox.setVisibility(View.GONE);
                         if (i == position)
-                            cb.setChecked(false);
+                            checkbox.setChecked(false);
                         i++;
                     }
                     toggle_ActionBar_elements();
@@ -290,21 +297,21 @@ public class Add_Cam extends AppCompatActivity
             }
         };
 
-        Thread t = new Thread() {
+        Thread thread_add_to_list = new Thread() {
             @Override
             public void run() {
                 handler.sendEmptyMessage(0);
             }
         };
 
-        t.run();
+        thread_add_to_list.run();
 
         res.close();
     }
 
     private void add_to_list()
     {
-        d_list.setAdapter(null);
+        CameraList_ListView.setAdapter(null);
         listItems.clear();
 
         for (Object o : label_url_port.entrySet())
@@ -315,7 +322,7 @@ public class Add_Cam extends AppCompatActivity
             resultsMap.put("Second Line", pair.getValue().toString());
             listItems.add(resultsMap);
         }
-        d_list.setAdapter(adapter);
+        CameraList_ListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 
@@ -327,17 +334,17 @@ public class Add_Cam extends AppCompatActivity
         if(edit_mode.equals("1"))
         {
             int i = 0;
-            while (i < d_list.getChildCount())
+            while (i < CameraList_ListView.getChildCount())
             {
-                View view = d_list.getChildAt(i);
-                CheckBox cb = view.findViewById(R.id.checkBox);
+                View view = CameraList_ListView.getChildAt(i);
+                CheckBox checkbox = view.findViewById(R.id.checkBox);
 
-                if (cb.isChecked())
+                if (checkbox.isChecked())
                 {
                     delete_label = ((TextView) view.findViewById(R.id.title_label_text)).getText().toString();
-                    cb.setChecked(false);
+                    checkbox.setChecked(false);
                 }
-                cb.setVisibility(View.GONE);
+                checkbox.setVisibility(View.GONE);
                 i++;
             }
             checked = false;
@@ -372,7 +379,7 @@ public class Add_Cam extends AppCompatActivity
         checked = false;
         fetch_data();
 
-        d_list.post(new Runnable() {
+        CameraList_ListView.post(new Runnable() {
             @Override
             public void run()
             {
@@ -381,19 +388,19 @@ public class Add_Cam extends AppCompatActivity
                     @Override
                     public void handleMessage(Message msg)
                     {
-                        show_hide_drive_button();
-                        show_hide_prev();
+                        toggle_visibility_of_drive_button();
+                        toggle_visibility_of_prev();
                     }
                 };
 
-                Thread t = new Thread() {
+                Thread thread_toggle_drive_prev = new Thread() {
                     @Override
                     public void run() {
                         handler.sendEmptyMessage(0);
                     }
                 };
 
-                t.run();
+                thread_toggle_drive_prev.run();
 
                 if(resultCode != 2)
                 {
@@ -441,18 +448,18 @@ public class Add_Cam extends AppCompatActivity
 
         if (id == R.id.delete)
         {
-            if(getItemCheckedCount_in_d_list() > 0 && checked)
+            if(getItemCheckedCount_in_CameraList_ListView() > 0 && checked)
             {
                 int i = 0;
 
-                while (i < d_list.getChildCount()) {
-                    View view = d_list.getChildAt(i);
-                    CheckBox cb = view.findViewById(R.id.checkBox);
+                while (i < CameraList_ListView.getChildCount()) {
+                    View view = CameraList_ListView.getChildAt(i);
+                    CheckBox checkbox = view.findViewById(R.id.checkBox);
 
-                    if (cb.isChecked()) {
+                    if (checkbox.isChecked()) {
                         String del_label = ((TextView) view.findViewById(R.id.title_label_text)).getText().toString();
                         delete_data(del_label);
-                        cb.setChecked(false);
+                        checkbox.setChecked(false);
                     }
                     i++;
                 }
@@ -466,7 +473,7 @@ public class Add_Cam extends AppCompatActivity
         {
             if(checked)
             {
-                int f = getItemCheckedCount_in_d_list();
+                int f = getItemCheckedCount_in_CameraList_ListView();
 
                 if (f > 1)
                 {
@@ -672,13 +679,13 @@ public class Add_Cam extends AppCompatActivity
         }
     }
 
-    public void show_hide_prev()
+    public void toggle_visibility_of_prev()
     {
         View view;
         int i = 0;
-        while (i < d_list.getChildCount())
+        while (i < CameraList_ListView.getChildCount())
         {
-            view = d_list.getChildAt(i);
+            view = CameraList_ListView.getChildAt(i);
             TextView Each_Label = view.findViewById(R.id.title_label_text);
             String Each_label_text = Each_Label.getText().toString();
             String prev = myDb.getPrevStat_from_Label(Each_label_text);
@@ -736,12 +743,12 @@ public class Add_Cam extends AppCompatActivity
         }
     }
 
-    private void show_hide_drive_button()
+    private void toggle_visibility_of_drive_button()
     {
         View view;
         int i = 0;
-        while (i < d_list.getChildCount()) {
-            view = d_list.getChildAt(i);
+        while (i < CameraList_ListView.getChildCount()) {
+            view = CameraList_ListView.getChildAt(i);
             TextView Each_Label = view.findViewById(R.id.title_label_text);
             String Each_label_text = Each_Label.getText().toString();
             String drive_link = myDb.getDrive_from_Label(Each_label_text);
@@ -761,16 +768,16 @@ public class Add_Cam extends AppCompatActivity
         }
     }
 
-    private int getItemCheckedCount_in_d_list()
+    private int getItemCheckedCount_in_CameraList_ListView()
     {
         View view;
-        CheckBox cb;
+        CheckBox checkbox;
         int f = 0;
-        for (int i = 0; i < d_list.getChildCount(); i++)
+        for (int i = 0; i < CameraList_ListView.getChildCount(); i++)
         {
-            view = d_list.getChildAt(i);
-            cb = view.findViewById(R.id.checkBox);
-            if (cb.isChecked())
+            view = CameraList_ListView.getChildAt(i);
+            checkbox = view.findViewById(R.id.checkBox);
+            if (checkbox.isChecked())
                 f++;
         }
         return f;
@@ -874,17 +881,17 @@ public class Add_Cam extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        int f = getItemCheckedCount_in_d_list();
+        int f = getItemCheckedCount_in_CameraList_ListView();
         if(f != 0)
         {
             View view;
-            CheckBox cb;
-            for (int i = 0; i < d_list.getChildCount(); i++)
+            CheckBox checkbox;
+            for (int i = 0; i < CameraList_ListView.getChildCount(); i++)
             {
-                view = d_list.getChildAt(i);
-                cb = view.findViewById(R.id.checkBox);
-                cb.setChecked(false);
-                cb.setVisibility(View.GONE);
+                view = CameraList_ListView.getChildAt(i);
+                checkbox = view.findViewById(R.id.checkBox);
+                checkbox.setChecked(false);
+                checkbox.setVisibility(View.GONE);
             }
             toggle_ActionBar_elements();
         }

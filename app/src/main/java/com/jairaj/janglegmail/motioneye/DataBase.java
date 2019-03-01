@@ -42,14 +42,14 @@ public class DataBase extends SQLiteOpenHelper
         }
     }
 
-    public void insertNewColumn()
+    void insertNewColumn()
     {
         SQLiteDatabase db = this.getWritableDatabase();
         if(!existsColumnInTable(db, TABLE_NAME, COL_6))
             db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_6 + " TEXT " + " DEFAULT 0" );
     }
 
-    public boolean insertData(String label,String url,String port, String drive, String prev)
+    boolean insertData(String label,String url,String port, String drive, String prev)
     {
         insertNewColumn();
 

@@ -31,12 +31,13 @@ public class About_Page extends AppCompatActivity
         TextView credits_showcase = findViewById(R.id.Credit_ShowCase);
         TextView apache_1 = findViewById(R.id.Apache_1);
 
-        TextView credits_icons = findViewById(R.id.Credit_Icons);
         TextView apache_2 = findViewById(R.id.Apache_2);
 
         String appversion = BuildConfig.VERSION_NAME;
 
-        app_version.setText("App Version: " + appversion);
+        String AppVersion_Text = "App Version: " + appversion;
+
+        app_version.setText(AppVersion_Text);
 
         send_fb.setText(Html.fromHtml("<a href=\"mailto:systems.sentinel@gmail.com \">Send Feedback</a>"));
         send_fb.setMovementMethod(LinkMovementMethod.getInstance());
