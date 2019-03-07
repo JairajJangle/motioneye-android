@@ -4,7 +4,7 @@
 
 ---
 
-# motionEye_app_HomeSurveillanceSystem
+# motionEye app - HomeSurveillance System
 git repo for motionEye app - Home Surveillance System (Beta), available on Google Play Store
 
 
