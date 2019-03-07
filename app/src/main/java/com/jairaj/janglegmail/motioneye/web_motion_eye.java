@@ -142,6 +142,7 @@ public class web_motion_eye extends AppCompatActivity implements SwipeRefreshLay
         mContentView.getSettings().setBuiltInZoomControls(true);
 
         swipe = findViewById(R.id.swipe);
+//        swipe.setSlingshotDistance(480);
         swipe.setOnRefreshListener(this);
 
         /*if (savedInstanceState != null)

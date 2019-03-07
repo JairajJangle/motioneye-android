@@ -53,6 +53,7 @@ public class Add_Cam extends AppCompatActivity
     MenuItem dummy_delete; //for storing layout item of delete button in toolbar
     MenuItem dummy_edit; //for storing layout item of edit button in toolbar
     MenuItem dummy_about; //for storing layout item of about option in toolbar
+    MenuItem dummy_help_faq;
     //private AdView mAdView; //for storing layout item of Ad view
     //AdRequest adRequest; //for storing ad request to adUnit id in linked layout file
     //AdListener adListener; //Listener for ads
@@ -370,6 +371,8 @@ public class Add_Cam extends AppCompatActivity
             dummy_edit.setVisible(false);
         if(dummy_about != null)
             dummy_about.setVisible(true);
+        if(dummy_help_faq != null)
+            dummy_help_faq.setVisible(true);
 
         toolbar.setTitle(R.string.Camera_List);
 
@@ -433,6 +436,8 @@ public class Add_Cam extends AppCompatActivity
         dummy_delete = menu.findItem(R.id.delete);
         dummy_edit = menu.findItem(R.id.edit);
         dummy_about = menu.findItem(R.id.action_about);
+        dummy_help_faq = menu.findItem(R.id.action_help);
+
         return true;
     }
 
@@ -489,6 +494,13 @@ public class Add_Cam extends AppCompatActivity
             Intent intent_about_page = new Intent(Add_Cam.this, About_Page.class);
             startActivity(intent_about_page);
         }
+
+        if(id == R.id.action_help)
+        {
+            Intent intent_help_faq = new Intent(Add_Cam.this, Help_FAQ.class);
+            startActivity(intent_help_faq);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -534,6 +546,12 @@ public class Add_Cam extends AppCompatActivity
         if(preview_view.getVisibility() == View.GONE)
         {
             String url_link = myDb.getUrl_from_Label(Label_text_at_expand_ic_click);
+            String url_port;
+            String port = myDb.getPort_from_Label(Label_text_at_expand_ic_click);
+            if(!port.isEmpty())
+                url_port = url_link + ":" + port;
+            else
+                url_port = url_link;
 
             expand_button.setImageResource(R.drawable.collapse_button);
 
@@ -545,7 +563,7 @@ public class Add_Cam extends AppCompatActivity
             preview_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
             preview_view.setWebViewClient(new WebViewClient());
             preview_view.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-            preview_view.loadUrl(url_link);
+            preview_view.loadUrl(url_port);
             preview_view.setInitialScale(100);
 
             boolean isUpdate = myDb.updatePrevStat(Label_text_at_expand_ic_click, "1");
@@ -710,6 +728,12 @@ public class Add_Cam extends AppCompatActivity
             if(prev.equals("1"))
             {
                 String url_link = myDb.getUrl_from_Label(Label_text_at_expand_ic_click);
+                String url_port;
+                String port = myDb.getPort_from_Label(Label_text_at_expand_ic_click);
+                if(!port.isEmpty())
+                    url_port = url_link + ":" + port;
+                else
+                    url_port = url_link;
 
                 expand_button.setImageResource(R.drawable.collapse_button);
 
@@ -721,7 +745,7 @@ public class Add_Cam extends AppCompatActivity
                 preview_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
                 preview_view.setWebViewClient(new WebViewClient());
                 preview_view.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-                preview_view.loadUrl(url_link);
+                preview_view.loadUrl(url_port);
                 preview_view.setInitialScale(100);
 
                 boolean isUpdate = myDb.updatePrevStat(Label_text_at_expand_ic_click, "1");
@@ -786,6 +810,7 @@ public class Add_Cam extends AppCompatActivity
     private void toggle_ActionBar_elements()
     {
         dummy_about.setVisible(!dummy_about.isVisible());
+        dummy_help_faq.setVisible(!dummy_help_faq.isVisible());
         dummy_delete.setVisible(!dummy_delete.isVisible());
         dummy_edit.setVisible(!dummy_edit.isVisible());
 

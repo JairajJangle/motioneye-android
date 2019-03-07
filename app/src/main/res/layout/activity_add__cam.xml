@@ -17,7 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/motioneye_dark_grey"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -32,7 +33,6 @@
     <include
         android:id="@+id/include2"
         layout="@layout/content_add__cam"
-        android:layout_marginTop="8dp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button

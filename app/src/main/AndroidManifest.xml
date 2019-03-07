@@ -5,18 +5,26 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-feature android:name="android.software.leanback"
+
+    <uses-feature
+        android:name="android.software.leanback"
         android:required="false" />
-    <uses-feature android:name="android.hardware.touchscreen"
+    <uses-feature
+        android:name="android.hardware.touchscreen"
         android:required="false" />
 
     <application
-        android:label="Motion Eye"
+        android:banner="@drawable/motion_eye_banner"
         android:icon="@mipmap/me_adp_ic"
+        android:label="Motion Eye"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:usesCleartextTraffic="true"
-        android:banner="@drawable/motion_eye_banner">
+        android:usesCleartextTraffic="true">
+
+        <activity android:name=".Help_FAQ"
+            android:label="Help and FAQ"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
 
         <activity
             android:name=".Add_Cam"
@@ -36,6 +44,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -43,13 +52,12 @@
         <activity
             android:name=".loading_screen_tv"
             android:label="Motion Eye">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <activity
@@ -58,6 +66,7 @@
             android:label="@string/title_activity_web_motion_eye"
             android:theme="@style/FullscreenTheme">
         </activity>
+
         <activity android:name=".About_Page">
         </activity>
 
