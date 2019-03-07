@@ -10,12 +10,12 @@
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="0dp"
-        android:hapticFeedbackEnabled="false">
+    <!--<android.support.v4.widget.SwipeRefreshLayout-->
+        <!--android:id="@+id/swipe"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--android:hapticFeedbackEnabled="true">-->
 
         <WebView
             android:id="@+id/fullscreen_content"
@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:keepScreenOn="true" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
     <ProgressBar
         android:id="@+id/webPBar"

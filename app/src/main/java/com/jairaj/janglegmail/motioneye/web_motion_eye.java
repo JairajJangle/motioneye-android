@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
+//import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,7 +32,7 @@ import android.widget.Toast;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class web_motion_eye extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener
+public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshLayout.OnRefreshListener
 {
     private static final String TAG = "";
     private ProgressDialog progressBar;
@@ -60,7 +60,7 @@ public class web_motion_eye extends AppCompatActivity implements SwipeRefreshLay
     private WebView mContentView;
     String url_port = "";
     int mode = -1;
-    private SwipeRefreshLayout swipe;
+    //private SwipeRefreshLayout swipe;
 
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
@@ -141,9 +141,8 @@ public class web_motion_eye extends AppCompatActivity implements SwipeRefreshLay
         mContentView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         mContentView.getSettings().setBuiltInZoomControls(true);
 
-        swipe = findViewById(R.id.swipe);
-//        swipe.setSlingshotDistance(480);
-        swipe.setOnRefreshListener(this);
+//        swipe = findViewById(R.id.swipe);
+//        swipe.setOnRefreshListener(this);
 
         /*if (savedInstanceState != null)
         {
@@ -220,7 +219,7 @@ public class web_motion_eye extends AppCompatActivity implements SwipeRefreshLay
                 if(cancel_button != null)
                     cancel_button.dismiss();
 
-                swipe.setRefreshing(false);
+//                swipe.setRefreshing(false);
             }
         });
         mContentView.loadUrl(url_port);
@@ -325,19 +324,19 @@ public class web_motion_eye extends AppCompatActivity implements SwipeRefreshLay
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
-    @Override
-    public void onRefresh()
-    {
-        if(mContentView.getScrollY() == 0)
-        {
-            swipe.setRefreshing(true);
-            ReLoadWebView(url_port);
-        }
-        else
-        {
-            swipe.setRefreshing(false);
-        }
-    }
+//    @Override
+//    public void onRefresh()
+//    {
+//        if(mContentView.getScrollY() == 0)
+//        {
+//            swipe.setRefreshing(true);
+//            ReLoadWebView(url_port);
+//        }
+//        else
+//        {
+//            swipe.setRefreshing(false);
+//        }
+//    }
 
     private void ReLoadWebView(String currentURL)
     {

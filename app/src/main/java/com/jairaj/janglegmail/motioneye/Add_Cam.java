@@ -250,6 +250,15 @@ public class Add_Cam extends AppCompatActivity
         });
     }
 
+    public void onPreviewClick(View v)
+    {
+        ConstraintLayout vwParentRow = (ConstraintLayout)v.getParent();
+        TextView url_port_tv = vwParentRow.findViewById(R.id.subtitle_url_port_text);
+        String url_port = url_port_tv.getText().toString();
+
+        goToWebMotionEye(url_port, Constants.MODE_CAMERA);
+    }
+
     private void goToWebMotionEye(String urlPort, @Constants.ServerMode int mode)
     {
         Log.v("In_goToWebMotionEye", "In_goToWebMotionEye");
@@ -522,7 +531,7 @@ public class Add_Cam extends AppCompatActivity
         goToWebMotionEye(drive_link, Constants.MODE_DRIVE);
     }
 
-    public void onExpandCamClick(View v)
+    public void onExpandCamClick(final View v)
     {
         //get the row the clicked button is in
         ConstraintLayout vwParentRow = (ConstraintLayout)v.getParent();
@@ -535,8 +544,12 @@ public class Add_Cam extends AppCompatActivity
         preview_view.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
-            public boolean onTouch(View v, MotionEvent event)
+            public boolean onTouch(View view, MotionEvent event)
             {
+                if(event.getAction() == MotionEvent.ACTION_UP)
+                {
+                    onPreviewClick(v);
+                }
                 return true;
             }
         });
@@ -713,16 +726,6 @@ public class Add_Cam extends AppCompatActivity
             TextView LabelView_at_Expand_ic_click = view.findViewById(R.id.title_label_text);
             String Label_text_at_expand_ic_click = LabelView_at_Expand_ic_click.getText().toString();
 
-            //TODO Test this onTouch code
-            preview_view.setOnTouchListener(new View.OnTouchListener()
-            {
-                @Override
-                public boolean onTouch(View v, MotionEvent event)
-                {
-                    return true;
-                }
-            });
-
             ImageView expand_button = view.findViewById(R.id.expand_button);
 
             if(prev.equals("1"))
@@ -751,6 +754,22 @@ public class Add_Cam extends AppCompatActivity
                 boolean isUpdate = myDb.updatePrevStat(Label_text_at_expand_ic_click, "1");
                 if(!isUpdate)
                     Toast.makeText(Add_Cam.this, R.string.error_try_delete,Toast.LENGTH_LONG).show();
+
+
+                //TODO Test this onTouch code
+                final View finalView = preview_view;
+                preview_view.setOnTouchListener(new View.OnTouchListener()
+                {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event)
+                    {
+                        if(event.getAction() == MotionEvent.ACTION_UP)
+                        {
+                            onPreviewClick(finalView);
+                        }
+                        return true;
+                    }
+                });
             }
 
             else
