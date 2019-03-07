@@ -7,9 +7,6 @@
 # motionEye app - HomeSurveillance System
 git repo for motionEye app - Home Surveillance System (Beta), available on Google Play Store
 
-
-Apply for the Beta Program for the app as this repo is currently in sync with Beta Release, becasue, unfortunately I lost my sources for Production Release :(
-
 ###### Want to contribute?
 If you are a developer and you wish to contribute to the app please fork the project and submit a pull request on the dev branch. Here are some user requested features that are still yet to be introduced.
 
@@ -18,6 +15,7 @@ If you are a developer and you wish to contribute to the app please fork the pro
 2. Android TV support
 3. Bugfix for entered port not attached at the url end while opening webview.
 4. Improve camera stream preview in home screen by using RecycleView instead of Listview
+5. Design Layout for Tablet
 
 ---
 ###### Licensing
