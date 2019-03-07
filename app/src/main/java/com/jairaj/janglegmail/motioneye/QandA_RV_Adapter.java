@@ -693,12 +693,12 @@ public class QandA_RV_Adapter extends RecyclerView.Adapter<QandA_RV_Adapter.MyVi
     /**
      * View holder class
      * */
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView QuestionText;
-        public TextView AnswerText;
+        TextView QuestionText;
+        TextView AnswerText;
 
-        public MyViewHolder(View view)
+        MyViewHolder(View view)
         {
             super(view);
             QuestionText = view.findViewById(R.id.title_q);
@@ -706,7 +706,7 @@ public class QandA_RV_Adapter extends RecyclerView.Adapter<QandA_RV_Adapter.MyVi
         }
     }
 
-    public QandA_RV_Adapter(List<QandA> QandAList) {
+    QandA_RV_Adapter(List<QandA> QandAList) {
         this.QandAList = QandAList;
     }
 

@@ -677,12 +677,12 @@
 
 package com.jairaj.janglegmail.motioneye;
 
-public class QandA
+class QandA
 {
-    protected String Question;
-    protected String Answer;
+    String Question;
+    String Answer;
 
-    public QandA(String Question, String Answer)
+    QandA(String Question, String Answer)
     {
         this.Question = Question;
         this.Answer = Answer;

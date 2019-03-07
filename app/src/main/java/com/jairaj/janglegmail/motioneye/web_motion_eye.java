@@ -28,6 +28,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -168,7 +170,7 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
         cancel_button = new AlertDialog.Builder(this).create();
 
         Window window = cancel_button.getWindow();
-        window.setGravity(Gravity.BOTTOM);
+        Objects.requireNonNull(window).setGravity(Gravity.BOTTOM);
 
         cancel_button.setMessage(":'( Taking too long to load?");
 

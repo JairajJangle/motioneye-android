@@ -416,21 +416,15 @@ public class Add_Cam extends AppCompatActivity
 
                 if(resultCode != 2)
                 {
-                    boolean foo_b;
-                    String foo_s = "";
-                    int foo_i;
+                    boolean flag_isFirstDevice;
 
-                    foo_b = isFirstTimeDevice();
-                    foo_i = isFirstTimeDrive_v;
+                    flag_isFirstDevice = isFirstTimeDevice();
 
-                    foo_s = "Boolean is: " + Boolean.toString(foo_b) + " Integer is: " + Integer.toString(foo_i);
-                    //Toast.makeText(getBaseContext(), foo_s, Toast.LENGTH_SHORT).show();
-
-                    if(foo_b && (isFirstTimeDrive_v == 0))
+                    if(flag_isFirstDevice && (isFirstTimeDrive_v == 0))
                         display_tutorial(2);
-                    else if(!foo_b && (isFirstTimeDrive_v == 1))
+                    else if(!flag_isFirstDevice && (isFirstTimeDrive_v == 1))
                         display_tutorial(3);
-                    else if(foo_b && (isFirstTimeDrive_v == 1))
+                    else if(flag_isFirstDevice && (isFirstTimeDrive_v == 1))
                         display_tutorial(4);
                 }
             }
@@ -620,7 +614,6 @@ public class Add_Cam extends AppCompatActivity
                         {
                             if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                             {
-                                //display_ad();
                                 // User has pressed the prompt target
                             }
                             if(state == MaterialTapTargetPrompt.STATE_DISMISSED)
@@ -723,16 +716,13 @@ public class Add_Cam extends AppCompatActivity
 
             WebView preview_view = view.findViewById(R.id.preview_webview);
 
-            TextView LabelView_at_Expand_ic_click = view.findViewById(R.id.title_label_text);
-            String Label_text_at_expand_ic_click = LabelView_at_Expand_ic_click.getText().toString();
-
             ImageView expand_button = view.findViewById(R.id.expand_button);
 
             if(prev.equals("1"))
             {
-                String url_link = myDb.getUrl_from_Label(Label_text_at_expand_ic_click);
+                String url_link = myDb.getUrl_from_Label(Each_label_text);
                 String url_port;
-                String port = myDb.getPort_from_Label(Label_text_at_expand_ic_click);
+                String port = myDb.getPort_from_Label(Each_label_text);
                 if(!port.isEmpty())
                     url_port = url_link + ":" + port;
                 else
@@ -751,7 +741,7 @@ public class Add_Cam extends AppCompatActivity
                 preview_view.loadUrl(url_port);
                 preview_view.setInitialScale(100);
 
-                boolean isUpdate = myDb.updatePrevStat(Label_text_at_expand_ic_click, "1");
+                boolean isUpdate = myDb.updatePrevStat(Each_label_text, "1");
                 if(!isUpdate)
                     Toast.makeText(Add_Cam.this, R.string.error_try_delete,Toast.LENGTH_LONG).show();
 
@@ -774,7 +764,7 @@ public class Add_Cam extends AppCompatActivity
 
             else
             {
-                boolean isUpdate = myDb.updatePrevStat(Label_text_at_expand_ic_click, "0");
+                boolean isUpdate = myDb.updatePrevStat(Each_label_text, "0");
                 if(!isUpdate)
                     Toast.makeText(Add_Cam.this, R.string.error_try_delete,Toast.LENGTH_LONG).show();
 
