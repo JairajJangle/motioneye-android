@@ -131,8 +131,8 @@
         android:layout_marginTop="8dp"
         android:contentDescription="@string/inputlayout_for_label"
         android:labelFor="@+id/label_input"
+        android:paddingStart="0dp"
         android:paddingEnd="15dp"
-        android:paddingRight="15dp"
         android:textColorHint="@android:color/darker_gray"
         app:layout_constraintEnd_toStartOf="@+id/buttons_ll"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
@@ -177,7 +177,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        app:srcCompat="@drawable/white_g_drive" />
+        app:srcCompat="@drawable/white_g_drive"
+        android:contentDescription="@string/drive_icon" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayout4"
@@ -188,7 +189,7 @@
         android:layout_marginEnd="8dp"
         android:labelFor="@+id/label_input"
         android:paddingEnd="15dp"
-        android:paddingRight="15dp"
+        android:paddingStart="0dp"
         android:textColorHint="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
@@ -254,56 +255,5 @@
             app:srcCompat="@drawable/cross_white"
             tools:ignore="ContentDescription" />
     </LinearLayout>
-
-    <!--<Switch
-        android:id="@+id/switch1"
-        android:layout_width="54dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="8dp"
-        android:textColor="@android:color/background_light"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.2"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
-
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4"
-        app:srcCompat="@drawable/white_user" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="281dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="20dp"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:paddingStart="4dp"
-        android:text="Username and password"
-        android:textColor="@android:color/background_light"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />-->
-
-    <!--<com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginEnd="8dp"
-        android:visibility="gone"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/cancel"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />-->
 
 </android.support.constraint.ConstraintLayout>

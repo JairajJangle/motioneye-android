@@ -23,7 +23,7 @@
             android:id="@+id/github_mark_ic"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:contentDescription="@string/email_icon"
             app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +119,7 @@
             android:id="@+id/send_fb_ic"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:background="@drawable/buttonshape_lesspad"
             android:contentDescription="@string/email_icon"
@@ -173,7 +173,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:text="MaterialTapTargetPrompt"
+            android:text="@string/materialtaptargetprompt"
             android:textColor="@android:color/background_light"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
@@ -189,7 +189,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:text="-"
+            android:text="@string/dash"
             android:textColor="@android:color/background_light"
             android:textSize="12sp" />
 
@@ -201,7 +201,7 @@
             android:layout_weight="1"
             android:autoLink="none"
             android:linksClickable="false"
-            android:text="Apache License"
+            android:text="@string/apache_license"
             android:textColor="@android:color/background_light"
             android:textSize="12sp" />
     </LinearLayout>
@@ -223,7 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
-            android:text="Icons"
+            android:text="@string/icons"
             android:textColor="@android:color/background_light"
             android:textSize="12sp" />
 
@@ -234,7 +234,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:text="-"
+            android:text="@string/dash"
             android:textColor="@android:color/background_light"
             android:textSize="12sp" />
 
@@ -244,7 +244,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
-            android:text="Apache License"
+            android:text="@string/apache_license"
             android:textColor="@android:color/background_light"
             android:textSize="12sp" />
     </LinearLayout>
@@ -257,14 +257,15 @@
         android:layout_marginTop="14dp"
         android:background="@drawable/back_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/button_to_go_back_to_home_screen" />
 
     <TextView
         android:id="@+id/app_version_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="App Version: "
+        android:text="@string/app_version_text"
         android:textColor="@color/alert_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

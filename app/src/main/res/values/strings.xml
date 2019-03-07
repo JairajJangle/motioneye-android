@@ -58,8 +58,15 @@
     <string name="button_to_collapse_and_expand_stream_preview">Button to collapse and expand stream preview</string>
     <string name="checkbox_to_select_specific_network_camera">Checkbox to select specific network camera</string>
     <string name="help_and_faq">Help and FAQ</string>
+    <string name="materialtaptargetprompt">MaterialTapTargetPrompt</string>
+    <string name="apache_license">Apache License</string>
+    <string name="icons">Icons</string>
+    <string name="app_version_text">App Version:</string>
+    <string name="button_to_go_back_to_home_screen">Button to go back to Home Screen</string>
+    <string name="dash">-</string>
+    <string name="drive_icon">Drive Icon</string>
 
-<!--Elements at even position are questions and at odd positions are answers-->
+    <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">
         <item>Q: App does not connect to the IP camera</item>
         <item>A: Check whether you have correctly mentioned http:// and https:// before the url and the port number

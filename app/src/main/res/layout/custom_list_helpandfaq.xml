@@ -28,7 +28,6 @@
         android:textSize="21sp"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_drive"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
