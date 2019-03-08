@@ -48,7 +48,7 @@
     <string name="for_displaying_ads_by_admob">Press here to view the ad</string>
     <string name="error_try_again">Error, try again</string>
     <string name="error_try_delete">Error Editing, try deleting the device and add again</string>
-    <string name="ok_do_not_show_again">Ok, do not show again.</string>
+    <string name="ok_do_not_show_again">OK, do not show again.</string>
     <string name="optional_drive_link_linked_to_motioneye">(Optional) Drive link linked to motionEye</string>
     <string name="tut_title_drive_icon">This is the Drive icon</string>
     <string name="tut_sub_drive_icon">Click to access motionEye drive folder to view videos and photos triggered by motion detection</string>
@@ -68,16 +68,23 @@
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">
+        <!-- 1 -->
         <item>Q: App does not connect to the IP camera</item>
         <item>A: Check whether you have correctly mentioned http:// and https:// before the url and the port number
         by default the port number of motionEye is 8765, you may also enter port number 8081 for streaming only</item>
+
+        <!-- 2 -->
         <item>Q: motionEye links cannot be opened as global links/port forwarded</item>
         <item>A: To access global links, first enable port forwarding in the WiFi router to which motionEye device
             is connected, for step by step guide checkout this link:
             https://github.com/ccrisan/motioneyeos/issues/58</item>
+
+        <!-- 3 -->
         <item>Q: My WiFi router does not support Port forwarding but I want to access my camera globally</item>
-        <item>A: Check out https://www.dataplicity.com/ they have awesome method to make your motionEye device
+        <item>A: Check out https://www.dataplicity.com/ they have an awesome method to make your motionEye device
         available globally without actual port forwarding</item>
+
+        <!-- X -->
         <item>Q: I am facing an unmentioned problem</item>
         <item>A: Please consider contacting us on our feedback mail in the About section before rating the app, we will fix the issue as soon as possible</item>
     </string-array>

@@ -677,6 +677,7 @@
 
 package com.jairaj.janglegmail.motioneye;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -724,8 +725,9 @@ public class QandA_RV_Adapter extends RecyclerView.Adapter<QandA_RV_Adapter.MyVi
         return QandAList.size();
     }
 
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_list_helpandfaq,parent, false);
         return new MyViewHolder(v);
     }
