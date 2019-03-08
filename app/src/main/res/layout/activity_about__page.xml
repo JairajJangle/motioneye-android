@@ -251,14 +251,14 @@
 
     <ImageButton
         android:id="@+id/about_backbutton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="14dp"
         android:background="@drawable/back_button"
+        android:contentDescription="@string/button_to_go_back_to_home_screen"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/button_to_go_back_to_home_screen" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/app_version_text"
