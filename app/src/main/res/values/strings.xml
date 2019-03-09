@@ -3,7 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_add_device_detail">add_device_detail</string>
     <string name="device_label">Device Label</string>
-    <string name="device_url">Device URL with http:// or https:// or rtsp://</string>
+    <string name="device_url">Device URL with http:// or https://</string>
     <string name="http_for_local_access">(Optional) Port (Default is 80)</string>
     <string name="label">Label</string>
     <string name="urlport_com">urlport.com</string>
@@ -70,7 +70,7 @@
     <string-array name="QandAs">
         <!-- 1 -->
         <item>Q: App does not connect to the IP camera</item>
-        <item>A: Check whether you have correctly mentioned http:// or https:// or rtsp:// before the url and the port number
+        <item>A: Check whether you have correctly mentioned http:// or https:// before the url and the port number
         by default the port number of motionEye is 8765, you may also enter port number 8081 for streaming only</item>
 
         <!-- 2 -->

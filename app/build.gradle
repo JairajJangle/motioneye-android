@@ -8,8 +8,8 @@ android {
         applicationId "com.jairaj.janglegmail.motioneye"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 48
-        versionName "0.9.6.2"
+        versionCode 49
+        versionName "0.9.6.3"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
