@@ -1,6 +1,7 @@
 package com.jairaj.janglegmail.motioneye;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -15,10 +16,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -571,7 +575,11 @@ public class Add_Cam extends AppCompatActivity
             preview_view.setWebViewClient(new WebViewClient());
             preview_view.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
             preview_view.loadUrl(url_port);
-            preview_view.setInitialScale(100);
+            // Enable responsive layout
+            preview_view.getSettings().setUseWideViewPort(true);
+// Zoom out if the content width is greater than the width of the viewport
+            preview_view.getSettings().setLoadWithOverviewMode(true);
+//            preview_view.setInitialScale(getScale(preview_view));
 
             boolean isUpdate = myDb.updatePrevStat(Label_text_at_expand_ic_click, "1");
             if(!isUpdate)
@@ -739,7 +747,10 @@ public class Add_Cam extends AppCompatActivity
                 preview_view.setWebViewClient(new WebViewClient());
                 preview_view.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
                 preview_view.loadUrl(url_port);
-                preview_view.setInitialScale(100);
+                // Enable responsive layout
+                preview_view.getSettings().setUseWideViewPort(true);
+                // Zoom out if the content width is greater than the width of the viewport
+                preview_view.getSettings().setLoadWithOverviewMode(true);
 
                 boolean isUpdate = myDb.updatePrevStat(Each_label_text, "1");
                 if(!isUpdate)
@@ -774,6 +785,16 @@ public class Add_Cam extends AppCompatActivity
             }
             i++;
         }
+    }
+
+    private int getScale(WebView preview_view)
+    {
+        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int width = display.getWidth();
+        int PIC_WIDTH= preview_view.getRight()-preview_view.getLeft();
+        Double val = new Double(width)/new Double(PIC_WIDTH);
+        val = val * 100d;
+        return val.intValue();
     }
 
     private void toggle_visibility_of_drive_button()
