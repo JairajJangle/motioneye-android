@@ -21,7 +21,6 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFoc
 
 public class add_device_detail extends AppCompatActivity
 {
-    private static final String TAG = "GG";
     DataBase myDb;
 
     int edit_mode = 0;
