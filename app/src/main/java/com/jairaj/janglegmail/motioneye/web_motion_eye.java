@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
-//import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -141,7 +140,10 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
         mContentView.getSettings().setJavaScriptEnabled(true);
         mContentView.setWebViewClient(new WebViewClient());
         mContentView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
         mContentView.getSettings().setBuiltInZoomControls(true);
+        mContentView.getSettings().setSupportZoom(true);
+        mContentView.getSettings().setDisplayZoomControls(true); // disable the default zoom controls on the page
 
 //        swipe = findViewById(R.id.swipe);
 //        swipe.setOnRefreshListener(this);

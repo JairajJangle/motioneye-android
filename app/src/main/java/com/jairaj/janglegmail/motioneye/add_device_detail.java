@@ -131,7 +131,7 @@ public class add_device_detail extends AppCompatActivity
         label_input = label_input_j.getText().toString();
         drive_link_input = drive_link_input_j.getText().toString();
 
-        if (URLUtil.isValidUrl(url_input) && !label_input.equals("")
+        if ((URLUtil.isValidUrl(url_input) || url_input.startsWith("rtsp://")) && !label_input.equals("")
                 && (URLUtil.isValidUrl(drive_link_input) || drive_link_input.equals("")))
         {
             switch (edit_mode)
@@ -155,7 +155,7 @@ public class add_device_detail extends AppCompatActivity
             should_proceed = 1;
         }
 
-        else if (!URLUtil.isValidUrl(url_input))
+        else if (!(URLUtil.isValidUrl(url_input) || url_input.startsWith("rtsp://")))
         {
             if(edit_mode != Constants.EDIT_CANCELLED)
                 Toast.makeText(getBaseContext(), R.string.warning_invalid_url, Toast.LENGTH_SHORT).show();
