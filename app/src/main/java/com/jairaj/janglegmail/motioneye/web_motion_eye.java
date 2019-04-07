@@ -361,7 +361,9 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
                 return false;
             }
         }
-        else { //permission is automatically granted on sdk<23 upon installation
+        else
+        {
+            //permission is automatically granted on sdk<23 upon installation
             Log.v(TAG,"Permission is granted");
             return true;
         }
