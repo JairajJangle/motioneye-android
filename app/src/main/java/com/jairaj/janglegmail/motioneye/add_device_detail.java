@@ -1,7 +1,6 @@
 package com.jairaj.janglegmail.motioneye;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,9 +14,9 @@ import android.widget.Toast;
 //import com.google.android.gms.ads.AdView;
 //import com.google.android.gms.ads.MobileAds;
 
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
-import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
-import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
+//import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+//import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
+//import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
 public class add_device_detail extends AppCompatActivity
 {
@@ -191,14 +190,14 @@ public class add_device_detail extends AppCompatActivity
         finish();
     }
 
-    public void display_tutorial(int call_number)
+    /*public void display_tutorial(int call_number)
     {
-        /* call_number usage
-         * 1 = First Time App Opened
-         * 2 = First Time Device added
-         * 3 = Not First Time for Device addition but First Time for Drive
-         * 4 = First Time for device addition as well as drive
-         */
+//        /* call_number usage
+//         * 1 = First Time App Opened
+//         * 2 = First Time Device added
+//         * 3 = Not First Time for Device addition but First Time for Drive
+//         * 4 = First Time for device addition as well as drive
+//
 
         if(call_number == 1)
         {
@@ -253,7 +252,7 @@ public class add_device_detail extends AppCompatActivity
                     })
                     .show();
         }
-    }
+    }*/
 
     /*public void display_ad()
     {

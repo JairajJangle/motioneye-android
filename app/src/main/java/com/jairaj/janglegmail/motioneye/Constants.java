@@ -2,8 +2,6 @@ package com.jairaj.janglegmail.motioneye;
 
 import android.support.annotation.IntDef;
 import java.lang.annotation.Retention;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 

@@ -107,7 +107,7 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
      * system UI. This is to prevent the jarring behavior of controls going away
      * while interacting with activity UI.
      */
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
+    /*private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (AUTO_HIDE)
@@ -116,7 +116,7 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
             }
             return false;
         }
-    };
+    };*/
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -284,14 +284,14 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
         delayedHide(100);
     }
 
-    private void toggle()
+    /*private void toggle()
     {
         if (mVisible) {
             hide();
         } else {
             show();
         }
-    }
+    }*/
 
     private void hide() {
         // Hide UI first
@@ -308,7 +308,8 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
     }
 
     @SuppressLint("InlinedApi")
-    private void show() {
+
+/*    private void show() {
         // Show the system bar
         mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
@@ -317,7 +318,7 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
         // Schedule a runnable to display UI elements after a delay
         mHideHandler.removeCallbacks(mHidePart2Runnable);
         mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
-    }
+    }*/
 
     /**
      * Schedules a call to hide() in delay milliseconds, canceling any

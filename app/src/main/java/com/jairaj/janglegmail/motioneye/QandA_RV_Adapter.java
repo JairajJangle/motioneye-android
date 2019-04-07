@@ -712,7 +712,7 @@ public class QandA_RV_Adapter extends RecyclerView.Adapter<QandA_RV_Adapter.MyVi
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         System.out.println("Bind ["+holder+"] - Pos ["+position+"]");
         QandA qa = QandAList.get(position);
         holder.QuestionText.setText(qa.Question);

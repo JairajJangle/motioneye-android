@@ -11,7 +11,7 @@ public class DataBase extends SQLiteOpenHelper
 {
     private static final String DATABASE_NAME = "Devices.db";
     private static final String TABLE_NAME = "device_detail_table";
-    private static final String COL_1 = "ID";
+    //private static final String COL_1 = "ID";
     private static final String COL_2 = "LABEL";
     private static final String COL_3 = "URL";
     private static final String COL_4 = "PORT";
@@ -88,13 +88,13 @@ public class DataBase extends SQLiteOpenHelper
         }
     }
 
-    public Cursor getAllData()
+    Cursor getAllData()
     {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.rawQuery("select * from "+TABLE_NAME,null);
     }
 
-    public String getUrl_from_Label(String sch_label)
+    String getUrl_from_Label(String sch_label)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = null;
@@ -116,7 +116,7 @@ public class DataBase extends SQLiteOpenHelper
         }
     }
 
-    public String getPort_from_Label(String sch_label)
+    String getPort_from_Label(String sch_label)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = null;
@@ -142,7 +142,7 @@ public class DataBase extends SQLiteOpenHelper
         }
     }
 
-    public String getDrive_from_Label(String sch_label)
+    String getDrive_from_Label(String sch_label)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = null;
@@ -174,7 +174,7 @@ public class DataBase extends SQLiteOpenHelper
         }
     }
 
-    public String getPrevStat_from_Label(String sch_label)
+    String getPrevStat_from_Label(String sch_label)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = null;
@@ -200,7 +200,7 @@ public class DataBase extends SQLiteOpenHelper
         }
     }
 
-    public boolean updateData(String key_label, String label,String url,String port, String drive)
+    boolean updateData(String key_label, String label,String url,String port, String drive)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -212,7 +212,7 @@ public class DataBase extends SQLiteOpenHelper
         return true;
     }
 
-    public boolean updatePrevStat(String key_label, String prev_stat)
+    boolean updatePrevStat(String key_label, String prev_stat)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -221,7 +221,7 @@ public class DataBase extends SQLiteOpenHelper
         return true;
     }
 
-    public Integer deleteData (String id)
+    Integer deleteData (String id)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME, "LABEL = ?",new String[] {id});

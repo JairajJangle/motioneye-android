@@ -1,7 +1,6 @@
 package com.jairaj.janglegmail.motioneye;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -16,13 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -579,7 +575,6 @@ public class Add_Cam extends AppCompatActivity
             preview_view.getSettings().setUseWideViewPort(true);
 // Zoom out if the content width is greater than the width of the viewport
             preview_view.getSettings().setLoadWithOverviewMode(true);
-//            preview_view.setInitialScale(getScale(preview_view));
 
             boolean isUpdate = myDb.updatePrevStat(Label_text_at_expand_ic_click, "1");
             if(!isUpdate)
@@ -711,12 +706,10 @@ public class Add_Cam extends AppCompatActivity
         }
     }
 
-    public void toggle_visibility_of_prev()
-    {
+    public void toggle_visibility_of_prev() {
         View view;
         int i = 0;
-        while (i < CameraList_ListView.getChildCount())
-        {
+        while (i < CameraList_ListView.getChildCount()) {
             view = CameraList_ListView.getChildAt(i);
             TextView Each_Label = view.findViewById(R.id.title_label_text);
             String Each_label_text = Each_Label.getText().toString();
@@ -726,12 +719,11 @@ public class Add_Cam extends AppCompatActivity
 
             ImageView expand_button = view.findViewById(R.id.expand_button);
 
-            if(prev.equals("1"))
-            {
+            if (prev.equals("1")) {
                 String url_link = myDb.getUrl_from_Label(Each_label_text);
                 String url_port;
                 String port = myDb.getPort_from_Label(Each_label_text);
-                if(!port.isEmpty())
+                if (!port.isEmpty())
                     url_port = url_link + ":" + port;
                 else
                     url_port = url_link;
@@ -740,7 +732,7 @@ public class Add_Cam extends AppCompatActivity
 
                 preview_view.setVisibility(View.VISIBLE);
 
-                ((ConstraintLayout)preview_view.getParent()).setPadding(0, 0, 0, Constants.PREVIEW_PADDING);
+                ((ConstraintLayout) preview_view.getParent()).setPadding(0, 0, 0, Constants.PREVIEW_PADDING);
 
                 preview_view.getSettings().setJavaScriptEnabled(true);
                 preview_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -753,31 +745,25 @@ public class Add_Cam extends AppCompatActivity
                 preview_view.getSettings().setLoadWithOverviewMode(true);
 
                 boolean isUpdate = myDb.updatePrevStat(Each_label_text, "1");
-                if(!isUpdate)
-                    Toast.makeText(Add_Cam.this, R.string.error_try_delete,Toast.LENGTH_LONG).show();
+                if (!isUpdate)
+                    Toast.makeText(Add_Cam.this, R.string.error_try_delete, Toast.LENGTH_LONG).show();
 
 
                 //TODO Test this onTouch code
                 final View finalView = preview_view;
-                preview_view.setOnTouchListener(new View.OnTouchListener()
-                {
+                preview_view.setOnTouchListener(new View.OnTouchListener() {
                     @Override
-                    public boolean onTouch(View v, MotionEvent event)
-                    {
-                        if(event.getAction() == MotionEvent.ACTION_UP)
-                        {
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getAction() == MotionEvent.ACTION_UP) {
                             onPreviewClick(finalView);
                         }
                         return true;
                     }
                 });
-            }
-
-            else
-            {
+            } else {
                 boolean isUpdate = myDb.updatePrevStat(Each_label_text, "0");
-                if(!isUpdate)
-                    Toast.makeText(Add_Cam.this, R.string.error_try_delete,Toast.LENGTH_LONG).show();
+                if (!isUpdate)
+                    Toast.makeText(Add_Cam.this, R.string.error_try_delete, Toast.LENGTH_LONG).show();
 
                 expand_button.setImageResource(R.drawable.expand_down);
                 preview_view.loadUrl("about:blank");
@@ -785,16 +771,6 @@ public class Add_Cam extends AppCompatActivity
             }
             i++;
         }
-    }
-
-    private int getScale(WebView preview_view)
-    {
-        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        int width = display.getWidth();
-        int PIC_WIDTH= preview_view.getRight()-preview_view.getLeft();
-        Double val = new Double(width)/new Double(PIC_WIDTH);
-        val = val * 100d;
-        return val.intValue();
     }
 
     private void toggle_visibility_of_drive_button()

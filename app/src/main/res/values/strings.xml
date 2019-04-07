@@ -65,6 +65,7 @@
     <string name="button_to_go_back_to_home_screen">Button to go back to Home Screen</string>
     <string name="dash">-</string>
     <string name="drive_icon">Drive Icon</string>
+    <string name="github_icon">GITHUB_ICON</string>
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">
@@ -74,12 +75,17 @@
         by default the port number of motionEye is 8765, you may also enter port number 8081 for streaming only</item>
 
         <!-- 2 -->
+        <item>Q: App crashes frequently / I cannot view the camera stream</item>
+        <item>A: Check whether the Android System WebView app in your device is up to date, check this link to update the app:
+            https://play.google.com/store/apps/details?id=com.google.android.webview&amp;hl</item>
+
+        <!-- 3 -->
         <item>Q: motionEye links cannot be opened as global links/port forwarded</item>
         <item>A: To access global links, first enable port forwarding in the WiFi router to which motionEye device
             is connected, for step by step guide checkout this link:
             https://github.com/ccrisan/motioneyeos/issues/58</item>
 
-        <!-- 3 -->
+        <!-- 4 -->
         <item>Q: My WiFi router does not support Port forwarding but I want to access my camera globally</item>
         <item>A: Check out https://www.dataplicity.com/ they have an awesome method to make your motionEye device
         available globally without actual port forwarding</item>
