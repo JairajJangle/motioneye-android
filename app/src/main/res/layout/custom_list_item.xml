@@ -104,14 +104,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/subtitle_url_port_text"
         app:layout_constraintVertical_bias="0.0" />
-
-    <!--<WebView-->
-    <!--android:id="@+id/preview_wv"-->
-    <!--android:layout_width="79dp"-->
-    <!--android:layout_height="62dp"-->
-    <!--android:visibility="visible"-->
-    <!--app:layout_constraintBottom_toBottomOf="@+id/subtitle_url_port_text"-->
-    <!--app:layout_constraintStart_toEndOf="@+id/checkBox"-->
-    <!--app:layout_constraintTop_toTopOf="parent" />-->
-
 </android.support.constraint.ConstraintLayout>

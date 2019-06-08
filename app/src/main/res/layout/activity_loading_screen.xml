@@ -43,7 +43,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5"
-        app:srcCompat="@drawable/motioneye_logo"
+        app:srcCompat="@drawable/motioneye_blue"
         android:contentDescription="@string/motion_eye_logo"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -67,7 +67,10 @@
             android:theme="@style/FullscreenTheme">
         </activity>
 
-        <activity android:name=".About_Page">
+        <activity
+            android:name=".About_Page"
+            android:label="About"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
     </application>
