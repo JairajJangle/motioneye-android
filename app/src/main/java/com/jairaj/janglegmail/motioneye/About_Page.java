@@ -10,21 +10,31 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
+
+import java.util.Objects;
 
 public class About_Page extends AppCompatActivity
 {
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about__page);
 
+        toolbar = findViewById(R.id.about_toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("About");
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         Button send_fb = findViewById(R.id.send_feedb);
         Button join_dev = findViewById(R.id.join_dev);
         Button view_steps = findViewById(R.id.button_install_steps);
-        ImageButton back_button = findViewById(R.id.about_backbutton);
 
         TextView app_version = findViewById(R.id.app_version_text);
 
@@ -62,14 +72,6 @@ public class About_Page extends AppCompatActivity
                 open_in_chrome(motion_eye_steps);
             }
         });
-
-        back_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                finish();
-            }
-        });
     }
 
     public void open_in_chrome(String url)
@@ -88,5 +90,10 @@ public class About_Page extends AppCompatActivity
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(i);
         }
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

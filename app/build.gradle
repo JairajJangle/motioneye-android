@@ -8,8 +8,8 @@ android {
         applicationId "com.jairaj.janglegmail.motioneye"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 49
-        versionName "0.9.6.3"
+        versionCode 53
+        versionName "0.9.6.7"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -28,6 +28,7 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'uk.co.samuelwall:material-tap-target-prompt:2.12.0'
+    implementation 'com.github.AppIntro:AppIntro:4.2.3'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:customtabs:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'

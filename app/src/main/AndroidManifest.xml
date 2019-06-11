@@ -20,24 +20,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-
-        <activity android:name=".Help_FAQ"
+        <activity
+            android:name=".Help_FAQ"
             android:label="Help and FAQ"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity
             android:name=".Add_Cam"
             android:label="Camera List"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity
             android:name=".add_device_detail"
             android:label="Add Device"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-
         <activity
             android:name=".loading_screen"
             android:label="Motion Eye">
@@ -48,7 +45,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".loading_screen_tv"
             android:label="Motion Eye">
@@ -59,17 +55,17 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".web_motion_eye"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_web_motion_eye"
             android:theme="@style/FullscreenTheme">
         </activity>
-
-        <activity android:name=".About_Page">
+        <activity
+            android:name=".About_Page"
+            android:label="About"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
     </application>
 
 </manifest>
