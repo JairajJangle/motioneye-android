@@ -14,16 +14,12 @@ import android.widget.Toast;
 //import com.google.android.gms.ads.AdView;
 //import com.google.android.gms.ads.MobileAds;
 
-//import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
-//import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
-//import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
-
 public class add_device_detail extends AppCompatActivity
 {
     DataBase myDb;
 
     int edit_mode = 0;
-    String edit_label = "";
+    String edit_label = "";    
     String edit_port = "";
     String edit_url = "";
     String edit_drive_link = "";
@@ -63,7 +59,8 @@ public class add_device_detail extends AppCompatActivity
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-            getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+            getWindow().getDecorView().setImportantForAutofill(View.
+                    IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         }
 
         final Intent previousScreen = new Intent(getApplicationContext(), Add_Cam.class);
@@ -129,13 +126,16 @@ public class add_device_detail extends AppCompatActivity
         label_input = label_input_j.getText().toString();
         drive_link_input = drive_link_input_j.getText().toString();
 
-        if ((URLUtil.isValidUrl(url_input) || url_input.startsWith("rtsp://")) && !label_input.equals("")
+        //TODO: Check RTSP support
+        if ((URLUtil.isValidUrl(url_input) || url_input.startsWith("rtsp://"))
+                && !label_input.equals("")
                 && (URLUtil.isValidUrl(drive_link_input) || drive_link_input.equals("")))
         {
             switch (edit_mode)
             {
                 case Constants.EDIT_MODE_NEW_DEV:
-                    boolean isInserted = myDb.insertData(label_input, url_input, port_input, drive_link_input, "1");
+                    boolean isInserted = myDb.insertData(label_input, url_input, port_input,
+                            drive_link_input, "1");
                     if(isInserted)
                         Toast.makeText(getBaseContext(), R.string.toast_added,
                                 Toast.LENGTH_SHORT).show();
@@ -145,9 +145,11 @@ public class add_device_detail extends AppCompatActivity
                     break;
 
                 case Constants.EDIT_MODE_EXIST_DEV:
-                    boolean isUpdate = myDb.updateData(edit_label, label_input, url_input, port_input, drive_link_input);
+                    boolean isUpdate = myDb.updateData(edit_label, label_input, url_input,
+                            port_input, drive_link_input);
                     if(!isUpdate)
-                        Toast.makeText(add_device_detail.this, R.string.error_try_delete,Toast.LENGTH_LONG).show();
+                        Toast.makeText(add_device_detail.this,
+                                R.string.error_try_delete,Toast.LENGTH_LONG).show();
                     break;
             }
             should_proceed = 1;
@@ -177,7 +179,8 @@ public class add_device_detail extends AppCompatActivity
         else if(!URLUtil.isValidUrl(drive_link_input))
         {
             if(edit_mode != Constants.EDIT_CANCELLED)
-                Toast.makeText(getBaseContext(), R.string.invalid_drive_warning, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), R.string.invalid_drive_warning,
+                        Toast.LENGTH_SHORT).show();
             should_proceed = 0;
         }
     }

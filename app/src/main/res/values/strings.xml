@@ -4,10 +4,7 @@
     <string name="title_activity_add_device_detail">add_device_detail</string>
     <string name="device_label">Device Label</string>
     <string name="device_url">Device URL with http:// or https://</string>
-    <string name="http_for_local_access">(Optional) Port (Default is 80)</string>
-    <string name="label">Label</string>
-    <string name="urlport_com">urlport.com</string>
-
+    <string name="http_for_local_access">(Optional) Port (usually 8765)</string>
     <string name="title_activity_web_motion_eye">web_motion_eye</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
@@ -66,6 +63,12 @@
     <string name="dash">-</string>
     <string name="drive_icon">Drive Icon</string>
     <string name="github_icon">GITHUB_ICON</string>
+
+    <!--Example Texts for custom_list_helpandfaq.xml-->
+    <string name="Eg_HAF_Question">Q: Here goes the question which is answered in the TextView Below</string>
+    <string name="Eg_HAF_Answer">A: Here goes the answer to the question above.</string>
+    <string name="Eg_custom_list_item_Label">Label of added device</string>
+    <string name="Eg_custom_list_item_URL">url_of_added_device.com</string>
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">
