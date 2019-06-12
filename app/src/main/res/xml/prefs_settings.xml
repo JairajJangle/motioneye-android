@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="General">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/key_fullscreen"
+            android:summary="Hide navigation buttons and make app fullscreen when video
+stream is opened"
+            android:title="Fullscreen streaming" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="About">
+
+        <Preference
+            android:icon="@mipmap/me_adp_ic_round"
+            android:summary="The motionEye app is an interface to interact with the motion eye powered and other network cameras, all in one app.">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.jairaj.janglegmail.motioneye"
+            android:targetClass="com.jairaj.janglegmail.motioneye.About_Page" />
+        </Preference>
+
+        <Preference
+            android:layout="@layout/preferences_category"
+            />
+
+        <Preference
+            android:summary="@string/versionName"
+            android:title="App Version" />
+
+        <Preference
+            android:layout="@layout/preferences_category"
+            />
+
+        <Preference
+            android:key="@string/key_send_feedback"
+            android:summary="@string/summary_support"
+            android:title="@string/send_feedback" />
+
+        <Preference
+            android:layout="@layout/preferences_category"
+            />
+
+        <!-- preference opens url in browser -->
+        <Preference
+            android:summary="@string/summary_faq"
+            android:title="@string/help_and_faq">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.jairaj.janglegmail.motioneye"
+                android:targetClass="com.jairaj.janglegmail.motioneye.Help_FAQ" />
+        </Preference>
+
+        <Preference
+            android:layout="@layout/preferences_category"
+            />
+
+        <Preference android:title="@string/title_privacy_policy"
+            android:summary="Good to Know: We do not collect any data from you"
+            android:key="@string/key_pp">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.jairaj.janglegmail.motioneye"
+                android:targetClass="com.jairaj.janglegmail.motioneye.LegalDocShow" />
+        </Preference>
+
+        <Preference
+            android:layout="@layout/preferences_category"
+            />
+
+        <Preference android:title="@string/title_tnc"
+            android:key="@string/key_tnc">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.jairaj.janglegmail.motioneye"
+                android:targetClass="com.jairaj.janglegmail.motioneye.LegalDocShow" />
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
