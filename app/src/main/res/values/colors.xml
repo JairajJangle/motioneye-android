@@ -12,7 +12,8 @@
     <color name="listview_answer_bg">#00000000</color>
     <color name="motioneye_darker_grey">#101010</color>
     <color name="text_dark_grey">#666666</color>
-    <color name="alert_text">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="transparent">#00ffffff</color>
+    <color name="text_light_gray">#C8C8C8</color>
     <color name="button_bg">#383838</color>
 </resources>

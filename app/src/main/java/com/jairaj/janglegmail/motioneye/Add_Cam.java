@@ -54,6 +54,7 @@ public class Add_Cam extends AppCompatActivity
     MenuItem dummy_edit; //for storing layout item of edit button in toolbar
     MenuItem dummy_about; //for storing layout item of about option in toolbar
     MenuItem dummy_help_faq;
+    MenuItem dummy_settings;
     //private AdView mAdView; //for storing layout item of Ad view
     //AdRequest adRequest; //for storing ad request to adUnit id in linked layout file
     //AdListener adListener; //Listener for ads
@@ -382,6 +383,8 @@ public class Add_Cam extends AppCompatActivity
             dummy_about.setVisible(true);
         if(dummy_help_faq != null)
             dummy_help_faq.setVisible(true);
+        if(dummy_settings != null)
+            dummy_settings.setVisible(true);
 
         toolbar.setTitle(R.string.Camera_List);
 
@@ -440,6 +443,7 @@ public class Add_Cam extends AppCompatActivity
         dummy_edit = menu.findItem(R.id.edit);
         dummy_about = menu.findItem(R.id.action_about);
         dummy_help_faq = menu.findItem(R.id.action_help);
+        dummy_settings = menu.findItem(R.id.action_settings);
 
         return true;
     }
@@ -502,6 +506,12 @@ public class Add_Cam extends AppCompatActivity
         {
             Intent intent_help_faq = new Intent(Add_Cam.this, Help_FAQ.class);
             startActivity(intent_help_faq);
+        }
+
+        if(id == R.id.action_settings)
+        {
+            Intent intent_settings = new Intent(Add_Cam.this, SettingsActivity.class);
+            startActivity(intent_settings);
         }
 
         return super.onOptionsItemSelected(item);
@@ -817,6 +827,7 @@ public class Add_Cam extends AppCompatActivity
     {
         dummy_about.setVisible(!dummy_about.isVisible());
         dummy_help_faq.setVisible(!dummy_help_faq.isVisible());
+        dummy_settings.setVisible(!dummy_settings.isVisible());
         dummy_delete.setVisible(!dummy_delete.isVisible());
         dummy_edit.setVisible(!dummy_edit.isVisible());
 

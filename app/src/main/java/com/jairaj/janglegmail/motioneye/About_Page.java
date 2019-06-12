@@ -49,9 +49,6 @@ public class About_Page extends AppCompatActivity
 
         app_version.setText(AppVersion_Text);
 
-        send_fb.setText(Html.fromHtml("<a href=\"mailto:systems.sentinel@gmail.com \">Send Feedback</a>"));
-        send_fb.setMovementMethod(LinkMovementMethod.getInstance());
-
         credits_showcase.setText(Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt'> MaterialTapTargetPrompt</a>"));
         credits_showcase.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -70,6 +67,14 @@ public class About_Page extends AppCompatActivity
             {
                 String motion_eye_steps = "https://github.com/ccrisan/motioneye/wiki/Installation";
                 open_in_chrome(motion_eye_steps);
+            }
+        });
+
+        send_fb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                Utils.sendFeedback(getApplicationContext());
             }
         });
     }
@@ -91,6 +96,7 @@ public class About_Page extends AppCompatActivity
             startActivity(i);
         }
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
