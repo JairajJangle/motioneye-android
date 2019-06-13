@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -70,6 +71,8 @@ public class Add_Cam extends AppCompatActivity
 
     private static final int REQUEST_CODE = 1;
 
+    boolean autoopen_pref = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -84,9 +87,15 @@ public class Add_Cam extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add__cam);
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        autoopen_pref = prefs.getBoolean(getString(R.string.key_autoopen), true);
+
         //MobileAds.initialize(this, "ca-app-pub-7081069887552324~4679468464");
         fab = findViewById(R.id.fab);
         toolbar = findViewById(R.id.toolbar);
+
+        Utils.showRateDialog(this, false);
 
         adapter = new SimpleAdapter(this, listItems, R.layout.custom_list_item,
                 new String[]{"First Line", "Second Line"},
@@ -162,7 +171,7 @@ public class Add_Cam extends AppCompatActivity
                         toggle_visibility_of_drive_button();
                         toggle_visibility_of_prev();
 
-                        if (CameraList_ListView.getCount() == 1)
+                        if ((CameraList_ListView.getCount() == 1) && autoopen_pref)
                         {
                             String url = listItems.get(0).get("Second Line");
                             int mode = TextUtils.isEmpty(
@@ -499,12 +508,14 @@ public class Add_Cam extends AppCompatActivity
         if(id == R.id.action_about)
         {
             Intent intent_about_page = new Intent(Add_Cam.this, About_Page.class);
+            intent_about_page.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent_about_page);
         }
 
         if(id == R.id.action_help)
         {
             Intent intent_help_faq = new Intent(Add_Cam.this, Help_FAQ.class);
+            intent_help_faq.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent_help_faq);
         }
 
@@ -770,6 +781,7 @@ public class Add_Cam extends AppCompatActivity
                         return true;
                     }
                 });
+
             } else {
                 boolean isUpdate = myDb.updatePrevStat(Each_label_text, "0");
                 if (!isUpdate)

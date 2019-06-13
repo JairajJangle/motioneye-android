@@ -43,6 +43,24 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorSecondary">@color/text_light_gray</item>
         <item name="android:listDivider">@color/text_dark_grey</item>
+        <item name="android:windowBackground">@color/motioneye_grey</item>
+    </style>
+
+    <style name="AlertDialogCustom" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:textColor">@color/motioneye_blue</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:background">@color/motioneye_darkerish_grey</item>
+        <item name="android:backgroundDimAmount">0.3</item>
+    </style>
+
+    <style name="AlertDialogCustom_API19" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:textColor">@color/motioneye_blue</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:colorBackground">@color/motioneye_darkerish_grey</item>
+        <item name="android:background">@color/motioneye_darkerish_grey</item>
+        <item name="android:backgroundDimAmount">0.3</item>
     </style>
 
     <style name="Divider">

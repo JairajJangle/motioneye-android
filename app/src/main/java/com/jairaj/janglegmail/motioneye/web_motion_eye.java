@@ -27,6 +27,7 @@ import android.webkit.DownloadListener;
 import android.webkit.URLUtil;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -46,6 +47,7 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
     Handler mHandler = new Handler();
     private WebView mContentView;
     String url_port = "";
+    String page_error_title = "Error";
     int mode = -1;
     //private SwipeRefreshLayout swipe;
 
@@ -86,7 +88,6 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
             mControlsView.setVisibility(View.VISIBLE);
         }
     };
-    private boolean mVisible;
     private final Runnable mHideRunnable = new Runnable() {
         @Override
         public void run()
@@ -94,21 +95,6 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
             hide();
         }
     };
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    /*private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (AUTO_HIDE)
-            {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-            }
-            return false;
-        }
-    };*/
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -130,7 +116,6 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
 
         FullScreenPref = prefs.getBoolean(getString(R.string.key_fullscreen), true);
 
-        mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
         mContentView.getSettings().setJavaScriptEnabled(true);
@@ -144,25 +129,18 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
 //        swipe = findViewById(R.id.swipe);
 //        swipe.setOnRefreshListener(this);
 
-        /*if (savedInstanceState != null)
-        {
-            (mContentView).restoreState(savedInstanceState);
-        }*/
-        /*else
-        {
-            mContentView.loadUrl(url_port);
-        }*/
-
         CookieManager.getInstance().setAcceptCookie(true);
 
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
-        if(mode == Constants.MODE_CAMERA)
+        if(mode == Constants.MODE_CAMERA) {
             progressBar = ProgressDialog.show(web_motion_eye.this, getString(R.string.connecting_mE), getString(R.string.loading));
-
-        else if(mode == Constants.MODE_DRIVE)
+            page_error_title = "Uh Oh! The camera stream could not be opened :( ";
+        }
+        else if(mode == Constants.MODE_DRIVE) {
             progressBar = ProgressDialog.show(web_motion_eye.this, getString(R.string.connecting_gD), getString(R.string.loading));
-
+            page_error_title = "Uh Oh! The cloud link could not be opened :( ";
+        }
         progressBar.setCancelable(true);
 
         cancel_button = new AlertDialog.Builder(this).create();
@@ -207,52 +185,27 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
                         progressBar.dismiss();
                 }
 
-                if(cancel_button != null)
-                    cancel_button.dismiss();
-
+                if(cancel_button != null) {
+                    if (cancel_button.isShowing())
+                        cancel_button.dismiss();
+                }
 //                swipe.setRefreshing(false);
+            }
+
+            //TODO: Android < 5.0.0 Dialog Box inconsistent and Error on Send Feedback intent
+            public void onReceivedError(WebView view, int errorCod,String description, String failingUrl)
+            {
+                Toast.makeText(getBaseContext(), page_error_title + "\nCheck FAQs or Send us Feedback" , Toast.LENGTH_LONG).show();
+                //show_webpageErrorDialog();
             }
 
             public void onReceivedError(WebView view, WebResourceRequest request,
                                         WebResourceError error)
             {
-                super.onReceivedError(view, request, error);
-
-                //TODO: remove this debug toast
-                Toast.makeText(getApplicationContext(), "Error" + error.toString(),
-                        Toast.LENGTH_LONG).show();
-
-                new AlertDialog.Builder(web_motion_eye.this)
-                        .setTitle("Uh Oh! The camera stream could not be opened :( ")
-                        .setMessage("Please help us fix the issue by letting us know by sending a feedback")
-
-                        .setPositiveButton("Send Feedback", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                Utils.sendFeedback(getApplicationContext());
-                            }
-
-                        })
-
-                        .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                            }
-                        })
-                        .setNegativeButton("Check Help and FAQ", new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                Intent i = new Intent(web_motion_eye.this, Help_FAQ.class);
-                                finish();  //Kill the activity from which you will go to next activity
-                                startActivity(i);
-                            }
-                        })
-                        .setCancelable(false)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                show_webpageErrorDialog();
             }
         });
+
         mContentView.loadUrl(url_port);
 
         mContentView.setDownloadListener(new DownloadListener()
@@ -277,7 +230,7 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
                     request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType));
                     DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                     dm.enqueue(request);
-                    Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Downloading File", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -291,14 +244,43 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
                     cancel_button.show();
             }
         }, 15000L);
+    }
 
-        //mContentView.loadUrl(url_port);
-        // Set up the user interaction to manually show or hide the system UI.
+    void show_webpageErrorDialog()
+    {
+        Toast.makeText(getBaseContext(), "Error",
+                Toast.LENGTH_LONG).show();
 
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-        //findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+        new AlertDialog.Builder(web_motion_eye.this)
+                .setTitle(page_error_title)
+                .setMessage("Please help us fix the issue by letting us know by sending a feedback")
+
+                .setPositiveButton("Send Feedback", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        Utils.sendFeedback(getBaseContext());
+                    }
+
+                })
+
+                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                    }
+                })
+                .setNegativeButton("Check Help and FAQ", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        Intent i = new Intent(web_motion_eye.this, Help_FAQ.class);
+                        finish();  //Kill the activity from which you will go to next activity
+                        startActivity(i);
+                    }
+                })
+                .setCancelable(false)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+
     }
 
     @Override
@@ -311,15 +293,6 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
         delayedHide(100);
     }
 
-    /*private void toggle()
-    {
-        if (mVisible) {
-            hide();
-        } else {
-            show();
-        }
-    }*/
-
     private void hide() {
         // Hide UI first
         ActionBar actionBar = getSupportActionBar();
@@ -327,7 +300,6 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
             actionBar.hide();
         }
         mControlsView.setVisibility(View.GONE);
-        mVisible = false;
 
         // Schedule a runnable to remove the status and navigation bar after a delay
         mHideHandler.removeCallbacks(mShowPart2Runnable);
@@ -336,22 +308,10 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
 
     @SuppressLint("InlinedApi")
 
-/*    private void show() {
-        // Show the system bar
-        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-        mVisible = true;
-
-        // Schedule a runnable to display UI elements after a delay
-        mHideHandler.removeCallbacks(mHidePart2Runnable);
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
-    }*/
-
     /*
      * Schedules a call to hide() in delay milliseconds, canceling any
      * previously scheduled calls.
      */
-
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
@@ -402,17 +362,10 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
             Log.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
-            Toast.makeText(getApplicationContext(), "Storage permission granted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), "Storage permission granted", Toast.LENGTH_SHORT).show();
             //resume tasks needing this permission
         }
         else
-            Toast.makeText(getApplicationContext(), "Storage permission denied", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), "Storage permission denied", Toast.LENGTH_SHORT).show();
     }
-
-    /*@Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
-        super.onSaveInstanceState(outState);
-        mContentView.saveState(outState);
-    }*/
 }

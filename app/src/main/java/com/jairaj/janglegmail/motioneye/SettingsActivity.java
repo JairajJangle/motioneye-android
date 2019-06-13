@@ -677,7 +677,11 @@
 
 package com.jairaj.janglegmail.motioneye;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -714,6 +718,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 
             //notification preference change listener
             bindPreferenceSummaryToValue(findPreference(getString(R.string.key_fullscreen)));
+            //notification preference change listener
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_autoopen)));
 
             // feedback preference click listener
             Preference feedback_pref = findPreference(getString(R.string.key_send_feedback));
@@ -755,6 +761,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                     return true;
                 }
             });
+
+            // rate me click listener
+            Preference rate_me_pref = findPreference(getString(R.string.key_rate_me));
+            rate_me_pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+            {
+                public boolean onPreferenceClick(Preference preference)
+                {
+                    Utils.askTorate(getActivity());
+                    return true;
+                }
+            });
         }
     }
 
@@ -778,7 +795,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 
     /**
      * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
+     * to reflect its new value. Currently Blank, here for future scope
      */
     private static Preference.OnPreferenceChangeListener
             sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener()

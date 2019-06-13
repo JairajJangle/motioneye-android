@@ -58,7 +58,7 @@
     <string name="materialtaptargetprompt">MaterialTapTargetPrompt</string>
     <string name="apache_license">Apache License</string>
     <string name="icons">Icons</string>
-    <string name="app_version_text">App Version:</string>
+    <string name="app_version_text">App Version</string>
     <string name="button_to_go_back_to_home_screen">Button to go back to Home Screen</string>
     <string name="dash">-</string>
     <string name="drive_icon">Drive Icon</string>
@@ -308,6 +308,17 @@
     <string name="title_tnc">Terms and Conditions</string>
     <string name="key_pp">key_pp</string>
     <string name="key_tnc">key_tnc</string>
+    <string name="key_autoopen">key_autoopen</string>
+    <string name="autoopen_summary">Automatically opens camera stream when only one camera device
+        is present</string>
+    <string name="about_summary">The motionEye app is an interface to interact with the motion eye
+        powered and other network cameras, all in one app</string>
+    <string name="fullscreen_summary">Hide navigation buttons and make app fullscreen when video
+        stream is opened</string>
+    <string name="pp_summary">Good to Know: We do not collect any data from you</string>
+    <string name="key_rate_me">key_rate_me</string>
+    <string name="rate_me_summary">Enjoying the app?</string>
+    <string name="title_rate_me">Rate me</string>
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">

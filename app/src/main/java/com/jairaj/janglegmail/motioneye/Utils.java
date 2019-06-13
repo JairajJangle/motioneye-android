@@ -677,10 +677,19 @@
 
 package com.jairaj.janglegmail.motioneye;
 
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
+import android.view.ContextThemeWrapper;
+
+import com.kobakei.ratethisapp.RateThisApp;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 final class Utils
 {
@@ -689,7 +698,6 @@ final class Utils
      * Appends the necessary device information to email body
      * useful when providing support
      */
-
     static void sendFeedback(Context context)
     {
         String body = null;
@@ -710,6 +718,69 @@ final class Utils
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"systems.sentinel@gmail.com"});
         intent.putExtra(Intent.EXTRA_SUBJECT, "motionEye app Feedback");
         intent.putExtra(Intent.EXTRA_TEXT, body);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(Intent.createChooser(intent, context.getString(R.string.choose_email_client)));
+    }
+
+    static void open_in_chrome(String url, Context context)
+    {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        intent.setPackage("com.android.chrome");
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException ex) {
+            // Chrome browser presumably not installed so allow user to choose instead
+            intent.setPackage(null);
+            context.startActivity(intent);
+        }
+    }
+
+    static void askTorate(final Context context)
+    {
+        int style;
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1)
+            style = android.R.style.Theme_Material_Dialog;
+
+        else
+            style = R.style.AlertDialogCustom;
+
+        new AlertDialog.Builder(new ContextThemeWrapper(context, style))
+                .setMessage("Are you enjoying the app?")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        showRateDialog(context, true);
+                    }
+                })
+
+                .setNegativeButton("No", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        sendFeedback(context);
+                    }
+                })
+                .show();
+    }
+
+    static void showRateDialog(Context context, boolean showRightAway)
+
+    {
+        // Custom condition: x days and y launches
+        RateThisApp.Config config = new RateThisApp.Config(7, 14);
+        RateThisApp.init(config);
+
+        // Monitor launch times and interval from installation
+        RateThisApp.onCreate(context);
+        // If the condition is satisfied, "Rate this app" dialog will be shown
+        if(showRightAway)
+            RateThisApp.showRateDialog(context, R.style.AlertDialogCustom);
+        else
+            RateThisApp.showRateDialogIfNeeded(context, R.style.AlertDialogCustom);
     }
 }

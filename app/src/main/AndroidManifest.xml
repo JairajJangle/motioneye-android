@@ -19,7 +19,9 @@
         android:label="Motion Eye"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:allowBackup="true"
+        android:roundIcon="@mipmap/me_adp_ic_round">
 
         <activity android:name=".LegalDocShow"
             android:theme="@style/AppTheme.NoActionBar">
@@ -73,7 +75,7 @@
         <activity
             android:name=".SettingsActivity"
             android:label="Settings"
-            android:theme="@style/PreferenceScreen" />
+            android:theme="@style/PreferenceScreen"/>
     </application>
 
 </manifest>

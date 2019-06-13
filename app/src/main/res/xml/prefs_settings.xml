@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/PreferenceScreen">
 
     <PreferenceCategory android:title="General">
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="@string/key_fullscreen"
-            android:summary="Hide navigation buttons and make app fullscreen when video
-stream is opened"
+            android:summary="@string/fullscreen_summary"
             android:title="Fullscreen streaming" />
+
+        <Preference
+            android:layout="@layout/preferences_category"
+            />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/key_autoopen"
+            android:summary="@string/autoopen_summary"
+            android:title="Auto-Open Camera stream" />
 
     </PreferenceCategory>
 
@@ -17,11 +27,12 @@ stream is opened"
 
         <Preference
             android:icon="@mipmap/me_adp_ic_round"
-            android:summary="The motionEye app is an interface to interact with the motion eye powered and other network cameras, all in one app.">
+            android:summary="@string/about_summary">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.jairaj.janglegmail.motioneye"
-            android:targetClass="com.jairaj.janglegmail.motioneye.About_Page" />
+            android:targetClass="com.jairaj.janglegmail.motioneye.About_Page"
+            android:launchMode="singleInstance"/>
         </Preference>
 
         <Preference
@@ -30,7 +41,7 @@ stream is opened"
 
         <Preference
             android:summary="@string/versionName"
-            android:title="App Version" />
+            android:title="@string/app_version_text" />
 
         <Preference
             android:layout="@layout/preferences_category"
@@ -52,7 +63,8 @@ stream is opened"
             <intent
                 android:action="android.intent.action.VIEW"
                 android:targetPackage="com.jairaj.janglegmail.motioneye"
-                android:targetClass="com.jairaj.janglegmail.motioneye.Help_FAQ" />
+                android:targetClass="com.jairaj.janglegmail.motioneye.Help_FAQ"
+                android:launchMode="singleInstance"/>
         </Preference>
 
         <Preference
@@ -60,7 +72,7 @@ stream is opened"
             />
 
         <Preference android:title="@string/title_privacy_policy"
-            android:summary="Good to Know: We do not collect any data from you"
+            android:summary="@string/pp_summary"
             android:key="@string/key_pp">
             <intent
                 android:action="android.intent.action.VIEW"
@@ -73,11 +85,23 @@ stream is opened"
             />
 
         <Preference android:title="@string/title_tnc"
-            android:key="@string/key_tnc">
+            android:key="@string/key_tnc"
+            android:summary="TNCs">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:targetPackage="com.jairaj.janglegmail.motioneye"
                 android:targetClass="com.jairaj.janglegmail.motioneye.LegalDocShow" />
+        </Preference>
+
+        <Preference
+            android:layout="@layout/preferences_category"
+            />
+
+        <Preference
+            android:key="@string/key_rate_me"
+            android:summary="@string/rate_me_summary"
+            android:title="@string/title_rate_me"
+            android:icon="@drawable/ic_rate_me">
         </Preference>
 
     </PreferenceCategory>
