@@ -21,6 +21,11 @@ class Constants
         PRIVPOL, TNC
     }
 
+    enum DIALOG_TYPE
+    {
+        RATE_DIALOG, WEBPAGE_ERROR_DIALOG, WEBPAGE_LONG_LOADING
+    }
+
     @Retention(SOURCE)
     @IntDef({MODE_CAMERA, MODE_DRIVE})
     @interface ServerMode {}

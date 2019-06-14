@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -25,9 +24,6 @@ import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.URLUtil;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -37,7 +33,7 @@ import java.util.Objects;
 public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshLayout.OnRefreshListener
 {
     private static final String TAG = "";
-    private ProgressDialog progressBar;
+    public ProgressDialog progressBar;
     private AlertDialog cancel_button;
 
     boolean FullScreenPref = true;
@@ -47,7 +43,6 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
     Handler mHandler = new Handler();
     private WebView mContentView;
     String url_port = "";
-    String page_error_title = "Error";
     int mode = -1;
     //private SwipeRefreshLayout swipe;
 
@@ -135,11 +130,9 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
 
         if(mode == Constants.MODE_CAMERA) {
             progressBar = ProgressDialog.show(web_motion_eye.this, getString(R.string.connecting_mE), getString(R.string.loading));
-            page_error_title = "Uh Oh! The camera stream could not be opened :( ";
         }
         else if(mode == Constants.MODE_DRIVE) {
             progressBar = ProgressDialog.show(web_motion_eye.this, getString(R.string.connecting_gD), getString(R.string.loading));
-            page_error_title = "Uh Oh! The cloud link could not be opened :( ";
         }
         progressBar.setCancelable(true);
 
@@ -193,17 +186,21 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
             }
 
             //TODO: Android < 5.0.0 Dialog Box inconsistent and Error on Send Feedback intent
-            public void onReceivedError(WebView view, int errorCod,String description, String failingUrl)
+            @Override
+            public void onReceivedError(WebView view, int errorCode,String description, String failingUrl)
             {
-                Toast.makeText(getBaseContext(), page_error_title + "\nCheck FAQs or Send us Feedback" , Toast.LENGTH_LONG).show();
-                //show_webpageErrorDialog();
-            }
-
-            public void onReceivedError(WebView view, WebResourceRequest request,
-                                        WebResourceError error)
-            {
+                super.onReceivedError(view, errorCode, description, failingUrl);
                 show_webpageErrorDialog();
             }
+
+            //TODO: Above method is deprecated, below is new, but doesn't run on older Android
+//            @Override
+//            public void onReceivedError(WebView view, WebResourceRequest request,
+//                                        WebResourceError error)
+//            {
+//                show_webpageErrorDialog();
+//                super.onReceivedError(view, request, error);
+//            }
         });
 
         mContentView.loadUrl(url_port);
@@ -248,39 +245,50 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
 
     void show_webpageErrorDialog()
     {
-        Toast.makeText(getBaseContext(), "Error",
-                Toast.LENGTH_LONG).show();
+        CustomDialogClass cdd=new CustomDialogClass(web_motion_eye.this);
+        cdd.Dialog_Type(Constants.DIALOG_TYPE.WEBPAGE_ERROR_DIALOG, web_motion_eye.this);
+        cdd.setCancelable(false);
+        cdd.show();
 
-        new AlertDialog.Builder(web_motion_eye.this)
-                .setTitle(page_error_title)
-                .setMessage("Please help us fix the issue by letting us know by sending a feedback")
+//        cdd.negative.setOnClickListener(new View.OnClickListener()
+//        {
+//            public void onClick(View view)
+//            {
+//                Intent i = new Intent(web_motion_eye.this, Help_FAQ.class);
+//                finish();  //Kill the activity from which you will go to next activity
+//                startActivity(i);
+//            }
+//        });
 
-                .setPositiveButton("Send Feedback", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        Utils.sendFeedback(getBaseContext());
-                    }
-
-                })
-
-                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                    }
-                })
-                .setNegativeButton("Check Help and FAQ", new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        Intent i = new Intent(web_motion_eye.this, Help_FAQ.class);
-                        finish();  //Kill the activity from which you will go to next activity
-                        startActivity(i);
-                    }
-                })
-                .setCancelable(false)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-
+//        new AlertDialog.Builder(web_motion_eye.this)
+//                .setTitle(page_error_title)
+//                .setMessage("Please help us fix the issue by letting us know by sending a feedback")
+//
+//                .setPositiveButton("Send Feedback", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which)
+//                    {
+//                        Utils.sendFeedback(web_motion_eye.this);
+//                    }
+//
+//                })
+//
+//                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which)
+//                    {
+//                    }
+//                })
+//                .setNegativeButton("Check Help and FAQ", new DialogInterface.OnClickListener()
+//                {
+//                    public void onClick(DialogInterface dialog, int which)
+//                    {
+//                        Intent i = new Intent(web_motion_eye.this, Help_FAQ.class);
+//                        finish();  //Kill the activity from which you will go to next activity
+//                        startActivity(i);
+//                    }
+//                })
+//                .setCancelable(false)
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .show();
     }
 
     @Override

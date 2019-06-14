@@ -1,6 +1,7 @@
 package com.jairaj.janglegmail.motioneye;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -16,10 +17,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -592,9 +595,10 @@ public class Add_Cam extends AppCompatActivity
             preview_view.setWebViewClient(new WebViewClient());
             preview_view.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
             preview_view.loadUrl(url_port);
+
             // Enable responsive layout
             preview_view.getSettings().setUseWideViewPort(true);
-// Zoom out if the content width is greater than the width of the viewport
+            // Zoom out if the content width is greater than the width of the viewport
             preview_view.getSettings().setLoadWithOverviewMode(true);
 
             boolean isUpdate = myDb.updatePrevStat(Label_text_at_expand_ic_click, "1");
@@ -727,7 +731,8 @@ public class Add_Cam extends AppCompatActivity
         }
     }
 
-    public void toggle_visibility_of_prev() {
+    public void toggle_visibility_of_prev()
+    {
         View view;
         int i = 0;
         while (i < CameraList_ListView.getChildCount()) {
@@ -782,7 +787,9 @@ public class Add_Cam extends AppCompatActivity
                     }
                 });
 
-            } else {
+            }
+            else
+            {
                 boolean isUpdate = myDb.updatePrevStat(Each_label_text, "0");
                 if (!isUpdate)
                     Toast.makeText(Add_Cam.this, R.string.error_try_delete, Toast.LENGTH_LONG).show();

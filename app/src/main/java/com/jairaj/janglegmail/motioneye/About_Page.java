@@ -62,7 +62,7 @@ public class About_Page extends AppCompatActivity
             public void onClick(View view)
             {
                 String motion_eye_steps = "https://github.com/ccrisan/motioneye/wiki/Installation";
-                Utils.open_in_chrome(motion_eye_steps, getBaseContext());
+                Utils.open_in_chrome(motion_eye_steps, About_Page.this);
             }
         });
 
@@ -70,7 +70,7 @@ public class About_Page extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Utils.sendFeedback(getBaseContext());
+                Utils.sendFeedback(About_Page.this);
             }
         });
     }

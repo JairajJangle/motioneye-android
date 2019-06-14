@@ -677,16 +677,13 @@
 
 package com.jairaj.janglegmail.motioneye;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.view.ContextThemeWrapper;
-
 import com.kobakei.ratethisapp.RateThisApp;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -718,7 +715,7 @@ final class Utils
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"systems.sentinel@gmail.com"});
         intent.putExtra(Intent.EXTRA_SUBJECT, "motionEye app Feedback");
         intent.putExtra(Intent.EXTRA_TEXT, body);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(Intent.createChooser(intent, context.getString(R.string.choose_email_client)));
     }
 
@@ -738,34 +735,38 @@ final class Utils
 
     static void askTorate(final Context context)
     {
-        int style;
-        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1)
-            style = android.R.style.Theme_Material_Dialog;
+//        int style;
+//        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1)
+//            style = android.R.style.Theme_Material_Dialog;
+//
+//        else
+//            style = R.style.AlertDialogCustom;
 
-        else
-            style = R.style.AlertDialogCustom;
+        CustomDialogClass cdd=new CustomDialogClass((Activity)context);
+        cdd.Dialog_Type(Constants.DIALOG_TYPE.RATE_DIALOG, context);
+        cdd.show();
 
-        new AlertDialog.Builder(new ContextThemeWrapper(context, style))
-                .setMessage("Are you enjoying the app?")
-
-                // Specifying a listener allows you to take an action before dismissing the dialog.
-                // The dialog is automatically dismissed when a dialog button is clicked.
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        showRateDialog(context, true);
-                    }
-                })
-
-                .setNegativeButton("No", new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        sendFeedback(context);
-                    }
-                })
-                .show();
+//        new AlertDialog.Builder(new ContextThemeWrapper(context, style))
+//                .setMessage("Are you enjoying the app?")
+//
+//                // Specifying a listener allows you to take an action before dismissing the dialog.
+//                // The dialog is automatically dismissed when a dialog button is clicked.
+//                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+//                {
+//                    public void onClick(DialogInterface dialog, int which)
+//                    {
+//                        showRateDialog(context, true);
+//                    }
+//                })
+//
+//                .setNegativeButton("No", new DialogInterface.OnClickListener()
+//                {
+//                    public void onClick(DialogInterface dialog, int which)
+//                    {
+//                        sendFeedback(context);
+//                    }
+//                })
+//                .show();
     }
 
     static void showRateDialog(Context context, boolean showRightAway)
