@@ -24,7 +24,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="paddingPercent" value="40" />
+                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -35,7 +35,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/home/jairaj/Softwares/Android_SDK/android-studio-setup/plugins/android/lib/android.jar!/images/material_design_icons/toggle/ic_star_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/home/jairaj/Softwares/Android_SDK/android-studio-setup/plugins/android/lib/android.jar!/images/material_design_icons/editor/ic_format_list_bulleted_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -57,10 +57,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="imageAsset" value="$USER_HOME$/Desktop/github_mark.svg" />
-                                      <entry key="outputName" value="ic_rate_me" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Desktop/github-logo.svg" />
+                                      <entry key="outputName" value="steps_logo" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="3598da" />
+                                      <entry key="themeColor" value="000000" />
                                     </map>
                                   </option>
                                 </PersistentState>

@@ -773,7 +773,7 @@ final class Utils
     static void showRateDialog(Context context, boolean showRightAway)
     {
         // Custom condition: x days and y launches
-        RateThisApp.Config config = new RateThisApp.Config(7, 14);
+        RateThisApp.Config config = new RateThisApp.Config(14, 20);
         RateThisApp.init(config);
 
         // Monitor launch times and interval from installation
