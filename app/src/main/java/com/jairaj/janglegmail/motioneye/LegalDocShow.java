@@ -677,13 +677,12 @@
 
 package com.jairaj.janglegmail.motioneye;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.ScrollingMovementMethod;
-import android.text.style.TtsSpan;
 import android.widget.TextView;
 
 import java.util.Objects;

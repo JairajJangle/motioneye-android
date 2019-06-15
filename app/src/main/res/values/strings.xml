@@ -63,6 +63,7 @@
     <string name="dash">-</string>
     <string name="drive_icon">Drive Icon</string>
     <string name="github_icon">GITHUB_ICON</string>
+    <string name="are_you_enjoying">Are you enjoying the app?</string>
 
     <!--Setting Screen related strings below-->
     <string name="summary_support">Got any queries? We are happy to help!</string>
@@ -319,6 +320,7 @@
     <string name="key_rate_me">key_rate_me</string>
     <string name="rate_me_summary">Enjoying the app?</string>
     <string name="title_rate_me">Rate me</string>
+    <string name="uh_oh">Uh Oh!</string>
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">

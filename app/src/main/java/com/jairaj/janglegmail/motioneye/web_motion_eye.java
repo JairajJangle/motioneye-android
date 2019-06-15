@@ -10,13 +10,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -125,8 +126,6 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
 //        swipe.setOnRefreshListener(this);
 
         CookieManager.getInstance().setAcceptCookie(true);
-
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
         if(mode == Constants.MODE_CAMERA) {
             progressBar = ProgressDialog.show(web_motion_eye.this, getString(R.string.connecting_mE), getString(R.string.loading));
@@ -243,6 +242,16 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
         }, 15000L);
     }
 
+    //To prevent crashes on some devices WebView needs to be safely destroyed
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mContentView.loadUrl("about:blank");
+        mContentView.destroy();
+        mContentView = null;
+
+    }
+
     void show_webpageErrorDialog()
     {
         CustomDialogClass cdd=new CustomDialogClass(web_motion_eye.this);
@@ -339,10 +348,10 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
 //        }
 //    }
 
-    private void ReLoadWebView(String currentURL)
-    {
-        mContentView.loadUrl(currentURL);
-    }
+//    private void ReLoadWebView(String currentURL)
+//    {
+//        mContentView.loadUrl(currentURL);
+//    }
 
     public  boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -366,7 +375,7 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
             Log.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);

@@ -684,6 +684,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+
 import com.kobakei.ratethisapp.RateThisApp;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -770,7 +771,6 @@ final class Utils
     }
 
     static void showRateDialog(Context context, boolean showRightAway)
-
     {
         // Custom condition: x days and y launches
         RateThisApp.Config config = new RateThisApp.Config(7, 14);

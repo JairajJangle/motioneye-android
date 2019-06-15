@@ -13,6 +13,7 @@
 
         <Preference
             android:layout="@layout/preferences_category"
+            android:clickable="false"
             />
 
         <SwitchPreference
@@ -37,6 +38,7 @@
 
         <Preference
             android:layout="@layout/preferences_category"
+            android:clickable="false"
             />
 
         <Preference
@@ -45,6 +47,7 @@
 
         <Preference
             android:layout="@layout/preferences_category"
+            android:clickable="false"
             />
 
         <Preference
@@ -54,6 +57,7 @@
 
         <Preference
             android:layout="@layout/preferences_category"
+            android:clickable="false"
             />
 
         <!-- preference opens url in browser -->
@@ -69,6 +73,7 @@
 
         <Preference
             android:layout="@layout/preferences_category"
+            android:clickable="false"
             />
 
         <Preference android:title="@string/title_privacy_policy"
@@ -82,6 +87,7 @@
 
         <Preference
             android:layout="@layout/preferences_category"
+            android:clickable="false"
             />
 
         <Preference android:title="@string/title_tnc"
@@ -95,6 +101,7 @@
 
         <Preference
             android:layout="@layout/preferences_category"
+            android:clickable="false"
             />
 
         <Preference

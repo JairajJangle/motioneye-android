@@ -1,9 +1,9 @@
 package com.jairaj.janglegmail.motioneye;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,12 +17,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -34,11 +32,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/*import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;*/
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +40,11 @@ import java.util.Map;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
+
+/*import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;*/
 
 public class Add_Cam extends AppCompatActivity
 {
@@ -79,7 +77,8 @@ public class Add_Cam extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+        if (!checkWriteExternalPermission())
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
 
         myDb = new DataBase(this); // init DataBase object
 
@@ -116,24 +115,6 @@ public class Add_Cam extends AppCompatActivity
         if(isFirstTime())
         {
             display_tutorial(1);
-        }
-
-        else
-        {
- /*           SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-            float fab_x = preferences.getInt("Fab_x", 0);
-            float fab_y = preferences.getInt("Fab_y", 0);
-
-            Toast.makeText(getBaseContext(), Float.toString(fab_y), Toast.LENGTH_SHORT).show();
-
-            //if(fab_x != 0 && fab_y != 0)
-            {
-                fab.setX(fab_x);
-                fab.setY(fab_y);
-                fab.show();
-            }
-*/
-            //display_ad();
         }
 
         fab.setOnClickListener(new View.OnClickListener()
@@ -261,6 +242,12 @@ public class Add_Cam extends AppCompatActivity
                 return true;
             }
         });
+    }
+
+    private boolean checkWriteExternalPermission() {
+        String permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        int res = this.checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
     }
 
     public void onPreviewClick(View v)
