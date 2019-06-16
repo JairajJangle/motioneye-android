@@ -1,13 +1,13 @@
 package com.jairaj.janglegmail.motioneye;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
 import java.util.Objects;
 
@@ -48,14 +48,19 @@ public class About_Page extends AppCompatActivity
         credits_showcase.setText(Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt'> MaterialTapTargetPrompt</a>"));
         credits_showcase.setMovementMethod(LinkMovementMethod.getInstance());
 
-        join_dev.setText(Html.fromHtml("<a href= 'https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/tree/beta-main'> Be a Dev</a>"));
-        join_dev.setMovementMethod(LinkMovementMethod.getInstance());
-
         apache_1.setText(Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/LICENSE'> Apache License</a>"));
         apache_1.setMovementMethod(LinkMovementMethod.getInstance());
 
         apache_2.setText(Html.fromHtml("<a href= 'http://www.apache.org/licenses/LICENSE-2.0.txt'> Apache License</a>"));
         apache_2.setMovementMethod(LinkMovementMethod.getInstance());
+
+        join_dev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String motion_eye_steps = "https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem";
+                Utils.open_in_chrome(motion_eye_steps, About_Page.this);
+            }
+        });
 
         view_steps.setOnClickListener(new View.OnClickListener() {
             @Override
