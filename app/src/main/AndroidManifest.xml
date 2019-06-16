@@ -19,7 +19,13 @@
         android:label="Motion Eye"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:allowBackup="true"
+        android:roundIcon="@mipmap/me_adp_ic_round">
+
+        <activity android:name=".LegalDocShow"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name=".Help_FAQ"
             android:label="Help and FAQ"
@@ -66,6 +72,10 @@
             android:label="About"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings"
+            android:theme="@style/PreferenceScreen"/>
     </application>
 
 </manifest>

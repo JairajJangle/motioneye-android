@@ -8,11 +8,23 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 /**
  * @author sk8 on 25/02/19.
  */
+
 class Constants
 {
     //Bundle Keys
     static final String KEY_URL_PORT = "url_port";
     static final String KEY_MODE = "mode";
+    static final String KEY_LEGAL_DOC_TYPE = "LEGAL_DOC";
+
+    enum LEGAL_DOC_TYPE
+    {
+        PRIVPOL, TNC
+    }
+
+    enum DIALOG_TYPE
+    {
+        RATE_DIALOG, WEBPAGE_ERROR_DIALOG, WEBPAGE_LONG_LOADING
+    }
 
     @Retention(SOURCE)
     @IntDef({MODE_CAMERA, MODE_DRIVE})

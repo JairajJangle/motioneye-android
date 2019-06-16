@@ -3,11 +3,13 @@ package com.jairaj.janglegmail.motioneye;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -30,11 +32,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/*import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;*/
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +40,11 @@ import java.util.Map;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
+
+/*import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;*/
 
 public class Add_Cam extends AppCompatActivity
 {
@@ -54,6 +56,7 @@ public class Add_Cam extends AppCompatActivity
     MenuItem dummy_edit; //for storing layout item of edit button in toolbar
     MenuItem dummy_about; //for storing layout item of about option in toolbar
     MenuItem dummy_help_faq;
+    MenuItem dummy_settings;
     //private AdView mAdView; //for storing layout item of Ad view
     //AdRequest adRequest; //for storing ad request to adUnit id in linked layout file
     //AdListener adListener; //Listener for ads
@@ -69,10 +72,13 @@ public class Add_Cam extends AppCompatActivity
 
     private static final int REQUEST_CODE = 1;
 
+    boolean autoopen_pref = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+        if (!checkWriteExternalPermission())
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
 
         myDb = new DataBase(this); // init DataBase object
 
@@ -83,9 +89,15 @@ public class Add_Cam extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add__cam);
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        autoopen_pref = prefs.getBoolean(getString(R.string.key_autoopen), true);
+
         //MobileAds.initialize(this, "ca-app-pub-7081069887552324~4679468464");
         fab = findViewById(R.id.fab);
         toolbar = findViewById(R.id.toolbar);
+
+        Utils.showRateDialog(this, false);
 
         adapter = new SimpleAdapter(this, listItems, R.layout.custom_list_item,
                 new String[]{"First Line", "Second Line"},
@@ -103,24 +115,6 @@ public class Add_Cam extends AppCompatActivity
         if(isFirstTime())
         {
             display_tutorial(1);
-        }
-
-        else
-        {
- /*           SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-            float fab_x = preferences.getInt("Fab_x", 0);
-            float fab_y = preferences.getInt("Fab_y", 0);
-
-            Toast.makeText(getBaseContext(), Float.toString(fab_y), Toast.LENGTH_SHORT).show();
-
-            //if(fab_x != 0 && fab_y != 0)
-            {
-                fab.setX(fab_x);
-                fab.setY(fab_y);
-                fab.show();
-            }
-*/
-            //display_ad();
         }
 
         fab.setOnClickListener(new View.OnClickListener()
@@ -161,7 +155,7 @@ public class Add_Cam extends AppCompatActivity
                         toggle_visibility_of_drive_button();
                         toggle_visibility_of_prev();
 
-                        if (CameraList_ListView.getCount() == 1)
+                        if ((CameraList_ListView.getCount() == 1) && autoopen_pref)
                         {
                             String url = listItems.get(0).get("Second Line");
                             int mode = TextUtils.isEmpty(
@@ -248,6 +242,12 @@ public class Add_Cam extends AppCompatActivity
                 return true;
             }
         });
+    }
+
+    private boolean checkWriteExternalPermission() {
+        String permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        int res = this.checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
     }
 
     public void onPreviewClick(View v)
@@ -382,6 +382,8 @@ public class Add_Cam extends AppCompatActivity
             dummy_about.setVisible(true);
         if(dummy_help_faq != null)
             dummy_help_faq.setVisible(true);
+        if(dummy_settings != null)
+            dummy_settings.setVisible(true);
 
         toolbar.setTitle(R.string.Camera_List);
 
@@ -440,6 +442,7 @@ public class Add_Cam extends AppCompatActivity
         dummy_edit = menu.findItem(R.id.edit);
         dummy_about = menu.findItem(R.id.action_about);
         dummy_help_faq = menu.findItem(R.id.action_help);
+        dummy_settings = menu.findItem(R.id.action_settings);
 
         return true;
     }
@@ -495,13 +498,21 @@ public class Add_Cam extends AppCompatActivity
         if(id == R.id.action_about)
         {
             Intent intent_about_page = new Intent(Add_Cam.this, About_Page.class);
+            intent_about_page.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent_about_page);
         }
 
         if(id == R.id.action_help)
         {
             Intent intent_help_faq = new Intent(Add_Cam.this, Help_FAQ.class);
+            intent_help_faq.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent_help_faq);
+        }
+
+        if(id == R.id.action_settings)
+        {
+            Intent intent_settings = new Intent(Add_Cam.this, SettingsActivity.class);
+            startActivity(intent_settings);
         }
 
         return super.onOptionsItemSelected(item);
@@ -571,9 +582,10 @@ public class Add_Cam extends AppCompatActivity
             preview_view.setWebViewClient(new WebViewClient());
             preview_view.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
             preview_view.loadUrl(url_port);
+
             // Enable responsive layout
             preview_view.getSettings().setUseWideViewPort(true);
-// Zoom out if the content width is greater than the width of the viewport
+            // Zoom out if the content width is greater than the width of the viewport
             preview_view.getSettings().setLoadWithOverviewMode(true);
 
             boolean isUpdate = myDb.updatePrevStat(Label_text_at_expand_ic_click, "1");
@@ -706,7 +718,8 @@ public class Add_Cam extends AppCompatActivity
         }
     }
 
-    public void toggle_visibility_of_prev() {
+    public void toggle_visibility_of_prev()
+    {
         View view;
         int i = 0;
         while (i < CameraList_ListView.getChildCount()) {
@@ -760,7 +773,10 @@ public class Add_Cam extends AppCompatActivity
                         return true;
                     }
                 });
-            } else {
+
+            }
+            else
+            {
                 boolean isUpdate = myDb.updatePrevStat(Each_label_text, "0");
                 if (!isUpdate)
                     Toast.makeText(Add_Cam.this, R.string.error_try_delete, Toast.LENGTH_LONG).show();
@@ -817,6 +833,7 @@ public class Add_Cam extends AppCompatActivity
     {
         dummy_about.setVisible(!dummy_about.isVisible());
         dummy_help_faq.setVisible(!dummy_help_faq.isVisible());
+        dummy_settings.setVisible(!dummy_settings.isVisible());
         dummy_delete.setVisible(!dummy_delete.isVisible());
         dummy_edit.setVisible(!dummy_edit.isVisible());
 
