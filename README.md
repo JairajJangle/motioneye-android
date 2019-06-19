@@ -5,7 +5,8 @@
 ---
 
 # motionEye app - HomeSurveillance System
-git repo for motionEye app - Home Surveillance System, available on Google Play Store
+git repo for Production release of motionEye app - Home Surveillance System, available on Google Play Store
+git repo for Beta Release here: [Beta Release Branch Link](https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/tree/beta-main)
 
 ###### Want to contribute?
 If you are a developer and you wish to contribute to the app please fork the project and submit a pull request on the dev branch. Here are some user requested features that are still yet to be introduced.
