@@ -321,6 +321,7 @@
     <string name="rate_me_summary">Enjoying the app?</string>
     <string name="title_rate_me">Rate me</string>
     <string name="uh_oh">Uh Oh!</string>
+    <string name="connecting_uM">Unknown Mode</string>
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">

@@ -734,6 +734,11 @@ final class Utils
         }
     }
 
+    static boolean checkWhetherStream(String url_port) {
+        boolean LiveStream = url_port.toLowerCase().contains("8081");
+        return LiveStream;
+    }
+
     static void askTorate(final Context context)
     {
 //        int style;
