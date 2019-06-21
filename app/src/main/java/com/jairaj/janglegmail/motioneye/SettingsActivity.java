@@ -690,8 +690,6 @@ import static com.jairaj.janglegmail.motioneye.Constants.LEGAL_DOC_TYPE;
 
 public class SettingsActivity extends AppCompatPreferenceActivity
 {
-    private static final String TAG = SettingsActivity.class.getSimpleName();
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

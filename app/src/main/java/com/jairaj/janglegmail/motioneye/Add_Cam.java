@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -556,8 +557,9 @@ public class Add_Cam extends AppCompatActivity
                     .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                     {
                         @Override
-                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                        public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
                         {
+                            /*
                             if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                             {
                                 // User has pressed the prompt target
@@ -566,6 +568,7 @@ public class Add_Cam extends AppCompatActivity
                             {
                                 //display_ad();
                             }
+                            */
                         }
                     })
                     .show();
@@ -584,7 +587,7 @@ public class Add_Cam extends AppCompatActivity
                     .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                     {
                         @Override
-                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                        public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
                         {
                             if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                             {
@@ -628,8 +631,9 @@ public class Add_Cam extends AppCompatActivity
                     .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                     {
                         @Override
-                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                        public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
                         {
+                            /*
                             if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                             {
                                 //display_ad();
@@ -638,6 +642,7 @@ public class Add_Cam extends AppCompatActivity
                             {
                                 //display_ad();
                             }
+                            */
                         }
                     })
                     .show();
@@ -740,6 +745,7 @@ public class Add_Cam extends AppCompatActivity
             expand_button.setImageResource(R.drawable.expand_down);
             preview_view.loadUrl("about:blank");
             preview_view.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
         }
 
         final View finalView = preview_view;
