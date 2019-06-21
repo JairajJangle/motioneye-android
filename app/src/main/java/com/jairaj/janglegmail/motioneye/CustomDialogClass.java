@@ -698,20 +698,16 @@ public class CustomDialogClass extends Dialog
 {
     public Activity c;
     public Dialog d;
-    public Button positive, negative, neutral;
-    DIALOG_TYPE type;
-    TextView dialogTitle, dialogmessage;
-    ImageView dialogIcon;
+    private DIALOG_TYPE type;
     Context context;
-    private String title, message;
 
-    public CustomDialogClass(Activity a) {
+    CustomDialogClass(Activity a) {
         super(a);
         // TODO Auto-generated constructor stub
         this.c = a;
     }
 
-    public void Dialog_Type(DIALOG_TYPE type, Context context) {
+    void Dialog_Type(DIALOG_TYPE type, Context context) {
         this.type = type;
         this.context = context;
     }
@@ -724,21 +720,21 @@ public class CustomDialogClass extends Dialog
 
         Objects.requireNonNull(getWindow()).setDimAmount(0.3f);
 
-        positive = findViewById(R.id.button2);
-        negative = findViewById(R.id.button1);
-        neutral = findViewById(R.id.button3);
+        Button positive = findViewById(R.id.button2);
+        Button negative = findViewById(R.id.button1);
+        Button neutral = findViewById(R.id.button3);
 
-        dialogTitle = findViewById(R.id.alertTitle);
-        dialogmessage = findViewById(R.id.message);
+        TextView dialogTitle = findViewById(R.id.alertTitle);
+        TextView dialogmessage = findViewById(R.id.message);
 
-        dialogIcon = findViewById(R.id.icon);
+        ImageView dialogIcon = findViewById(R.id.icon);
 
         LinearLayout titltePanel = findViewById(R.id.topPanel);
 
         switch (type) {
             case RATE_DIALOG:
-                positive.setText("Yes");
-                negative.setText("No");
+                positive.setText(c.getString(R.string.yes));
+                negative.setText(c.getString(R.string.no));
                 neutral.setVisibility(View.GONE);
 
                 dialogTitle.setText("");
@@ -770,11 +766,11 @@ public class CustomDialogClass extends Dialog
 //                negative.setText("Check Help and FAQ");
 //                neutral.setText("Cancel");
 
-                neutral.setText("Send Feedback");
-                positive.setText("Check Help and FAQ");
-                negative.setText("Cancel");
+                neutral.setText(c.getString(R.string.send_feedback));
+                positive.setText(c.getString(R.string.check_help_faq));
+                negative.setText(c.getString(R.string.cancel));
 
-                dialogmessage.setText("Please help us fix the issue by letting us know by sending a feedback");
+                dialogmessage.setText(c.getString(R.string.page_error_dialog_message));
 
                 neutral.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -28,6 +30,7 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -536,77 +539,6 @@ public class Add_Cam extends AppCompatActivity
         goToWebMotionEye(drive_link, Constants.MODE_DRIVE);
     }
 
-    public void onExpandCamClick(final View v)
-    {
-        //get the row the clicked button is in
-        ConstraintLayout vwParentRow = (ConstraintLayout)v.getParent();
-        WebView preview_view = vwParentRow.findViewById(R.id.preview_webview);
-
-        TextView LabelView_at_Expand_ic_click = vwParentRow.findViewById(R.id.title_label_text);
-        String Label_text_at_expand_ic_click = LabelView_at_Expand_ic_click.getText().toString();
-
-        //TODO Test this onTouch code
-        preview_view.setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View view, MotionEvent event)
-            {
-                if(event.getAction() == MotionEvent.ACTION_UP)
-                {
-                    onPreviewClick(v);
-                }
-                return true;
-            }
-        });
-
-        ImageView expand_button = vwParentRow.findViewById(R.id.expand_button);
-
-        if(preview_view.getVisibility() == View.GONE)
-        {
-            String url_link = myDb.getUrl_from_Label(Label_text_at_expand_ic_click);
-            String url_port;
-            String port = myDb.getPort_from_Label(Label_text_at_expand_ic_click);
-            if(!port.isEmpty())
-                url_port = url_link + ":" + port;
-            else
-                url_port = url_link;
-
-            expand_button.setImageResource(R.drawable.collapse_button);
-
-            preview_view.setVisibility(View.VISIBLE);
-
-            ((ConstraintLayout)preview_view.getParent()).setPadding(0, 0, 0, Constants.PREVIEW_PADDING);
-
-            preview_view.getSettings().setJavaScriptEnabled(true);
-            preview_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-            preview_view.setWebViewClient(new WebViewClient());
-            preview_view.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-            preview_view.loadUrl(url_port);
-
-            // Enable responsive layout
-            preview_view.getSettings().setUseWideViewPort(true);
-            // Zoom out if the content width is greater than the width of the viewport
-            preview_view.getSettings().setLoadWithOverviewMode(true);
-
-            boolean isUpdate = myDb.updatePrevStat(Label_text_at_expand_ic_click, "1");
-            if(!isUpdate)
-                Toast.makeText(Add_Cam.this, R.string.error_try_delete,Toast.LENGTH_LONG).show();
-        }
-
-        else
-        {
-            boolean isUpdate = myDb.updatePrevStat(Label_text_at_expand_ic_click, "0");
-            if(!isUpdate)
-                Toast.makeText(Add_Cam.this, R.string.error_try_delete,Toast.LENGTH_LONG).show();
-
-            ((ConstraintLayout)preview_view.getParent()).setPadding(0, 0, 0, 0);
-
-            expand_button.setImageResource(R.drawable.expand_down);
-            preview_view.loadUrl("about:blank");
-            preview_view.setVisibility(View.GONE);
-        }
-    }
-
     private void display_tutorial(int call_number)
     {
         /* call_number usage
@@ -625,8 +557,9 @@ public class Add_Cam extends AppCompatActivity
                     .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                     {
                         @Override
-                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                        public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
                         {
+                            /*
                             if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                             {
                                 // User has pressed the prompt target
@@ -635,6 +568,7 @@ public class Add_Cam extends AppCompatActivity
                             {
                                 //display_ad();
                             }
+                            */
                         }
                     })
                     .show();
@@ -653,7 +587,7 @@ public class Add_Cam extends AppCompatActivity
                     .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                     {
                         @Override
-                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                        public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
                         {
                             if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                             {
@@ -697,8 +631,9 @@ public class Add_Cam extends AppCompatActivity
                     .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                     {
                         @Override
-                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                        public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state)
                         {
+                            /*
                             if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                             {
                                 //display_ad();
@@ -707,6 +642,7 @@ public class Add_Cam extends AppCompatActivity
                             {
                                 //display_ad();
                             }
+                            */
                         }
                     })
                     .show();
@@ -718,75 +654,110 @@ public class Add_Cam extends AppCompatActivity
         }
     }
 
+    public void onExpandCamClick(final View v) {
+        //get the row the clicked button is in
+        ConstraintLayout vwParentRow = (ConstraintLayout) v.getParent();
+
+        HandlePreviewView(vwParentRow, false);
+    }
+
     public void toggle_visibility_of_prev()
     {
         View view;
         int i = 0;
         while (i < CameraList_ListView.getChildCount()) {
             view = CameraList_ListView.getChildAt(i);
-            TextView Each_Label = view.findViewById(R.id.title_label_text);
-            String Each_label_text = Each_Label.getText().toString();
-            String prev = myDb.getPrevStat_from_Label(Each_label_text);
+            HandlePreviewView(view, true);
 
-            WebView preview_view = view.findViewById(R.id.preview_webview);
-
-            ImageView expand_button = view.findViewById(R.id.expand_button);
-
-            if (prev.equals("1")) {
-                String url_link = myDb.getUrl_from_Label(Each_label_text);
-                String url_port;
-                String port = myDb.getPort_from_Label(Each_label_text);
-                if (!port.isEmpty())
-                    url_port = url_link + ":" + port;
-                else
-                    url_port = url_link;
-
-                expand_button.setImageResource(R.drawable.collapse_button);
-
-                preview_view.setVisibility(View.VISIBLE);
-
-                ((ConstraintLayout) preview_view.getParent()).setPadding(0, 0, 0, Constants.PREVIEW_PADDING);
-
-                preview_view.getSettings().setJavaScriptEnabled(true);
-                preview_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-                preview_view.setWebViewClient(new WebViewClient());
-                preview_view.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-                preview_view.loadUrl(url_port);
-                // Enable responsive layout
-                preview_view.getSettings().setUseWideViewPort(true);
-                // Zoom out if the content width is greater than the width of the viewport
-                preview_view.getSettings().setLoadWithOverviewMode(true);
-
-                boolean isUpdate = myDb.updatePrevStat(Each_label_text, "1");
-                if (!isUpdate)
-                    Toast.makeText(Add_Cam.this, R.string.error_try_delete, Toast.LENGTH_LONG).show();
-
-
-                //TODO Test this onTouch code
-                final View finalView = preview_view;
-                preview_view.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if (event.getAction() == MotionEvent.ACTION_UP) {
-                            onPreviewClick(finalView);
-                        }
-                        return true;
-                    }
-                });
-
-            }
-            else
-            {
-                boolean isUpdate = myDb.updatePrevStat(Each_label_text, "0");
-                if (!isUpdate)
-                    Toast.makeText(Add_Cam.this, R.string.error_try_delete, Toast.LENGTH_LONG).show();
-
-                expand_button.setImageResource(R.drawable.expand_down);
-                preview_view.loadUrl("about:blank");
-                preview_view.setVisibility(View.GONE);
-            }
             i++;
         }
+    }
+
+    void HandlePreviewView(final View view, boolean checkAll) {
+        TextView Each_Label = view.findViewById(R.id.title_label_text);
+        String Each_label_text = Each_Label.getText().toString();
+
+        WebView preview_view = view.findViewById(R.id.preview_webview);
+
+        ImageView expand_button = view.findViewById(R.id.expand_button);
+
+        final ProgressBar progressBar = view.findViewById(R.id.preview_progressBar);
+
+        String visibilityState = "0";
+
+        if (checkAll)
+            visibilityState = myDb.getPrevStat_from_Label(Each_label_text);
+        else {
+            if (preview_view.getVisibility() == View.GONE)
+                visibilityState = "1";
+        }
+
+        if (visibilityState.equals("1")) {
+            String url_link = myDb.getUrl_from_Label(Each_label_text);
+            String url_port;
+            String port = myDb.getPort_from_Label(Each_label_text);
+
+            if (!port.isEmpty())
+                url_port = url_link + ":" + port;
+            else
+                url_port = url_link;
+
+            expand_button.setImageResource(R.drawable.collapse_button);
+
+            preview_view.setVisibility(View.VISIBLE);
+
+            ((ConstraintLayout) preview_view.getParent()).setPadding(0, 0, 0, Constants.PREVIEW_PADDING);
+
+            preview_view.getSettings().setJavaScriptEnabled(true);
+            preview_view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+            preview_view.setWebViewClient(new WebViewClient());
+            preview_view.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+            preview_view.getSettings().setUseWideViewPort(true);
+            preview_view.getSettings().setLoadWithOverviewMode(true);
+
+            preview_view.loadUrl(url_port);
+
+            final boolean LiveStream = Utils.checkWhetherStream(url_port);
+            preview_view.setWebChromeClient(new WebChromeClient() {
+                public void onProgressChanged(WebView view, int progress) {
+                    if (!view.getUrl().equals("about:blank")) {
+                        progressBar.setProgress(progress);
+                        if (progress == 100 || (progress >= 30 && LiveStream)) {
+                            progressBar.setVisibility(View.GONE);
+                        } else {
+                            progressBar.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            });
+
+            boolean isUpdate = myDb.updatePrevStat(Each_label_text, "1");
+            if (!isUpdate)
+                Toast.makeText(Add_Cam.this, R.string.error_try_delete, Toast.LENGTH_LONG).show();
+        } else {
+            boolean isUpdate = myDb.updatePrevStat(Each_label_text, "0");
+
+            if (!isUpdate)
+                Toast.makeText(Add_Cam.this, R.string.error_try_delete, Toast.LENGTH_LONG).show();
+
+            ((ConstraintLayout) preview_view.getParent()).setPadding(0, 0, 0, 0);
+
+            expand_button.setImageResource(R.drawable.expand_down);
+            preview_view.loadUrl("about:blank");
+            preview_view.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+        }
+
+        final View finalView = preview_view;
+        preview_view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    onPreviewClick(finalView);
+                }
+                return true;
+            }
+        });
     }
 
     private void toggle_visibility_of_drive_button()

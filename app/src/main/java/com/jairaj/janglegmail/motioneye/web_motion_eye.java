@@ -25,8 +25,10 @@ import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.URLUtil;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.Objects;
@@ -72,7 +74,7 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
                         | UiVisibilityFlag);
         }
     };
-    private View mControlsView;
+    //    private View mControlsView;
     private final Runnable mShowPart2Runnable = new Runnable() {
         @Override
         public void run() {
@@ -81,9 +83,10 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
             if (actionBar != null) {
                 actionBar.show();
             }
-            mControlsView.setVisibility(View.VISIBLE);
+//            mControlsView.setVisibility(View.VISIBLE);
         }
     };
+
     private final Runnable mHideRunnable = new Runnable() {
         @Override
         public void run()
@@ -96,6 +99,9 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_web_motion_eye);
+
         Bundle bundle = getIntent().getExtras();
         //Extract the data…
         if (bundle != null)
@@ -104,15 +110,11 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
             mode = bundle.getInt(Constants.KEY_MODE);
         }
 
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_web_motion_eye);
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         FullScreenPref = prefs.getBoolean(getString(R.string.key_fullscreen), true);
 
-        mControlsView = findViewById(R.id.fullscreen_content_controls);
+//        mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
         mContentView.getSettings().setJavaScriptEnabled(true);
         mContentView.setWebViewClient(new WebViewClient());
@@ -127,12 +129,22 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
 
         CookieManager.getInstance().setAcceptCookie(true);
 
-        if(mode == Constants.MODE_CAMERA) {
-            progressBar = ProgressDialog.show(web_motion_eye.this, getString(R.string.connecting_mE), getString(R.string.loading));
+        if (mode == Constants.MODE_CAMERA) {
+            progressBar = ProgressDialog.show(web_motion_eye.this,
+                    getString(R.string.connecting_mE), getString(R.string.loading));
+        } else if (mode == Constants.MODE_DRIVE) {
+            progressBar = ProgressDialog.show(web_motion_eye.this,
+                    getString(R.string.connecting_gD), getString(R.string.loading));
+        } else {
+            progressBar = ProgressDialog.show(web_motion_eye.this,
+                    getString(R.string.connecting_uM), getString(R.string.loading));
         }
-        else if(mode == Constants.MODE_DRIVE) {
-            progressBar = ProgressDialog.show(web_motion_eye.this, getString(R.string.connecting_gD), getString(R.string.loading));
-        }
+
+        ProgressBar progressbar = progressBar.findViewById(android.R.id.progress);
+        progressbar.getIndeterminateDrawable()
+                .setColorFilter(getResources().getColor(R.color.motioneye_blue),
+                        android.graphics.PorterDuff.Mode.SRC_IN);
+
         progressBar.setCancelable(true);
 
         cancel_button = new AlertDialog.Builder(this).create();
@@ -154,7 +166,8 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
         {
             public void onCancel(DialogInterface arg0)
             {
-                progressBar.dismiss();
+                if (progressBar != null)
+                    progressBar.dismiss();
                 mHandler.removeMessages(0);
                 finish();
             }
@@ -171,16 +184,7 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
 
             public void onPageFinished(WebView view, String url)
             {
-                if (progressBar != null)
-                {
-                    if(progressBar.isShowing())
-                        progressBar.dismiss();
-                }
-
-                if(cancel_button != null) {
-                    if (cancel_button.isShowing())
-                        cancel_button.dismiss();
-                }
+                HandleOnPageFinished();
 //                swipe.setRefreshing(false);
             }
 
@@ -200,6 +204,14 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
 //                show_webpageErrorDialog();
 //                super.onReceivedError(view, request, error);
 //            }
+        });
+
+        final boolean LiveStream = Utils.checkWhetherStream(url_port);
+        mContentView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                if (LiveStream && progress >= 30)
+                    HandleOnPageFinished();
+            }
         });
 
         mContentView.loadUrl(url_port);
@@ -236,8 +248,10 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
             @Override
             public void run()
             {
-                if(progressBar.isShowing())
-                    cancel_button.show();
+                if (progressBar != null)
+                    if (progressBar.isShowing())
+                        if (cancel_button != null)
+                            cancel_button.show();
             }
         }, 15000L);
     }
@@ -249,7 +263,18 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
         mContentView.loadUrl("about:blank");
         mContentView.destroy();
         mContentView = null;
+    }
 
+    void HandleOnPageFinished() {
+        if (progressBar != null) {
+            if (progressBar.isShowing())
+                progressBar.dismiss();
+        }
+
+        if (cancel_button != null) {
+            if (cancel_button.isShowing())
+                cancel_button.dismiss();
+        }
     }
 
     void show_webpageErrorDialog()
@@ -316,7 +341,7 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
         if (actionBar != null) {
             actionBar.hide();
         }
-        mControlsView.setVisibility(View.GONE);
+//        mControlsView.setVisibility(View.GONE);
 
         // Schedule a runnable to remove the status and navigation bar after a delay
         mHideHandler.removeCallbacks(mShowPart2Runnable);
@@ -353,7 +378,7 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
 //        mContentView.loadUrl(currentURL);
 //    }
 
-    public  boolean isStoragePermissionGranted() {
+    public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
@@ -377,7 +402,7 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
             Toast.makeText(getBaseContext(), "Storage permission granted", Toast.LENGTH_SHORT).show();
             //resume tasks needing this permission

@@ -698,7 +698,7 @@ final class Utils
      */
     static void sendFeedback(Context context)
     {
-        String body = null;
+        String body;
         try
         {
             body = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
@@ -732,6 +732,10 @@ final class Utils
             intent.setPackage(null);
             context.startActivity(intent);
         }
+    }
+
+    static boolean checkWhetherStream(String url_port) {
+        return url_port.toLowerCase().contains("8081");
     }
 
     static void askTorate(final Context context)

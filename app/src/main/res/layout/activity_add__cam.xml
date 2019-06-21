@@ -26,7 +26,7 @@
             android:layout_height="?attr/actionBarSize"
             android:animateLayoutChanges="true"
             android:background="@color/motioneye_dark_grey"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/DarkPopUpStyle" />
 
     </android.support.design.widget.AppBarLayout>
 

@@ -26,14 +26,6 @@
             android:keepScreenOn="true" />
     <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
-    <ProgressBar
-        android:id="@+id/webPBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hapticFeedbackEnabled="false"
-        android:indeterminate="false"
-        android:visibility="invisible" />
-
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
     <FrameLayout

@@ -64,6 +64,7 @@
     <string name="drive_icon">Drive Icon</string>
     <string name="github_icon">GITHUB_ICON</string>
     <string name="are_you_enjoying">Are you enjoying the app?</string>
+    <string name="cancel">Cancel</string>
 
     <!--Setting Screen related strings below-->
     <string name="summary_support">Got any queries? We are happy to help!</string>
@@ -321,6 +322,11 @@
     <string name="rate_me_summary">Enjoying the app?</string>
     <string name="title_rate_me">Rate me</string>
     <string name="uh_oh">Uh Oh!</string>
+    <string name="connecting_uM">Unknown Mode</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="check_help_faq">Check Help and FAQ</string>
+    <string name="page_error_dialog_message">Please help us fix the issue by letting us know by sending a feedback</string>
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">
