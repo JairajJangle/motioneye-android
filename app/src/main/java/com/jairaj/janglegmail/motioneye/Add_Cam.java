@@ -751,7 +751,8 @@ public class Add_Cam extends AppCompatActivity
         final View finalView = preview_view;
         preview_view.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent event) {
+            public boolean
+            onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     onPreviewClick(finalView);
                 }

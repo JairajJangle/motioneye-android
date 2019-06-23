@@ -1,6 +1,7 @@
 package com.jairaj.janglegmail.motioneye;
 
 import android.support.annotation.IntDef;
+
 import java.lang.annotation.Retention;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
@@ -11,18 +12,18 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 class Constants
 {
-    //Bundle Keys
+    //Bundle Keys for
     static final String KEY_URL_PORT = "url_port";
     static final String KEY_MODE = "mode";
     static final String KEY_LEGAL_DOC_TYPE = "LEGAL_DOC";
 
-    enum LEGAL_DOC_TYPE
-    {
+    //Enum for selecting Legal document to show as only 1 activity is used for it
+    enum LEGAL_DOC_TYPE {
         PRIVPOL, TNC
     }
 
-    enum DIALOG_TYPE
-    {
+    //Enum for selecting Custom Dialog Box type
+    enum DIALOG_TYPE {
         RATE_DIALOG, WEBPAGE_ERROR_DIALOG, WEBPAGE_LONG_LOADING
     }
 
