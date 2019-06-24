@@ -1,6 +1,7 @@
-# Get it on Play Store                    Get motionEye on your Linux system
-
+# Get it on Play Store
 [![Foo](https://lh3.googleusercontent.com/oP-cPUAKRhaikPnu6FI3EISNcypEbyxZej3P9xNHvJSzk1F00ArtnYbotDvpEGDCJzJB=s180-rw)](https://play.google.com/store/apps/details?id=com.jairaj.janglegmail.motioneye)
+
+# Get motionEye on your Linux system
 [![Foo](https://github.com/ccrisan/motioneye/blob/dev/extra/motioneye-256x256.png?raw=true)](https://github.com/ccrisan/motioneye/wiki)
 ---
 
