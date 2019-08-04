@@ -703,7 +703,6 @@ public class CustomDialogClass extends Dialog
 
     CustomDialogClass(Activity a) {
         super(a);
-        // TODO Auto-generated constructor stub
         this.c = a;
     }
 

@@ -188,7 +188,6 @@ public class web_motion_eye extends AppCompatActivity //implements SwipeRefreshL
 //                swipe.setRefreshing(false);
             }
 
-            //TODO: Android < 5.0.0 Dialog Box inconsistent and Error on Send Feedback intent
             @Override
             public void onReceivedError(WebView view, int errorCode,String description, String failingUrl)
             {
