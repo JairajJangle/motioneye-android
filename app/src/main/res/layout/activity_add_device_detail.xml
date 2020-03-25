@@ -9,54 +9,6 @@
     tools:context=".activities.AddDeviceDetailsActivity"
     android:fitsSystemWindows="true">
 
-    <LinearLayout
-        android:id="@+id/buttons_ll"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_margin="0dp"
-        android:background="@drawable/circle_bg"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/det"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="5dp"
-            android:clickable="true"
-            android:contentDescription="@string/button_for_confirmation"
-            android:focusable="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cancel"
-            app:srcCompat="@drawable/done"
-            tools:ignore="ContentDescription" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="5dp"
-            android:clickable="true"
-            android:contentDescription="@string/button_for_cancellation"
-            android:focusable="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:srcCompat="@drawable/cross_white"
-            tools:ignore="ContentDescription" />
-    </LinearLayout>
 
     <include
         android:id="@+id/include"
@@ -255,5 +207,42 @@
             android:textColorHint="@android:color/darker_gray"
             android:visibility="visible" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/buttons_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="0dp"
+        android:background="@drawable/circle_bg"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:clickable="true"
+            android:contentDescription="@string/button_for_cancellation"
+            android:focusable="true"
+            app:srcCompat="@drawable/cross_white"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/det"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:clickable="true"
+            android:contentDescription="@string/button_for_confirmation"
+            android:focusable="true"
+            app:srcCompat="@drawable/done"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
