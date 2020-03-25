@@ -1,0 +1,358 @@
+<resources>
+    <string name="app_name">Motion Eye</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="title_activity_add_device_detail">add_device_detail</string>
+    <string name="device_label">Alias de l'appareil</string>
+    <string name="device_url">URL de l'appareil avec http:// or https://</string>
+    <string name="http_for_local_access">(Optionnel) Port (généralement 8765)</string>
+    <string name="title_activity_web_motion_eye">web_motion_eye</string>
+    <string name="dummy_button">Bouton factice</string>
+    <string name="dummy_content">CONTENU\nFACTICE</string>
+    <string name="Camera_List">Liste de caméras</string>
+    <string name="action_about">À propos</string>
+    <string name="tut_sub_device_list">Touchez une fois pour vous connecter, maintenez pour révéler les options de modification et de suppression\n\n
+        Cliquez sur le bouton "moins" pour masquer l'aperçu</string>
+    <string name="tut_title_device_list">C'est votre premier appareil</string>
+    <string name="tut_title_add_button">Ajoutez votre premier appareil</string>
+    <string name="tut_sub_add_button">Appuyez sur le bouton + pour commencer \nCe bouton peut être glissé/déposé</string>
+    <string name="toast_added">Ajouté</string>
+    <string name="warning_invalid_url">URL invalide !</string>
+    <string name="warning_empty_url">URL vide !</string>
+    <string name="warning_empty_label">Alias vide !</string>
+    <string name="send_feedback">Envoyer votre réaction</string>
+    <string name="https_github_com_sjwall">https://github.com/sjwall</string>
+    <string name="credits">crédits</string>
+    <string name="motion_eye_logo">MOTION_EYE_LOGO</string>
+    <string name="app_created_by_jairaj_jangle">App crée par : Jairaj Jangle</string>
+    <string name="cc_calin_crisan">Logo par Calin Crisan</string>
+    <string name="email_icon">EMAIL_ICON</string>
+    <string name="cancelled_toast">Annulé</string>
+    <string name="connecting_mE">Connection à motionEye</string>
+    <string name="connecting_gD">Connection à Google Drive</string>
+    <string name="loading">Chargement…</string>
+    <string name="steps_to_install_motioneye">Étapes pour installer motionEye</string>
+    <string name="imageview_for_url_icon">C'est l'image de l'icône de l'URL</string>
+    <string name="imageview_for_port_icon">C'est l'image de l'icône du port HTTP</string>
+    <string name="imageview_for_label_icon">C'est l'image de l'icône de l'alias</string>
+    <string name="button_for_confirmation">Appuyez sur ce bouton pour confirmer l'ajout de l'appareil</string>
+    <string name="button_for_cancellation">Appuyez sur ce bouton pour annuler</string>
+    <string name="dummy_button_for_showcaseview">N'appuyez pas sur ce bouton, il s'agit juste d'un bouton factive pour afficher le tutoriel</string>
+    <string name="button_for_device_detail_intent">Pressez ce bouton pour ajouter une caméra réseau</string>
+    <string name="inputlayout_for_label">Champ pour l'alias</string>
+    <string name="inputlayout_for_port">Champ pour le port</string>
+    <string name="inputlayout_for_url">Champ pour l'URL</string>
+    <string name="constraintlayout_for_list_ad_and_etc">Il s'agit que d'une mise en page contenant d'autres éléments de cet écran</string>
+    <string name="for_displaying_ads_by_admob">Cliquez ici pour voir la pub</string>
+    <string name="error_try_again">Erreur, essayez à nouveau</string>
+    <string name="error_try_delete">Erreur lors de l'édition, essayez de supprimer l'appareil à nouveau</string>
+    <string name="ok_do_not_show_again">OK, ne plus me montrer.</string>
+    <string name="optional_drive_link_linked_to_motioneye">(Optionnel) Lien Drive lié à motionEye</string>
+    <string name="tut_title_drive_icon">C'est l'icône de Google Drive</string>
+    <string name="tut_sub_drive_icon">Cliquez pour accéder au dossier motionEye contenant les images et vidéos déclenchées par la détection de mouvement</string>
+    <string name="invalid_drive_warning">Lien Google Drive invalide !</string>
+    <string name="be_a_developer">Être développeur</string>
+    <string name="button_for_cloud_drive">Bouton pour Google Drive</string>
+    <string name="button_to_collapse_and_expand_stream_preview">Bouton permettant de masquer et d'afficher l'aperçu du flux</string>
+    <string name="checkbox_to_select_specific_network_camera">Case à cocher pour sélectionner une caméra réseau spécifique</string>
+    <string name="help_and_faq">Aide et FAQ</string>
+    <string name="materialtaptargetprompt">MaterialTapTargetPrompt</string>
+    <string name="apache_license">Licence Apache</string>
+    <string name="icons">Icônes</string>
+    <string name="app_version_text">Version de l'App</string>
+    <string name="button_to_go_back_to_home_screen">Bouton pour revenir à l'écran d'accueil</string>
+    <string name="dash">-</string>
+    <string name="drive_icon">Icône Drive</string>
+    <string name="github_icon">GITHUB_ICON</string>
+    <string name="are_you_enjoying">Appréciez-vous l'application ?</string>
+    <string name="cancel">Annuler</string>
+
+    <!--Setting Screen related strings below-->
+    <string name="summary_support">Une demande ? Nous sommes heureux de vous aider !</string>
+    <string name="choose_email_client">Choisissez un client mail</string>
+    <string name="summary_faq">Regardez la foire aux questions</string>
+    <string name="privacy_policy"><![CDATA[<!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset=\'utf-8\'>
+      <meta name=\'viewport\' content=\'width=device-width\'>
+    </head>
+    <body>
+    <h2>Privacy Policy</h2> <p>
+                    FutureJJ built the motionEye app - HomeSurveillance System app as
+                    an Open Source app. This SERVICE is provided by
+                    FutureJJ at no cost and is intended for
+                    use as is.
+                  </p> <p>
+                    This page is used to inform visitors regarding
+                    my policies with the collection, use, and
+                    disclosure of Personal Information if anyone decided to use
+                    my Service.
+                  </p> <p>
+                    If you choose to use my Service, then you agree
+                    to the collection and use of information in relation to this
+                    policy. The Personal Information that I collect is
+                    used for providing and improving the Service.
+                    I will not use or share your
+                    information with anyone except as described in this Privacy
+                    Policy.
+                  </p> <p>
+                    The terms used in this Privacy Policy have the same meanings
+                    as in our Terms and Conditions, which is accessible at
+                    motionEye app - HomeSurveillance System unless otherwise defined in this Privacy
+                    Policy.
+                  </p> <p><strong>Information Collection and Use</strong></p> <p>
+                    For a better experience, while using our Service,
+                    I may require you to provide us with certain
+                    personally identifiable information, including but not limited to nothing. The
+                    information that I request will be
+                    retained on your device and is not collected by me in any way.
+                  </p> <p>
+                    The app does use third party services that may collect
+                    information used to identify you.
+                  </p> <div><p>
+                      Link to privacy policy of third party service providers
+                      used by the app
+                    </p> <ul><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></ul></div> <p><strong>Log Data</strong></p> <p>
+                    I want to inform you that whenever
+                    you use my Service, in a case of an error in the
+                    app I collect data and information (through third
+                    party products) on your phone called Log Data. This Log Data
+                    may include information such as your device Internet
+                    Protocol (“IP”) address, device name, operating system
+                    version, the configuration of the app when utilizing
+                    my Service, the time and date of your use of the
+                    Service, and other statistics.
+                  </p> <p><strong>Cookies</strong></p> <p>
+                    Cookies are files with a small amount of data that are
+                    commonly used as anonymous unique identifiers. These are
+                    sent to your browser from the websites that you visit and
+                    are stored on your device\'s internal memory.
+                  </p> <p>
+                    This Service does not use these “cookies” explicitly.
+                    However, the app may use third party code and libraries that
+                    use “cookies” to collect information and improve their
+                    services. You have the option to either accept or refuse
+                    these cookies and know when a cookie is being sent to your
+                    device. If you choose to refuse our cookies, you may not be
+                    able to use some portions of this Service.
+                  </p> <p><strong>Service Providers</strong></p> <p>
+                    I may employ third-party companies
+                    and individuals due to the following reasons:
+                  </p> <ul><li>To facilitate our Service;</li> <li>To provide the Service on our behalf;</li> <li>To perform Service-related services; or</li> <li>To assist us in analyzing how our Service is used.</li></ul> <p>
+                    I want to inform users of this
+                    Service that these third parties have access to your
+                    Personal Information. The reason is to perform the tasks
+                    assigned to them on our behalf. However, they are obligated
+                    not to disclose or use the information for any other
+                    purpose.
+                  </p> <p><strong>Security</strong></p> <p>
+                    I value your trust in providing us
+                    your Personal Information, thus we are striving to use
+                    commercially acceptable means of protecting it. But remember
+                    that no method of transmission over the internet, or method
+                    of electronic storage is 100% secure and reliable, and
+                    I cannot guarantee its absolute security.
+                  </p> <p><strong>Links to Other Sites</strong></p> <p>
+                    This Service may contain links to other sites. If you click
+                    on a third-party link, you will be directed to that site.
+                    Note that these external sites are not operated by
+                    me. Therefore, I strongly advise you to
+                    review the Privacy Policy of these websites.
+                    I have no control over and assume no
+                    responsibility for the content, privacy policies, or
+                    practices of any third-party sites or services.
+                  </p> <p><strong>Children’s Privacy</strong></p> <p>
+                    These Services do not address anyone under the age of 13.
+                    I do not knowingly collect personally
+                    identifiable information from children under 13. In the case
+                    I discover that a child under 13 has provided
+                    me with personal information,
+                    I immediately delete this from our servers. If you
+                    are a parent or guardian and you are aware that your child
+                    has provided us with personal information, please contact
+                    me so that I will be able to do
+                    necessary actions.
+                  </p> <p><strong>Changes to This Privacy Policy</strong></p> <p>
+                    I may update our Privacy Policy from
+                    time to time. Thus, you are advised to review this page
+                    periodically for any changes. I will
+                    notify you of any changes by posting the new Privacy Policy
+                    on this page. These changes are effective immediately after
+                    they are posted on this page.
+                  </p> <p><strong>Contact Us</strong></p> <p>
+                    If you have any questions or suggestions about
+                    my Privacy Policy, do not hesitate to contact
+                    me at systems.sentinel@gmail.com.
+    </body>
+    </html>]]>
+      </string>
+    <string name="tnc"><![CDATA[<!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset=\'utf-8\'>
+      <meta name=\'viewport\' content=\'width=device-width\'>
+      </head>
+    <body>
+    <h2>Terms &amp; Conditions</h2> <p>
+                    By downloading or using the app, these terms will
+                    automatically apply to you – you should make sure therefore
+                    that you read them carefully before using the app. You’re
+                    not allowed to copy, or modify the app, any part of the app,
+                    or our trademarks in any way. You’re not allowed to attempt
+                    to extract the source code of the app, and you also
+                    shouldn’t try to translate the app into other languages, or
+                    make derivative versions. The app itself, and all the trade
+                    marks, copyright, database rights and other intellectual
+                    property rights related to it, still belong to
+                    FutureJJ.
+                  </p> <p>
+                    FutureJJ is committed to ensuring that the app
+                    is as useful and efficient as possible. For that reason, we
+                    reserve the right to make changes to the app or to charge
+                    for its services, at any time and for any reason. We will
+                    never charge you for the app or its services without making
+                    it very clear to you exactly what you’re paying for.
+                  </p> <p>
+                    The motionEye app - Home Surveillance System app stores and processes personal data
+                    that you have provided to us, in order to provide
+                    my Service. It’s your responsibility to keep your
+                    phone and access to the app secure. We therefore recommend
+                    that you do not jailbreak or root your phone, which is the
+                    process of removing software restrictions and limitations
+                    imposed by the official operating system of your device. It
+                    could make your phone vulnerable to
+                    malware/viruses/malicious programs, compromise your phone’s
+                    security features and it could mean that the
+                    motionEye app - Home Surveillance System app won’t work properly or at all.
+                  </p> <p>
+                    You should be aware that there are certain things that
+                    FutureJJ will not take responsibility for.
+                    Certain functions of the app will require the app to have an
+                    active internet connection. The connection can be Wi-Fi, or
+                    provided by your mobile network provider, but
+                    FutureJJ cannot take responsibility for the
+                    app not working at full functionality if you don’t have
+                    access to Wi-Fi, and you don’t have any of your data
+                    allowance left.
+                  </p> <p></p> <p>
+                    If you’re using the app outside of an area with Wi-Fi, you
+                    should remember that your terms of the agreement with your
+                    mobile network provider will still apply. As a result, you
+                    may be charged by your mobile provider for the cost of data
+                    for the duration of the connection while accessing the app,
+                    or other third party charges. In using the app, you’re
+                    accepting responsibility for any such charges, including
+                    roaming data charges if you use the app outside of your home
+                    territory (i.e. region or country) without turning off data
+                    roaming. If you are not the bill payer for the device on
+                    which you’re using the app, please be aware that we assume
+                    that you have received permission from the bill payer for
+                    using the app.
+                  </p> <p>
+                    Along the same lines, FutureJJ cannot always
+                    take responsibility for the way you use the app i.e. You
+                    need to make sure that your device stays charged – if it
+                    runs out of battery and you can’t turn it on to avail the
+                    Service, FutureJJ cannot accept
+                    responsibility.
+                  </p> <p>
+                    With respect to FutureJJ’s responsibility for
+                    your use of the app, when you’re using the app, it’s
+                    important to bear in mind that although we endeavour to
+                    ensure that it is updated and correct at all times, we do
+                    rely on third parties to provide information to us so that
+                    we can make it available to you.
+                    FutureJJ accepts no liability for any loss,
+                    direct or indirect, you experience as a result of relying
+                    wholly on this functionality of the app.
+                  </p> <p>
+                    At some point, we may wish to update the app. The app is
+                    currently available on Android – the requirements for
+                    system (and for any additional systems we
+                    decide to extend the availability of the app to) may change,
+                    and you’ll need to download the updates if you want to keep
+                    using the app. FutureJJ does not promise that
+                    it will always update the app so that it is relevant to you
+                    and/or works with the Android version that you have
+                    installed on your device. However, you promise to always
+                    accept updates to the application when offered to you, We
+                    may also wish to stop providing the app, and may terminate
+                    use of it at any time without giving notice of termination
+                    to you. Unless we tell you otherwise, upon any termination,
+                    (a) the rights and licenses granted to you in these terms
+                    will end; (b) you must stop using the app, and (if needed)
+                    delete it from your device.
+                  </p> <p><strong>Changes to This Terms and Conditions</strong></p> <p>
+                    I may update our Terms and Conditions
+                    from time to time. Thus, you are advised to review this page
+                    periodically for any changes. I will
+                    notify you of any changes by posting the new Terms and
+                    Conditions on this page. These changes are effective
+                    immediately after they are posted on this page.
+                  </p> <p><strong>Contact Us</strong></p> <p>
+                    If you have any questions or suggestions about
+                    my Terms and Conditions, do not hesitate to
+                    contact me at systems.sentinel@gmail.com.
+                  </p> <p>
+    </body>
+    </html>]]>
+      </string>
+    <!--Settings Screen related string above-->
+
+    <!--Example Texts for custom_list_helpandfaq.xml-->
+    <string name="Eg_HAF_Question">Q: Voici la question qui trouve sa répondu dans le TextView ci-dessous</string>
+    <string name="Eg_HAF_Answer">R: Voici la réponse de la question ci-dessus.</string>
+    <string name="Eg_custom_list_item_Label">Alias de l'appareil ajouté</string>
+    <string name="Eg_custom_list_item_URL">url_de_appareil_ajoute.com</string>
+    <string name="key_send_feedback">key_send_feedback</string>
+    <string name="key_fullscreen">key_fullscreen</string>
+    <string name="title_privacy_policy">Politique de Confidentialité</string>
+    <string name="title_tnc">Termes et Conditions</string>
+    <string name="key_pp">key_pp</string>
+    <string name="key_tnc">key_tnc</string>
+    <string name="key_autoopen">key_autoopen</string>
+    <string name="autoopen_summary">Ouvre automatiquement le flux des caméras lorsqu'une seule caméras
+        est présente</string>
+    <string name="about_summary">L'application motionEye permet d'intéragir avec motion eye
+        et les caméras réseau, le tout dans une seule application</string>
+    <string name="fullscreen_summary">Cacher les boutons de navigation et faire en sorte que l'application soit en plein écran lorsque la vidéo est en cours
+        le flux est ouvert</string>
+    <string name="pp_summary">Bon à savoir : Nous ne recueillons aucune donnée auprès de vous</string>
+    <string name="key_rate_me">key_rate_me</string>
+    <string name="rate_me_summary">Vous appréciez l'app?</string>
+    <string name="title_rate_me">Notez moi</string>
+    <string name="uh_oh">Uh Oh!</string>
+    <string name="connecting_uM">Mode inconnu</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="check_help_faq">Consultez l'aide et la FAQ</string>
+    <string name="page_error_dialog_message">Aidez-nous à résoudre ce problème en nous faisant part de vos commentaires</string>
+
+    <!--Elements at even position are questions and at odd positions are answers-->
+    <string-array name="QandAs">
+        <!-- 1 -->
+        <item>Q: L'application ne se connecte pas à la caméra IP</item>
+        <item>R: Vérifiez si vous avez correctement mentionné http:// ou https:// avant l'url et le numéro de port
+        par défaut, le numéro de port de motionEye est 8765, vous pouvez également saisir le numéro de port 8081 pour la diffusion en streaming uniquement</item>
+
+        <!-- 2 -->
+        <item>Q: L'application crash fréquemment / je ne peux pas voir le flux de la caméra</item>
+        <item>R: Vérifiez si l'application Android System WebView de votre appareil est à jour, cliquez sur ce lien pour mettre l'application à jour :
+            https://play.google.com/store/apps/details?id=com.google.android.webview&amp;hl</item>
+
+        <!-- 3 -->
+        <item>Q: Les liens motionEye ne peuvent pas être ouverts en tant que liens globaux/port transféré.</item>
+        <item>R: Pour accéder aux liens mondiaux, il faut d'abord activer la redirection de port dans le routeur WiFi vers lequel le dispositif motionEye
+            est connecté, pour un guide étape par étape, consultez ce lien :
+            https://github.com/ccrisan/motioneyeos/issues/58</item>
+
+        <!-- 4 -->
+        <item>Q: Mon routeur WiFi ne prend pas en charge la redirection de port, mais je veux accéder à mon appareil photo dans le monde entier</item>
+        <item>R: Consultez le site https://www.dataplicity.com/. Ils ont une méthode géniale pour fabriquer votre appareil MotionEye
+        disponible dans le monde entier sans transfert de port réel</item>
+
+        <!-- X -->
+        <item>Q: Je suis confronté à un problème non mentionné</item>
+        <item>R: N'hésitez pas à nous contacter sur notre courrier électronique dans la section "À propos" avant de noter l'application, nous corrigerons le problème dès que possible</item>
+    </string-array>
+</resources>
