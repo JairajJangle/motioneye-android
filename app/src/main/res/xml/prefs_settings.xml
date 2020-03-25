@@ -1,114 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--suppress AndroidDomInspection -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/PreferenceScreen">
 
-    <PreferenceCategory android:title="General">
+    <PreferenceCategory
+        android:title="General"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:clickable="false"
+            android:layout="@layout/preferences_category" />
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="@string/key_fullscreen"
             android:summary="@string/fullscreen_summary"
-            android:title="Fullscreen streaming" />
-
-        <Preference
-            android:layout="@layout/preferences_category"
-            android:clickable="false"
-            />
+            android:title="Fullscreen streaming"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="@string/key_autoopen"
             android:summary="@string/autoopen_summary"
             android:title="Auto-Open Camera stream" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="About">
+    <PreferenceCategory
+        android:title="About"
+        app:iconSpaceReserved="false">
 
         <Preference
             android:icon="@mipmap/me_adp_ic_round"
             android:summary="@string/about_summary">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="com.jairaj.janglegmail.motioneye"
-            android:targetClass="com.jairaj.janglegmail.motioneye.About_Page"
-            android:launchMode="singleInstance"/>
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:launchMode="singleInstance"
+                android:targetClass="com.jairaj.janglegmail.motioneye.activities.AboutActivity"
+                android:targetPackage="com.jairaj.janglegmail.motioneye" />
         </Preference>
 
         <Preference
-            android:layout="@layout/preferences_category"
             android:clickable="false"
-            />
+            android:layout="@layout/preferences_category" />
 
         <Preference
             android:summary="@string/versionName"
+            app:iconSpaceReserved="false"
             android:title="@string/app_version_text" />
 
         <Preference
-            android:layout="@layout/preferences_category"
             android:clickable="false"
-            />
+            android:layout="@layout/preferences_category" />
 
         <Preference
             android:key="@string/key_send_feedback"
+            app:iconSpaceReserved="false"
             android:summary="@string/summary_support"
             android:title="@string/send_feedback" />
 
         <Preference
-            android:layout="@layout/preferences_category"
             android:clickable="false"
-            />
+            android:layout="@layout/preferences_category" />
 
         <!-- preference opens url in browser -->
         <Preference
             android:summary="@string/summary_faq"
-            android:title="@string/help_and_faq">
+            android:title="@string/help_and_faq"
+            app:iconSpaceReserved="false">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:targetPackage="com.jairaj.janglegmail.motioneye"
-                android:targetClass="com.jairaj.janglegmail.motioneye.Help_FAQ"
-                android:launchMode="singleInstance"/>
+                android:launchMode="singleInstance"
+                android:targetClass="com.jairaj.janglegmail.motioneye.activities.HelpFAQActivity"
+                android:targetPackage="com.jairaj.janglegmail.motioneye" />
         </Preference>
 
         <Preference
-            android:layout="@layout/preferences_category"
             android:clickable="false"
-            />
+            android:layout="@layout/preferences_category" />
 
-        <Preference android:title="@string/title_privacy_policy"
+        <Preference
+            android:key="@string/key_pp"
+            android:title="@string/title_privacy_policy"
             android:summary="@string/pp_summary"
-            android:key="@string/key_pp">
+            app:iconSpaceReserved="false">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:targetPackage="com.jairaj.janglegmail.motioneye"
-                android:targetClass="com.jairaj.janglegmail.motioneye.LegalDocShow" />
+                android:targetClass="com.jairaj.janglegmail.motioneye.activities.LegalDocShowActivity"
+                android:targetPackage="com.jairaj.janglegmail.motioneye" />
         </Preference>
 
         <Preference
-            android:layout="@layout/preferences_category"
             android:clickable="false"
-            />
+            android:layout="@layout/preferences_category" />
 
-        <Preference android:title="@string/title_tnc"
+        <Preference
             android:key="@string/key_tnc"
-            android:summary="TNCs">
+            android:summary="TNCs"
+            android:title="@string/title_tnc"
+            app:iconSpaceReserved="false">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:targetPackage="com.jairaj.janglegmail.motioneye"
-                android:targetClass="com.jairaj.janglegmail.motioneye.LegalDocShow" />
+                android:targetClass="com.jairaj.janglegmail.motioneye.activities.LegalDocShowActivity"
+                android:targetPackage="com.jairaj.janglegmail.motioneye" />
         </Preference>
 
         <Preference
-            android:layout="@layout/preferences_category"
             android:clickable="false"
-            />
+            android:layout="@layout/preferences_category" />
 
         <Preference
+            android:icon="@drawable/ic_rate_me"
+            android:title="@string/title_rate_me"
             android:key="@string/key_rate_me"
             android:summary="@string/rate_me_summary"
-            android:title="@string/title_rate_me"
-            android:icon="@drawable/ic_rate_me">
+            app:iconSpaceReserved="false">
         </Preference>
 
     </PreferenceCategory>

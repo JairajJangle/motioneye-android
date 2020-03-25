@@ -675,64 +675,39 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.jairaj.janglegmail.motioneye;
+package com.jairaj.janglegmail.motioneye.utils
 
-import android.content.res.Resources;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.IntDef
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+object Constants {
+    //Bundle Keys for
+    const val KEY_URL_PORT = "url_port"
+    const val KEY_MODE = "mode"
+    const val KEY_LEGAL_DOC_TYPE = "LEGAL_DOC"
 
-public class Help_FAQ extends AppCompatActivity
-{
-    Toolbar toolbar;
-    private List<QandA> QandAList= new ArrayList<>();
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_help__faq);
-
-        RecyclerView Recyclerview = findViewById(R.id.recycleview_HFAQ);
-
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(R.string.help_and_faq);
-
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        Recyclerview.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        Recyclerview.setLayoutManager(llm);
-
-        createList();
-
-        QandA_RV_Adapter QAAdapter = new QandA_RV_Adapter(QandAList);
-        Recyclerview.setAdapter(QAAdapter);
+    //Enum for selecting Legal document to show as only 1 activity is used for it
+    internal enum class LegalDocType {
+        PRIVPOL, TNC
     }
 
-    private void createList()
-    {
-        Resources res = getResources();
-        String[] QandA_array = res.getStringArray(R.array.QandAs);
-
-        for(int i = 0; i < QandA_array.length; i+=2)
-        {
-            QandAList.add(new QandA(QandA_array[i], QandA_array[i+1]));
-        }
+    //Enum for selecting Custom Dialog Box type
+    internal enum class DialogType {
+        RATE_DIALOG, WEB_PAGE_ERROR_DIALOG,
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
+    @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
+    @IntDef(MODE_CAMERA, MODE_DRIVE)
+    internal annotation class ServerMode
+
+    //CONNECTION MODES
+    const val MODE_CAMERA = 1
+    const val MODE_DRIVE = 2
+
+    //EDIT MODES
+    const val EDIT_MODE_NEW_DEV = 0
+    const val EDIT_MODE_EXIST_DEV = 1
+    const val EDIT_CANCELLED = 2
+
+    //UI parameters
+    const val PREVIEW_PADDING = 40
 }

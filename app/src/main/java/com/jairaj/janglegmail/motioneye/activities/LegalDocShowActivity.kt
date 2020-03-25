@@ -674,71 +674,48 @@
  * Public License instead of this License.  But first, please read
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
+package com.jairaj.janglegmail.motioneye.activities
 
-package com.jairaj.janglegmail.motioneye;
+import android.os.Bundle
+import android.text.Html
+import android.text.method.ScrollingMovementMethod
+import androidx.appcompat.app.AppCompatActivity
+import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.utils.Constants
+import kotlinx.android.synthetic.main.activity_legal_doc_show.*
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.Spanned;
-import android.text.method.ScrollingMovementMethod;
-import android.widget.TextView;
-
-import java.util.Objects;
-
-import static com.jairaj.janglegmail.motioneye.Constants.LEGAL_DOC_TYPE;
-
-public class LegalDocShow extends AppCompatActivity
-{
-    Toolbar toolbar;
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        Bundle bundle = getIntent().getExtras();
-
-        String html_legal_doc = "";
-
-        String Title = "";
+class LegalDocShowActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val bundle = intent.extras
+        var htmlLegalDoc = ""
+        var title = ""
 
         //Extract the data…
-        if (bundle != null)
-        {
-            if(bundle.getSerializable(Constants.KEY_LEGAL_DOC_TYPE) == LEGAL_DOC_TYPE.PRIVPOL)
-            {
-                html_legal_doc = getString(R.string.privacy_policy);
-                Title = getString(R.string.title_privacy_policy);
-            }
-
-            else if(bundle.getSerializable(Constants.KEY_LEGAL_DOC_TYPE) == LEGAL_DOC_TYPE.TNC)
-            {
-                html_legal_doc = getString(R.string.tnc);
-                Title = getString(R.string.title_tnc);
+        if (bundle != null) {
+            if (bundle.getSerializable(Constants.KEY_LEGAL_DOC_TYPE) === Constants.LegalDocType.PRIVPOL) {
+                htmlLegalDoc = getString(R.string.privacy_policy)
+                title = getString(R.string.title_privacy_policy)
+            } else if (bundle.getSerializable(Constants.KEY_LEGAL_DOC_TYPE) === Constants.LegalDocType.TNC) {
+                htmlLegalDoc = getString(R.string.tnc)
+                title = getString(R.string.title_tnc)
             }
         }
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_legal_doc_show)
+        setSupportActionBar(appBarPP)
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_legal_doc_show);
+        supportActionBar?.title = title
 
-        toolbar = findViewById(R.id.appBarPP);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(Title);
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        TextView textView_legal_doc = findViewById(R.id.textView_privacy_policy);
-
-        Spanned htmlAsSpanned = Html.fromHtml(html_legal_doc);
-
-        textView_legal_doc.setText(htmlAsSpanned);
-
-        textView_legal_doc.setMovementMethod(new ScrollingMovementMethod());
+        val htmlAsSpanned = Html.fromHtml(htmlLegalDoc, Html.FROM_HTML_MODE_LEGACY)
+        textView_privacy_policy.text = htmlAsSpanned
+        textView_privacy_policy.movementMethod = ScrollingMovementMethod()
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

@@ -674,173 +674,43 @@
  * Public License instead of this License.  But first, please read
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
+package com.jairaj.janglegmail.motioneye.views_and_adapters
 
-package com.jairaj.janglegmail.motioneye;
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.dataclass.QandA
+import com.jairaj.janglegmail.motioneye.views_and_adapters.QAndARVAdapter.MyViewHolder
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+class QAndARVAdapter internal constructor(private val QandAList: List<QandA>) : RecyclerView.Adapter<MyViewHolder>() {
 
-import java.util.Objects;
-
-import static com.jairaj.janglegmail.motioneye.Constants.DIALOG_TYPE;
-
-public class CustomDialogClass extends Dialog
-//        implements android.view.View.OnClickListener
-{
-    public Activity c;
-    public Dialog d;
-    private DIALOG_TYPE type;
-    Context context;
-
-    CustomDialogClass(Activity a) {
-        super(a);
-        this.c = a;
+    /**
+     * View holder class
+     */
+    inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        var questionText: TextView = view.findViewById(R.id.title_q)
+        var answerText: TextView = view.findViewById(R.id.subtitle_ans)
     }
 
-    void Dialog_Type(DIALOG_TYPE type, Context context) {
-        this.type = type;
-        this.context = context;
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        println("Bind [$holder] - Pos [$position]")
+        val qa = QandAList[position]
+        holder.questionText.text = qa.Question
+        holder.answerText.text = qa.Answer
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.custom_dialog);
-
-        Objects.requireNonNull(getWindow()).setDimAmount(0.3f);
-
-        Button positive = findViewById(R.id.button2);
-        Button negative = findViewById(R.id.button1);
-        Button neutral = findViewById(R.id.button3);
-
-        TextView dialogTitle = findViewById(R.id.alertTitle);
-        TextView dialogmessage = findViewById(R.id.message);
-
-        ImageView dialogIcon = findViewById(R.id.icon);
-
-        LinearLayout titltePanel = findViewById(R.id.topPanel);
-
-        switch (type) {
-            case RATE_DIALOG:
-                positive.setText(c.getString(R.string.yes));
-                negative.setText(c.getString(R.string.no));
-                neutral.setVisibility(View.GONE);
-
-                dialogTitle.setText("");
-                titltePanel.setVisibility(View.GONE);
-                dialogmessage.setText(R.string.are_you_enjoying);
-
-                negative.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dismiss();
-                        Utils.sendFeedback(context);
-                    }
-                });
-
-                positive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dismiss();
-                        Utils.showRateDialog(context, true);
-                    }
-                });
-                break;
-
-            case WEBPAGE_ERROR_DIALOG:
-                dialogTitle.setText(R.string.uh_oh);
-                dialogIcon.setImageResource(android.R.drawable.ic_dialog_alert);
-
-//                positive.setText("Send Feedback");
-//                negative.setText("Check Help and FAQ");
-//                neutral.setText("Cancel");
-
-                neutral.setText(c.getString(R.string.send_feedback));
-                positive.setText(c.getString(R.string.check_help_faq));
-                negative.setText(c.getString(R.string.cancel));
-
-                dialogmessage.setText(c.getString(R.string.page_error_dialog_message));
-
-                neutral.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dismiss();
-                        Utils.sendFeedback(context);
-                        c.finish();
-                    }
-                });
-
-                positive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dismiss();
-                        Intent i = new Intent(c, Help_FAQ.class);
-                        c.finish();
-                        c.startActivity(i);
-                    }
-                });
-
-                negative.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (isShowing())
-                            dismiss();
-                    }
-                });
-                break;
-
-//            case WEBPAGE_LONG_LOADING:
-//                Window window = getWindow();
-//                Objects.requireNonNull(window).setGravity(Gravity.BOTTOM);
-//
-//                dialogTitle.setText("");
-//                titltePanel.setVisibility(View.GONE);
-//                dialogmessage.setText(":'( Taking too long to load?");
-//
-//                negative.setText("Click to Dismiss");
-//
-//                negative.setOnClickListener(new View.OnClickListener()
-//                {
-//                    @Override
-//                    public void onClick(View view)
-//                    {
-//                        dismiss();
-//                    }
-//                });
-//                break;
-            default:
-                //Nothing to do
-        }
-
-//        positive.setOnClickListener(this);
-//        negative.setOnClickListener(this);
-//        neutral.setOnClickListener(this);
+    override fun getItemCount(): Int {
+        Log.d("RV", "Item size [" + QandAList.size + "]")
+        return QandAList.size
     }
 
-//    @Override
-//    public void onClick(View v)
-//    {
-//        switch (v.getId())
-//        {
-//            case R.id.button1:
-//                c.finish();
-//                break;
-//            case R.id.button2:
-//                dismiss();
-//                break;
-//            default:
-//                break;
-//        }
-//        dismiss();
-//    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.custom_list_helpandfaq, parent, false)
+        return MyViewHolder(v)
+    }
+
 }

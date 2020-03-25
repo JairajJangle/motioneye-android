@@ -675,16 +675,67 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.jairaj.janglegmail.motioneye;
+package com.jairaj.janglegmail.motioneye.activities
 
-class QandA
-{
-    String Question;
-    String Answer;
+import android.os.Bundle
+import android.text.Html
+import android.text.method.LinkMovementMethod
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.getVersionName
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.openInChrome
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.sendFeedback
+import kotlinx.android.synthetic.main.activity_about__page.*
 
-    QandA(String Question, String Answer)
-    {
-        this.Question = Question;
-        this.Answer = Answer;
+
+class AboutActivity : AppCompatActivity(), View.OnClickListener {
+    private lateinit var toolbar: Toolbar
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContentView(R.layout.activity_about__page)
+        toolbar = findViewById(R.id.about_toolbar)
+        setSupportActionBar(toolbar)
+
+        init()
+
+
+        val appVersionText = "App Version: ${getVersionName(this)}"
+        app_version_text.text = appVersionText
+
+        Credit_ShowCase.text = Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt'> MaterialTapTargetPrompt</a>", Html.FROM_HTML_MODE_LEGACY)
+        Credit_ShowCase.movementMethod = LinkMovementMethod.getInstance()
+        Apache_1.text = Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/LICENSE'> Apache License</a>", Html.FROM_HTML_MODE_LEGACY)
+        Apache_1.movementMethod = LinkMovementMethod.getInstance()
+        Apache_2.text = Html.fromHtml("<a href= 'http://www.apache.org/licenses/LICENSE-2.0.txt'> Apache License</a>", Html.FROM_HTML_MODE_LEGACY)
+        Apache_2.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+    private fun init() {
+        toolbar.title = "About"
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+
+    override fun onClick(v: View?) {
+        when (v) {
+            send_feedb -> sendFeedback(this@AboutActivity)
+            button_install_steps -> {
+                val motionEyeSteps = "https://github.com/ccrisan/motioneye/wiki/Installation"
+                openInChrome(motionEyeSteps, this@AboutActivity)
+            }
+            join_dev -> {
+                val motionEyeSteps = "https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem"
+                openInChrome(motionEyeSteps, this@AboutActivity)
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Motion Eye</string>
     <string name="action_settings">Einstellungen</string>
     <string name="title_activity_add_device_detail">add_device_detail</string>
@@ -70,7 +70,7 @@
     <string name="summary_support">Irgendwelche Fragen? Wir sind froh, helfen zu können!</string>
     <string name="choose_email_client">E-Mail-Client auswählen</string>
     <string name="summary_faq">FAQ anschauen</string>
-    <string name="privacy_policy"><![CDATA[<!DOCTYPE html>
+    <string name="privacy_policy" tools:ignore="StringFormatInvalid"><![CDATA[<!DOCTYPE html>
     <html>
     <head>
       <meta charset=\'utf-8\'>

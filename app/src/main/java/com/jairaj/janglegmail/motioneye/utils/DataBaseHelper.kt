@@ -675,60 +675,172 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.jairaj.janglegmail.motioneye;
+package com.jairaj.janglegmail.motioneye.utils
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.content.ContentValues
+import android.content.Context
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
-import java.util.List;
+class DataBaseHelper internal constructor(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+    override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL("create table " + TABLE_NAME
+                + "(ID INTEGER PRIMARY KEY AUTOINCREMENT,LABEL TEXT,URL TEXT,PORT TEXT,DRIVE TEXT,PREV TEXT)")
+    }
 
-public class QandA_RV_Adapter extends RecyclerView.Adapter<QandA_RV_Adapter.MyViewHolder> {
-
-    private List<QandA> QandAList;
-
-    /**
-     * View holder class
-     * */
-    class MyViewHolder extends RecyclerView.ViewHolder {
-
-        TextView QuestionText;
-        TextView AnswerText;
-
-        MyViewHolder(View view)
-        {
-            super(view);
-            QuestionText = view.findViewById(R.id.title_q);
-            AnswerText = view.findViewById(R.id.subtitle_ans);
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
+        onCreate(db)
+        if (newVersion > oldVersion) {
+            db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $COL_6 TEXT")
         }
     }
 
-    QandA_RV_Adapter(List<QandA> QandAList) {
-        this.QandAList = QandAList;
+    fun insertNewColumn() {
+        val db = this.writableDatabase
+        if (!existsColumnInTable(db, TABLE_NAME, COL_6)) db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $COL_6 TEXT  DEFAULT 0")
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        System.out.println("Bind ["+holder+"] - Pos ["+position+"]");
-        QandA qa = QandAList.get(position);
-        holder.QuestionText.setText(qa.Question);
-        holder.AnswerText.setText(String.valueOf(qa.Answer));
+    fun insertData(label: String?, url: String?, port: String?, drive: String?, prev: String?): Boolean {
+        insertNewColumn()
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(COL_2, label)
+        contentValues.put(COL_3, url)
+        contentValues.put(COL_4, port)
+        contentValues.put(COL_5, drive)
+        contentValues.put(COL_6, prev)
+        val result = db.insert(TABLE_NAME, null, contentValues)
+        return result != -1L
     }
 
-    @Override
-    public int getItemCount() {
-        Log.d("RV", "Item size ["+QandAList.size()+"]");
-        return QandAList.size();
+    private fun existsColumnInTable(inDatabase: SQLiteDatabase, inTable: String, columnToCheck: String): Boolean {
+        var mCursor: Cursor? = null
+        return try {
+            // Query 1 row
+            mCursor = inDatabase.rawQuery("SELECT * FROM $inTable LIMIT 0", null)
+
+            // getColumnIndex() gives us the index (0 to ...) of the column - otherwise we get a -1
+            mCursor.getColumnIndex(columnToCheck) != -1
+        } catch (Exp: Exception) {
+            // Something went wrong. Missing the database? The table?
+            Log.d("existsColumnInTable", "When checking whether a column exists in the table, an error occurred: " + Exp.message)
+            false
+        } finally {
+            mCursor?.close()
+        }
     }
 
-    @NonNull
-    @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_list_helpandfaq,parent, false);
-        return new MyViewHolder(v);
+    val allData: Cursor
+        get() {
+            val db = this.writableDatabase
+            return db.rawQuery("select * from $TABLE_NAME", null)
+        }
+
+    fun urlFromLabel(sch_label: String): String {
+        val db = this.writableDatabase
+        var cursor: Cursor? = null
+        var url = ""
+        return try {
+            cursor = db.rawQuery("select URL from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+            if (cursor.count > 0) {
+                cursor.moveToFirst()
+                url = cursor.getString(cursor.getColumnIndex("URL"))
+            }
+            url
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun portFromLabel(sch_label: String): String {
+        val db = this.writableDatabase
+        var cursor: Cursor? = null
+        var port: String? = ""
+        return try {
+            cursor = db.rawQuery("select PORT from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+            if (cursor.count > 0) {
+                cursor.moveToFirst()
+                port = cursor.getString(cursor.getColumnIndex("PORT"))
+            }
+            port ?: ""
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun driveFromLabel(sch_label: String): String {
+        val db = this.writableDatabase
+        var cursor: Cursor? = null
+        var driveLink: String? = ""
+        return try {
+            cursor = db.rawQuery("select * from $TABLE_NAME", null)
+            if (cursor.getColumnIndex("DRIVE") != -1) {
+                cursor = db.rawQuery("select DRIVE from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+                if (cursor.count > 0) {
+                    cursor.moveToFirst()
+                    driveLink = cursor.getString(cursor.getColumnIndex("DRIVE"))
+                }
+                driveLink ?: ""
+            } else {
+                ""
+            }
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun prevStatFromLabel(sch_label: String): String {
+        val db = this.writableDatabase
+        var cursor: Cursor? = null
+        var prev: String? = ""
+        return try {
+            cursor = db.rawQuery("select PREV from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+            if (cursor.count > 0) {
+                cursor.moveToFirst()
+                prev = cursor.getString(cursor.getColumnIndex("PREV"))
+            }
+            prev ?: ""
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun updateData(key_label: String, label: String?, url: String?, port: String?, drive: String?): Boolean {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(COL_2, label)
+        contentValues.put(COL_3, url)
+        contentValues.put(COL_4, port)
+        contentValues.put(COL_5, drive)
+        db.update(TABLE_NAME, contentValues, "LABEL = ?", arrayOf(key_label))
+        return true
+    }
+
+    fun updatePrevStat(key_label: String, prev_stat: String?): Boolean {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(COL_6, prev_stat)
+        db.update(TABLE_NAME, contentValues, "LABEL = ?", arrayOf(key_label))
+        return true
+    }
+
+    fun deleteData(id: String): Int {
+        val db = this.writableDatabase
+        return db.delete(TABLE_NAME, "LABEL = ?", arrayOf(id))
+    }
+
+    companion object {
+        private const val DATABASE_NAME = "Devices.db"
+        private const val TABLE_NAME = "device_detail_table"
+
+        //private static final String COL_1 = "ID";
+        private const val COL_2 = "LABEL"
+        private const val COL_3 = "URL"
+        private const val COL_4 = "PORT"
+        private const val COL_5 = "DRIVE"
+        private const val COL_6 = "PREV"
     }
 }

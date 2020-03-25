@@ -674,118 +674,100 @@
  * Public License instead of this License.  But first, please read
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
+package com.jairaj.janglegmail.motioneye.activities
 
-package com.jairaj.janglegmail.motioneye;
+import android.content.Intent
+import android.os.Bundle
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
+import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.askToRate
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.sendFeedback
+import com.jairaj.janglegmail.motioneye.utils.Constants
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
+class SettingsActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
-import com.kobakei.ratethisapp.RateThisApp;
+        // load settings fragment
+        supportFragmentManager.beginTransaction().replace(android.R.id.content, MainPreferenceFragment()).commit()
+    }
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+    class MainPreferenceFragment : PreferenceFragmentCompat() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            addPreferencesFromResource(R.xml.prefs_settings)
 
-final class Utils
-{
-    /**
-     * Email client intent to send support mail
-     * Appends the necessary device information to email body
-     * useful when providing support
-     */
-    static void sendFeedback(Context context)
-    {
-        String body;
-        try
-        {
-            body = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-            body = "\n\n-----------------------------\nPlease don't remove this information\n Device OS: Android \n Device OS version: " +
-                    Build.VERSION.RELEASE + "\n App Version: " + body + "\n Device Brand: " + Build.BRAND +
-                    "\n Device Model: " + Build.MODEL + "\n Device Manufacturer: " + Build.MANUFACTURER;
+            //notification preference change listener
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_fullscreen)))
+            //notification preference change listener
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_autoopen)))
+
+            // feedback preference click listener
+            val feedbackPref = findPreference<Preference>(getString(R.string.key_send_feedback))
+            feedbackPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                sendFeedback(activity!!)
+                true
+            }
+
+            val ppPref = findPreference<Preference>(getString(R.string.key_pp))
+            ppPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                val bundle = Bundle()
+                bundle.putSerializable(Constants.KEY_LEGAL_DOC_TYPE,
+                        Constants.LegalDocType.PRIVPOL)
+                val i = Intent(activity, LegalDocShowActivity::class.java)
+                i.putExtras(bundle)
+                startActivity(i)
+                true
+            }
+
+            val tncPref = findPreference<Preference>(getString(R.string.key_tnc))
+            tncPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                val bundle = Bundle()
+                bundle.putSerializable(Constants.KEY_LEGAL_DOC_TYPE,
+                        Constants.LegalDocType.TNC)
+                val i = Intent(activity, LegalDocShowActivity::class.java)
+                i.putExtras(bundle)
+                startActivity(i)
+                true
+            }
+
+            // rate me click listener
+            val rateMePref = findPreference<Preference>(getString(R.string.key_rate_me))
+            rateMePref?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                askToRate(activity)
+                true
+            }
         }
-        catch (PackageManager.NameNotFoundException e)
-        {
-            body = "";
+
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {}
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        private fun bindPreferenceSummaryToValue(preference: Preference?) {
+            preference?.onPreferenceChangeListener = sBindPreferenceSummaryToValueListener
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference?.context)
+                            .getBoolean(preference?.key, true))
         }
 
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("message/rfc822");
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"systems.sentinel@gmail.com"});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "motionEye app Feedback");
-        intent.putExtra(Intent.EXTRA_TEXT, body);
-        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(Intent.createChooser(intent, context.getString(R.string.choose_email_client)));
-    }
-
-    static void open_in_chrome(String url, Context context)
-    {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-        intent.setPackage("com.android.chrome");
-        try {
-            context.startActivity(intent);
-        } catch (ActivityNotFoundException ex) {
-            // Chrome browser presumably not installed so allow user to choose instead
-            intent.setPackage(null);
-            context.startActivity(intent);
-        }
-    }
-
-    static boolean checkWhetherStream(String url_port) {
-        return url_port.toLowerCase().contains("8081");
-    }
-
-    static void askTorate(final Context context)
-    {
-//        int style;
-//        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1)
-//            style = android.R.style.Theme_Material_Dialog;
-//
-//        else
-//            style = R.style.AlertDialogCustom;
-
-        CustomDialogClass cdd=new CustomDialogClass((Activity)context);
-        cdd.Dialog_Type(Constants.DIALOG_TYPE.RATE_DIALOG, context);
-        cdd.show();
-
-//        new AlertDialog.Builder(new ContextThemeWrapper(context, style))
-//                .setMessage("Are you enjoying the app?")
-//
-//                // Specifying a listener allows you to take an action before dismissing the dialog.
-//                // The dialog is automatically dismissed when a dialog button is clicked.
-//                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-//                {
-//                    public void onClick(DialogInterface dialog, int which)
-//                    {
-//                        showRateDialog(context, true);
-//                    }
-//                })
-//
-//                .setNegativeButton("No", new DialogInterface.OnClickListener()
-//                {
-//                    public void onClick(DialogInterface dialog, int which)
-//                    {
-//                        sendFeedback(context);
-//                    }
-//                })
-//                .show();
-    }
-
-    static void showRateDialog(Context context, boolean showRightAway)
-    {
-        // Custom condition: x days and y launches
-        RateThisApp.Config config = new RateThisApp.Config(14, 20);
-        RateThisApp.init(config);
-
-        // Monitor launch times and interval from installation
-        RateThisApp.onCreate(context);
-        // If the condition is satisfied, "Rate this app" dialog will be shown
-        if(showRightAway)
-            RateThisApp.showRateDialog(context, R.style.AlertDialogCustom);
-        else
-            RateThisApp.showRateDialogIfNeeded(context, R.style.AlertDialogCustom);
+        /**
+         * A preference value change listener that updates the preference's summary
+         * to reflect its new value. Currently Blank, here for future scope
+         */
+        private val sBindPreferenceSummaryToValueListener = Preference.OnPreferenceChangeListener { _, _ -> true }
     }
 }
