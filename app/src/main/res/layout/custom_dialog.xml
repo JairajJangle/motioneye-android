@@ -694,6 +694,16 @@
         android:minHeight="54dip"
         android:orientation="vertical">
 
+        <ImageView
+            android:id="@+id/titleDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:gravity="fill_horizontal"
+            android:scaleType="fitXY"
+            android:src="@android:drawable/divider_horizontal_dark"
+            android:contentDescription="divider"
+            android:visibility="gone" />
+
         <LinearLayout
             android:id="@+id/title_template"
             android:layout_width="match_parent"
@@ -711,6 +721,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:paddingTop="6dip"
+                android:contentDescription="title icon"
                 android:paddingEnd="10dip" />
 
             <com.android.internal.widget.DialogTitle
@@ -725,15 +736,6 @@
                 android:textColor="@color/motioneye_blue"
                 android:textStyle="bold" />
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/titleDivider"
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:gravity="fill_horizontal"
-            android:scaleType="fitXY"
-            android:src="@android:drawable/divider_horizontal_dark"
-            android:visibility="gone" />
         <!-- If the client uses a customTitle, it will be added here. -->
     </LinearLayout>
 

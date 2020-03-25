@@ -23,26 +23,27 @@
         android:allowBackup="true"
         android:roundIcon="@mipmap/me_adp_ic_round">
 
-        <activity android:name=".LegalDocShow"
+        <activity
+            android:name=".activities.LegalDocShowActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Help_FAQ"
+            android:name=".activities.HelpFAQActivity"
             android:label="Help and FAQ"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Add_Cam"
+            android:name=".activities.AddCamActivity"
             android:label="Camera List"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".add_device_detail"
+            android:name=".activities.AddDeviceDetailsActivity"
             android:label="Add Device"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".loading_screen"
+            android:name=".activities.LoadingScreenActivity"
             android:label="Motion Eye">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,7 +57,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".loading_screen_tv"
+            android:name=".activities.LoadingScreenTvActivity"
             android:label="Motion Eye">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -66,18 +67,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".web_motion_eye"
+            android:name=".activities.WebMotionEyeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_web_motion_eye"
             android:theme="@style/FullscreenTheme">
         </activity>
         <activity
-            android:name=".About_Page"
+            android:name=".activities.AboutActivity"
             android:label="About"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="Settings"
             android:theme="@style/PreferenceScreen"/>
     </application>

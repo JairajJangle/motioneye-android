@@ -674,65 +674,100 @@
  * Public License instead of this License.  But first, please read
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
+package com.jairaj.janglegmail.motioneye.activities
 
-package com.jairaj.janglegmail.motioneye;
+import android.content.Intent
+import android.os.Bundle
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
+import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.askToRate
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.sendFeedback
+import com.jairaj.janglegmail.motioneye.utils.Constants
 
-import android.content.res.Resources;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+class SettingsActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-public class Help_FAQ extends AppCompatActivity
-{
-    Toolbar toolbar;
-    private List<QandA> QandAList= new ArrayList<>();
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_help__faq);
-
-        RecyclerView Recyclerview = findViewById(R.id.recycleview_HFAQ);
-
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(R.string.help_and_faq);
-
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        Recyclerview.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        Recyclerview.setLayoutManager(llm);
-
-        createList();
-
-        QandA_RV_Adapter QAAdapter = new QandA_RV_Adapter(QandAList);
-        Recyclerview.setAdapter(QAAdapter);
+        // load settings fragment
+        supportFragmentManager.beginTransaction().replace(android.R.id.content, MainPreferenceFragment()).commit()
     }
 
-    private void createList()
-    {
-        Resources res = getResources();
-        String[] QandA_array = res.getStringArray(R.array.QandAs);
+    class MainPreferenceFragment : PreferenceFragmentCompat() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            addPreferencesFromResource(R.xml.prefs_settings)
 
-        for(int i = 0; i < QandA_array.length; i+=2)
-        {
-            QandAList.add(new QandA(QandA_array[i], QandA_array[i+1]));
+            //notification preference change listener
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_fullscreen)))
+            //notification preference change listener
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_autoopen)))
+
+            // feedback preference click listener
+            val feedbackPref = findPreference<Preference>(getString(R.string.key_send_feedback))
+            feedbackPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                sendFeedback(activity!!)
+                true
+            }
+
+            val ppPref = findPreference<Preference>(getString(R.string.key_pp))
+            ppPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                val bundle = Bundle()
+                bundle.putSerializable(Constants.KEY_LEGAL_DOC_TYPE,
+                        Constants.LegalDocType.PRIVPOL)
+                val i = Intent(activity, LegalDocShowActivity::class.java)
+                i.putExtras(bundle)
+                startActivity(i)
+                true
+            }
+
+            val tncPref = findPreference<Preference>(getString(R.string.key_tnc))
+            tncPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                val bundle = Bundle()
+                bundle.putSerializable(Constants.KEY_LEGAL_DOC_TYPE,
+                        Constants.LegalDocType.TNC)
+                val i = Intent(activity, LegalDocShowActivity::class.java)
+                i.putExtras(bundle)
+                startActivity(i)
+                true
+            }
+
+            // rate me click listener
+            val rateMePref = findPreference<Preference>(getString(R.string.key_rate_me))
+            rateMePref?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                askToRate(activity)
+                true
+            }
         }
+
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {}
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        private fun bindPreferenceSummaryToValue(preference: Preference?) {
+            preference?.onPreferenceChangeListener = sBindPreferenceSummaryToValueListener
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference?.context)
+                            .getBoolean(preference?.key, true))
+        }
+
+        /**
+         * A preference value change listener that updates the preference's summary
+         * to reflect its new value. Currently Blank, here for future scope
+         */
+        private val sBindPreferenceSummaryToValueListener = Preference.OnPreferenceChangeListener { _, _ -> true }
     }
 }

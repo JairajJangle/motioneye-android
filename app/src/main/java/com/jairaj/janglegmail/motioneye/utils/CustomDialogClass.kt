@@ -674,130 +674,107 @@
  * Public License instead of this License.  But first, please read
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
+package com.jairaj.janglegmail.motioneye.utils
 
-package com.jairaj.janglegmail.motioneye;
+import android.app.Activity
+import android.app.Dialog
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import android.view.Window
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.activities.HelpFAQActivity
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.sendFeedback
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.showRateDialog
+import com.jairaj.janglegmail.motioneye.utils.Constants.DialogType
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.view.MenuItem;
-
-import java.util.Objects;
-
-import static com.jairaj.janglegmail.motioneye.Constants.LEGAL_DOC_TYPE;
-
-public class SettingsActivity extends AppCompatPreferenceActivity
+internal class CustomDialogClass //    public void onClick(View v)
+//    {
+//        switch (v.getId())
+//        {
+//            case R.id.button1:
+//                c.finish();
+//                break;
+//            case R.id.button2:
+//                dismiss();
+//                break;
+//            default:
+//                break;
+//        }
+//        dismiss();
+//    }
+(var c: Activity) : Dialog(c) //        implements android.view.View.OnClickListener
 {
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        // load settings fragment
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
+    var d: Dialog? = null
+    private var type: DialogType? = null
+    fun dialogType(type: DialogType?) {
+        this.type = type
     }
 
-    public static class MainPreferenceFragment extends PreferenceFragment
-    {
-        @Override
-        public void onCreate(final Bundle savedInstanceState)
-        {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.prefs_settings);
-
-            //notification preference change listener
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_fullscreen)));
-            //notification preference change listener
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_autoopen)));
-
-            // feedback preference click listener
-            Preference feedback_pref = findPreference(getString(R.string.key_send_feedback));
-            feedback_pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-            {
-                public boolean onPreferenceClick(Preference preference)
-                {
-                    Utils.sendFeedback(getActivity());
-                    return true;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setContentView(R.layout.custom_dialog)
+        window?.setDimAmount(0.3f)
+        val positive = findViewById<Button>(R.id.button2)
+        val negative = findViewById<Button>(R.id.button1)
+        val neutral = findViewById<Button>(R.id.button3)
+        val dialogTitle = findViewById<TextView>(R.id.alertTitle)
+        val dialogmessage = findViewById<TextView>(R.id.message)
+        val dialogIcon = findViewById<ImageView>(R.id.icon)
+        val titltePanel = findViewById<LinearLayout>(R.id.topPanel)
+        when (type) {
+            DialogType.RATE_DIALOG -> {
+                positive.text = c.getString(R.string.yes)
+                negative.text = c.getString(R.string.no)
+                neutral.visibility = View.GONE
+                dialogTitle.text = ""
+                titltePanel.visibility = View.GONE
+                dialogmessage.setText(R.string.are_you_enjoying)
+                negative.setOnClickListener {
+                    dismiss()
+                    sendFeedback(context)
                 }
-            });
-
-            Preference pp_pref = findPreference(getString(R.string.key_pp));
-            pp_pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-            {
-                public boolean onPreferenceClick(Preference preference)
-                {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(Constants.KEY_LEGAL_DOC_TYPE,
-                            LEGAL_DOC_TYPE.PRIVPOL);
-                    Intent i = new Intent(getActivity(), LegalDocShow.class);
-                    i.putExtras(bundle);
-                    startActivity(i);
-                    return true;
+                positive.setOnClickListener {
+                    dismiss()
+                    showRateDialog(context, true)
                 }
-            });
+            }
+            DialogType.WEBPAGE_ERROR_DIALOG -> {
+                dialogTitle.setText(R.string.uh_oh)
+                dialogIcon.setImageResource(android.R.drawable.ic_dialog_alert)
 
-            Preference tnc_pref = findPreference(getString(R.string.key_tnc));
-            tnc_pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-            {
-                public boolean onPreferenceClick(Preference preference)
-                {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(Constants.KEY_LEGAL_DOC_TYPE,
-                            LEGAL_DOC_TYPE.TNC);
-                    Intent i = new Intent(getActivity(), LegalDocShow.class);
-                    i.putExtras(bundle);
-                    startActivity(i);
-                    return true;
+//                positive.setText("Send Feedback");
+//                negative.setText("Check Help and FAQ");
+//                neutral.setText("Cancel");
+                neutral.text = c.getString(R.string.send_feedback)
+                positive.text = c.getString(R.string.check_help_faq)
+                negative.text = c.getString(R.string.cancel)
+                dialogmessage.text = c.getString(R.string.page_error_dialog_message)
+                neutral.setOnClickListener {
+                    dismiss()
+                    sendFeedback(context)
+                    c.finish()
                 }
-            });
-
-            // rate me click listener
-            Preference rate_me_pref = findPreference(getString(R.string.key_rate_me));
-            rate_me_pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-            {
-                public boolean onPreferenceClick(Preference preference)
-                {
-                    Utils.askTorate(getActivity());
-                    return true;
+                positive.setOnClickListener {
+                    dismiss()
+                    val i = Intent(c, HelpFAQActivity::class.java)
+                    c.finish()
+                    c.startActivity(i)
                 }
-            });
+                negative.setOnClickListener { if (isShowing) dismiss() }
+            }
+            else -> {
+            }
         }
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//        positive.setOnClickListener(this);
+//        negative.setOnClickListener(this);
+//        neutral.setOnClickListener(this);
+    } //    @Override
 
-    private static void bindPreferenceSummaryToValue(Preference preference)
-    {
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getBoolean(preference.getKey(), true));
-    }
-
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value. Currently Blank, here for future scope
-     */
-    private static Preference.OnPreferenceChangeListener
-            sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener()
-    {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue)
-        {
-            return true;
-        }
-    };
 }

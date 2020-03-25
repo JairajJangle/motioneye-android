@@ -675,60 +675,330 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.jairaj.janglegmail.motioneye;
+package com.jairaj.janglegmail.motioneye.activities
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.DownloadManager
+import android.app.ProgressDialog
+import android.content.Context
+import android.content.DialogInterface
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
+import android.preference.PreferenceManager
+import android.util.Log
+import android.view.Gravity
+import android.view.View
+import android.webkit.*
+import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.utils.AppUtils
+import com.jairaj.janglegmail.motioneye.utils.Constants
+import com.jairaj.janglegmail.motioneye.utils.CustomDialogClass
 
-import java.util.List;
+class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.OnRefreshListener
+() {
+    private var progressBar: ProgressDialog? = null
+    private lateinit var cancelButton: AlertDialog
 
-public class QandA_RV_Adapter extends RecyclerView.Adapter<QandA_RV_Adapter.MyViewHolder> {
+    private var fullScreenPref = true
+    private val mHideHandler = Handler()
+    private var mHandler = Handler()
+    private lateinit var mContentView: WebView
+    private var urlPort: String = ""
+    internal var mode = -1
+    //private SwipeRefreshLayout swipe;
 
-    private List<QandA> QandAList;
+    private val mHidePart2Runnable = Runnable {
+        // Delayed removal of status and navigation bar
 
-    /**
-     * View holder class
-     * */
-    class MyViewHolder extends RecyclerView.ViewHolder {
+        // Note that some of these constants are new as of API 16 (Jelly Bean)
+        // and API 19 (KitKat). It is safe to use them, as they are inlined
+        // at compile-time and do nothing on earlier devices.
 
-        TextView QuestionText;
-        TextView AnswerText;
+        val uiVisibilityFlag = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
-        MyViewHolder(View view)
-        {
-            super(view);
-            QuestionText = view.findViewById(R.id.title_q);
-            AnswerText = view.findViewById(R.id.subtitle_ans);
+        mContentView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
+                //|View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+
+        if (fullScreenPref)
+            mContentView.systemUiVisibility = mContentView.systemUiVisibility or uiVisibilityFlag
+    }
+
+    //    private View mControlsView;
+    private val mShowPart2Runnable = Runnable {
+        // Delayed display of UI elements
+        val actionBar = supportActionBar
+        actionBar?.show()
+        //            mControlsView.setVisibility(View.VISIBLE);
+    }
+
+    private val mHideRunnable = Runnable { hide() }
+
+    //    @Override
+    //    public void onRefresh()
+    //    {
+    //        if(mContentView.getScrollY() == 0)
+    //        {
+    //            swipe.setRefreshing(true);
+    //            ReLoadWebView(url_port);
+    //        }
+    //        else
+    //        {
+    //            swipe.setRefreshing(false);
+    //        }
+    //    }
+
+    //    private void ReLoadWebView(String currentURL)
+    //    {
+    //        mContentView.loadUrl(currentURL);
+    //    }
+
+    //permission is automatically granted on sdk<23 upon installation
+    private val isStoragePermissionGranted: Boolean
+        get() {
+            return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG, "Permission is granted")
+                true
+            } else {
+                Log.v(TAG, "Permission is revoked")
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                false
+            }
         }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_web_motion_eye)
+
+        val bundle = intent.extras
+        //Extract the data…
+        if (bundle != null) {
+            urlPort = bundle.getString(Constants.KEY_URL_PORT) ?: "about:blank"
+            mode = bundle.getInt(Constants.KEY_MODE)
+        }
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+
+        fullScreenPref = prefs.getBoolean(getString(R.string.key_fullscreen), true)
+
+        //        mControlsView = findViewById(R.id.fullscreen_content_controls);
+        mContentView = findViewById(R.id.fullscreen_content)
+        mContentView.settings.javaScriptEnabled = true
+        mContentView.webViewClient = WebViewClient()
+        mContentView.settings.javaScriptCanOpenWindowsAutomatically = true
+
+        mContentView.settings.builtInZoomControls = true
+        mContentView.settings.setSupportZoom(true)
+        mContentView.settings.displayZoomControls = true // disable the default zoom controls on the page
+
+        //        swipe = findViewById(R.id.swipe);
+        //        swipe.setOnRefreshListener(this);
+
+        CookieManager.getInstance().setAcceptCookie(true)
+
+        progressBar = when (mode) {
+            Constants.MODE_CAMERA -> ProgressDialog.show(this@WebMotionEyeActivity,
+                    getString(R.string.connecting_mE), getString(R.string.loading))
+            Constants.MODE_DRIVE -> ProgressDialog.show(this@WebMotionEyeActivity,
+                    getString(R.string.connecting_gD), getString(R.string.loading))
+            else -> ProgressDialog.show(this@WebMotionEyeActivity,
+                    getString(R.string.connecting_uM), getString(R.string.loading))
+        }
+
+        val progressbar = progressBar!!.findViewById<ProgressBar>(android.R.id.progress)
+        progressbar.indeterminateDrawable
+                .setColorFilter(resources.getColor(R.color.motioneye_blue),
+                        android.graphics.PorterDuff.Mode.SRC_IN)
+
+        progressBar!!.setCancelable(true)
+
+        cancelButton = AlertDialog.Builder(this).create()
+
+        val window = cancelButton.window
+        window?.setGravity(Gravity.BOTTOM)
+
+        cancelButton.setMessage(":'( Taking too long to load?")
+
+        cancelButton.setButton(DialogInterface.BUTTON_NEGATIVE, "Click to Dismiss") { _, _ -> progressBar!!.dismiss() }
+
+        progressBar!!.setOnCancelListener {
+            if (progressBar != null)
+                progressBar!!.dismiss()
+            mHandler.removeMessages(0)
+            finish()
+        }
+
+        mContentView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                view.loadUrl(url)
+                return true
+            }
+
+            override fun onPageFinished(view: WebView, url: String) {
+                handleOnPageFinished()
+                //                swipe.setRefreshing(false);
+            }
+
+            override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
+                super.onReceivedError(view, errorCode, description, failingUrl)
+                showWebPageErrorDialog()
+            }
+        }
+
+        val liveStream = AppUtils.checkWhetherStream(urlPort)
+        mContentView.webChromeClient = object : WebChromeClient() {
+            override fun onProgressChanged(view: WebView, progress: Int) {
+                if (liveStream && progress >= 30)
+                    handleOnPageFinished()
+            }
+        }
+
+        mContentView.loadUrl(urlPort)
+
+        mContentView.setDownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
+            val request = DownloadManager.Request(Uri.parse(url))
+
+            if (isStoragePermissionGranted) {
+                request.setMimeType(mimeType)
+                //------------------------COOKIE!!------------------------
+                val cookies = CookieManager.getInstance().getCookie(url)
+                request.addRequestHeader("cookie", cookies)
+                //------------------------COOKIE!!------------------------
+                request.addRequestHeader("User-Agent", userAgent)
+                request.setDescription("Downloading file...")
+                request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType))
+                request.allowScanningByMediaScanner()
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType))
+                val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                dm.enqueue(request)
+                Toast.makeText(baseContext, "Downloading File", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        mHandler.postDelayed({
+            if (progressBar != null)
+                if (progressBar!!.isShowing)
+                    cancelButton.show()
+        }, 15000L)
     }
 
-    QandA_RV_Adapter(List<QandA> QandAList) {
-        this.QandAList = QandAList;
+    //To prevent crashes on some devices WebView needs to be safely destroyed
+    override fun onDestroy() {
+        super.onDestroy()
+        mContentView.loadUrl("about:blank")
+        mContentView.destroy()
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        System.out.println("Bind ["+holder+"] - Pos ["+position+"]");
-        QandA qa = QandAList.get(position);
-        holder.QuestionText.setText(qa.Question);
-        holder.AnswerText.setText(String.valueOf(qa.Answer));
+    internal fun handleOnPageFinished() {
+        if (progressBar != null) {
+            if (progressBar!!.isShowing)
+                progressBar!!.dismiss()
+        }
+
+        if (cancelButton.isShowing)
+            cancelButton.dismiss()
     }
 
-    @Override
-    public int getItemCount() {
-        Log.d("RV", "Item size ["+QandAList.size()+"]");
-        return QandAList.size();
+    internal fun showWebPageErrorDialog() {
+        val cdd = CustomDialogClass(this@WebMotionEyeActivity)
+        cdd.dialogType(Constants.DialogType.WEBPAGE_ERROR_DIALOG)
+        cdd.setCancelable(false)
+        cdd.show()
+
+        //        cdd.negative.setOnClickListener(new View.OnClickListener()
+        //        {
+        //            public void onClick(View view)
+        //            {
+        //                Intent i = new Intent(web_motion_eye.this, Help_FAQ.class);
+        //                finish();  //Kill the activity from which you will go to next activity
+        //                startActivity(i);
+        //            }
+        //        });
+
+        //        new AlertDialog.Builder(web_motion_eye.this)
+        //                .setTitle(page_error_title)
+        //                .setMessage("Please help us fix the issue by letting us know by sending a feedback")
+        //
+        //                .setPositiveButton("Send Feedback", new DialogInterface.OnClickListener() {
+        //                    public void onClick(DialogInterface dialog, int which)
+        //                    {
+        //                        Utils.sendFeedback(web_motion_eye.this);
+        //                    }
+        //
+        //                })
+        //
+        //                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+        //                    public void onClick(DialogInterface dialog, int which)
+        //                    {
+        //                    }
+        //                })
+        //                .setNegativeButton("Check Help and FAQ", new DialogInterface.OnClickListener()
+        //                {
+        //                    public void onClick(DialogInterface dialog, int which)
+        //                    {
+        //                        Intent i = new Intent(web_motion_eye.this, Help_FAQ.class);
+        //                        finish();  //Kill the activity from which you will go to next activity
+        //                        startActivity(i);
+        //                    }
+        //                })
+        //                .setCancelable(false)
+        //                .setIcon(android.R.drawable.ic_dialog_alert)
+        //                .show();
     }
 
-    @NonNull
-    @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_list_helpandfaq,parent, false);
-        return new MyViewHolder(v);
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+
+        // Trigger the initial hide() shortly after the activity has been
+        // created, to briefly hint to the user that UI controls
+        // are available.
+        delayedHide(100)
+    }
+
+    private fun hide() {
+        // Hide UI first
+        val actionBar = supportActionBar
+        actionBar?.hide()
+        //        mControlsView.setVisibility(View.GONE);
+
+        // Schedule a runnable to remove the status and navigation bar after a delay
+        mHideHandler.removeCallbacks(mShowPart2Runnable)
+        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
+    }
+
+    @SuppressLint("InlinedApi")
+    private/*
+     * Schedules a call to hide() in delay milliseconds, canceling any
+     * previously scheduled calls.
+     */ fun delayedHide(delayMillis: Int) {
+        mHideHandler.removeCallbacks(mHideRunnable)
+        mHideHandler.postDelayed(mHideRunnable, delayMillis.toLong())
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0])
+            Toast.makeText(baseContext, "Storage permission granted", Toast.LENGTH_SHORT).show()
+            //resume tasks needing this permission
+        } else
+            Toast.makeText(baseContext, "Storage permission denied", Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        private const val TAG = ""
+
+        private const val UI_ANIMATION_DELAY = 300
     }
 }

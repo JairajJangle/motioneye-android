@@ -674,118 +674,48 @@
  * Public License instead of this License.  But first, please read
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
+package com.jairaj.janglegmail.motioneye.activities
 
-package com.jairaj.janglegmail.motioneye;
+import android.os.Bundle
+import android.text.Html
+import android.text.method.ScrollingMovementMethod
+import androidx.appcompat.app.AppCompatActivity
+import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.utils.Constants
+import kotlinx.android.synthetic.main.activity_legal_doc_show.*
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
+class LegalDocShowActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val bundle = intent.extras
+        var htmlLegalDoc = ""
+        var title = ""
 
-import com.kobakei.ratethisapp.RateThisApp;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-
-final class Utils
-{
-    /**
-     * Email client intent to send support mail
-     * Appends the necessary device information to email body
-     * useful when providing support
-     */
-    static void sendFeedback(Context context)
-    {
-        String body;
-        try
-        {
-            body = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-            body = "\n\n-----------------------------\nPlease don't remove this information\n Device OS: Android \n Device OS version: " +
-                    Build.VERSION.RELEASE + "\n App Version: " + body + "\n Device Brand: " + Build.BRAND +
-                    "\n Device Model: " + Build.MODEL + "\n Device Manufacturer: " + Build.MANUFACTURER;
+        //Extract the data…
+        if (bundle != null) {
+            if (bundle.getSerializable(Constants.KEY_LEGAL_DOC_TYPE) === Constants.LegalDocType.PRIVPOL) {
+                htmlLegalDoc = getString(R.string.privacy_policy)
+                title = getString(R.string.title_privacy_policy)
+            } else if (bundle.getSerializable(Constants.KEY_LEGAL_DOC_TYPE) === Constants.LegalDocType.TNC) {
+                htmlLegalDoc = getString(R.string.tnc)
+                title = getString(R.string.title_tnc)
+            }
         }
-        catch (PackageManager.NameNotFoundException e)
-        {
-            body = "";
-        }
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_legal_doc_show)
+        setSupportActionBar(appBarPP)
 
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("message/rfc822");
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"systems.sentinel@gmail.com"});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "motionEye app Feedback");
-        intent.putExtra(Intent.EXTRA_TEXT, body);
-        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(Intent.createChooser(intent, context.getString(R.string.choose_email_client)));
+        supportActionBar?.title = title
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
+
+        val htmlAsSpanned = Html.fromHtml(htmlLegalDoc, Html.FROM_HTML_MODE_LEGACY)
+        textView_privacy_policy.text = htmlAsSpanned
+        textView_privacy_policy.movementMethod = ScrollingMovementMethod()
     }
 
-    static void open_in_chrome(String url, Context context)
-    {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-        intent.setPackage("com.android.chrome");
-        try {
-            context.startActivity(intent);
-        } catch (ActivityNotFoundException ex) {
-            // Chrome browser presumably not installed so allow user to choose instead
-            intent.setPackage(null);
-            context.startActivity(intent);
-        }
-    }
-
-    static boolean checkWhetherStream(String url_port) {
-        return url_port.toLowerCase().contains("8081");
-    }
-
-    static void askTorate(final Context context)
-    {
-//        int style;
-//        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1)
-//            style = android.R.style.Theme_Material_Dialog;
-//
-//        else
-//            style = R.style.AlertDialogCustom;
-
-        CustomDialogClass cdd=new CustomDialogClass((Activity)context);
-        cdd.Dialog_Type(Constants.DIALOG_TYPE.RATE_DIALOG, context);
-        cdd.show();
-
-//        new AlertDialog.Builder(new ContextThemeWrapper(context, style))
-//                .setMessage("Are you enjoying the app?")
-//
-//                // Specifying a listener allows you to take an action before dismissing the dialog.
-//                // The dialog is automatically dismissed when a dialog button is clicked.
-//                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-//                {
-//                    public void onClick(DialogInterface dialog, int which)
-//                    {
-//                        showRateDialog(context, true);
-//                    }
-//                })
-//
-//                .setNegativeButton("No", new DialogInterface.OnClickListener()
-//                {
-//                    public void onClick(DialogInterface dialog, int which)
-//                    {
-//                        sendFeedback(context);
-//                    }
-//                })
-//                .show();
-    }
-
-    static void showRateDialog(Context context, boolean showRightAway)
-    {
-        // Custom condition: x days and y launches
-        RateThisApp.Config config = new RateThisApp.Config(14, 20);
-        RateThisApp.init(config);
-
-        // Monitor launch times and interval from installation
-        RateThisApp.onCreate(context);
-        // If the condition is satisfied, "Rate this app" dialog will be shown
-        if(showRightAway)
-            RateThisApp.showRateDialog(context, R.style.AlertDialogCustom);
-        else
-            RateThisApp.showRateDialogIfNeeded(context, R.style.AlertDialogCustom);
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

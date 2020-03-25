@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,12 +7,12 @@
     android:animateLayoutChanges="true"
     android:background="@color/motioneye_grey"
     android:fitsSystemWindows="true"
-    tools:context=".Add_Cam"
+    tools:context=".activities.AddCamActivity"
     tools:ignore="ContentDescription"
     android:contentDescription="@string/constraintlayout_for_list_ad_and_etc"
     android:labelFor="@+id/device_list">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -28,7 +28,7 @@
             android:background="@color/motioneye_dark_grey"
             app:popupTheme="@style/DarkPopUpStyle" />
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <include
         android:id="@+id/include2"
@@ -67,7 +67,7 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
         app:layout_constraintVertical_bias="0.0" />
 
-    <com.jairaj.janglegmail.motioneye.MovableFloatingActionButton
+    <com.jairaj.janglegmail.motioneye.views_and_adapters.MovableFloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -104,4 +104,4 @@
 
     </com.google.android.gms.ads.AdView>-->
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

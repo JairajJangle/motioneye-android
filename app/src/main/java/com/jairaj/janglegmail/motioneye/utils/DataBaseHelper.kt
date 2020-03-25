@@ -675,172 +675,172 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.jairaj.janglegmail.motioneye;
+package com.jairaj.janglegmail.motioneye.utils
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.content.ContentValues
+import android.content.Context
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
-import java.util.Objects;
-
-import static com.jairaj.janglegmail.motioneye.Constants.DIALOG_TYPE;
-
-public class CustomDialogClass extends Dialog
-//        implements android.view.View.OnClickListener
-{
-    public Activity c;
-    public Dialog d;
-    private DIALOG_TYPE type;
-    Context context;
-
-    CustomDialogClass(Activity a) {
-        super(a);
-        this.c = a;
+class DataBaseHelper internal constructor(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+    override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL("create table " + TABLE_NAME
+                + "(ID INTEGER PRIMARY KEY AUTOINCREMENT,LABEL TEXT,URL TEXT,PORT TEXT,DRIVE TEXT,PREV TEXT)")
     }
 
-    void Dialog_Type(DIALOG_TYPE type, Context context) {
-        this.type = type;
-        this.context = context;
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
+        onCreate(db)
+        if (newVersion > oldVersion) {
+            db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $COL_6 TEXT")
+        }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.custom_dialog);
+    fun insertNewColumn() {
+        val db = this.writableDatabase
+        if (!existsColumnInTable(db, TABLE_NAME, COL_6)) db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $COL_6 TEXT  DEFAULT 0")
+    }
 
-        Objects.requireNonNull(getWindow()).setDimAmount(0.3f);
+    fun insertData(label: String?, url: String?, port: String?, drive: String?, prev: String?): Boolean {
+        insertNewColumn()
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(COL_2, label)
+        contentValues.put(COL_3, url)
+        contentValues.put(COL_4, port)
+        contentValues.put(COL_5, drive)
+        contentValues.put(COL_6, prev)
+        val result = db.insert(TABLE_NAME, null, contentValues)
+        return result != -1L
+    }
 
-        Button positive = findViewById(R.id.button2);
-        Button negative = findViewById(R.id.button1);
-        Button neutral = findViewById(R.id.button3);
+    private fun existsColumnInTable(inDatabase: SQLiteDatabase, inTable: String, columnToCheck: String): Boolean {
+        var mCursor: Cursor? = null
+        return try {
+            // Query 1 row
+            mCursor = inDatabase.rawQuery("SELECT * FROM $inTable LIMIT 0", null)
 
-        TextView dialogTitle = findViewById(R.id.alertTitle);
-        TextView dialogmessage = findViewById(R.id.message);
+            // getColumnIndex() gives us the index (0 to ...) of the column - otherwise we get a -1
+            mCursor.getColumnIndex(columnToCheck) != -1
+        } catch (Exp: Exception) {
+            // Something went wrong. Missing the database? The table?
+            Log.d("existsColumnInTable", "When checking whether a column exists in the table, an error occurred: " + Exp.message)
+            false
+        } finally {
+            mCursor?.close()
+        }
+    }
 
-        ImageView dialogIcon = findViewById(R.id.icon);
-
-        LinearLayout titltePanel = findViewById(R.id.topPanel);
-
-        switch (type) {
-            case RATE_DIALOG:
-                positive.setText(c.getString(R.string.yes));
-                negative.setText(c.getString(R.string.no));
-                neutral.setVisibility(View.GONE);
-
-                dialogTitle.setText("");
-                titltePanel.setVisibility(View.GONE);
-                dialogmessage.setText(R.string.are_you_enjoying);
-
-                negative.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dismiss();
-                        Utils.sendFeedback(context);
-                    }
-                });
-
-                positive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dismiss();
-                        Utils.showRateDialog(context, true);
-                    }
-                });
-                break;
-
-            case WEBPAGE_ERROR_DIALOG:
-                dialogTitle.setText(R.string.uh_oh);
-                dialogIcon.setImageResource(android.R.drawable.ic_dialog_alert);
-
-//                positive.setText("Send Feedback");
-//                negative.setText("Check Help and FAQ");
-//                neutral.setText("Cancel");
-
-                neutral.setText(c.getString(R.string.send_feedback));
-                positive.setText(c.getString(R.string.check_help_faq));
-                negative.setText(c.getString(R.string.cancel));
-
-                dialogmessage.setText(c.getString(R.string.page_error_dialog_message));
-
-                neutral.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dismiss();
-                        Utils.sendFeedback(context);
-                        c.finish();
-                    }
-                });
-
-                positive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dismiss();
-                        Intent i = new Intent(c, Help_FAQ.class);
-                        c.finish();
-                        c.startActivity(i);
-                    }
-                });
-
-                negative.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (isShowing())
-                            dismiss();
-                    }
-                });
-                break;
-
-//            case WEBPAGE_LONG_LOADING:
-//                Window window = getWindow();
-//                Objects.requireNonNull(window).setGravity(Gravity.BOTTOM);
-//
-//                dialogTitle.setText("");
-//                titltePanel.setVisibility(View.GONE);
-//                dialogmessage.setText(":'( Taking too long to load?");
-//
-//                negative.setText("Click to Dismiss");
-//
-//                negative.setOnClickListener(new View.OnClickListener()
-//                {
-//                    @Override
-//                    public void onClick(View view)
-//                    {
-//                        dismiss();
-//                    }
-//                });
-//                break;
-            default:
-                //Nothing to do
+    val allData: Cursor
+        get() {
+            val db = this.writableDatabase
+            return db.rawQuery("select * from $TABLE_NAME", null)
         }
 
-//        positive.setOnClickListener(this);
-//        negative.setOnClickListener(this);
-//        neutral.setOnClickListener(this);
+    fun urlFromLabel(sch_label: String): String {
+        val db = this.writableDatabase
+        var cursor: Cursor? = null
+        var url = ""
+        return try {
+            cursor = db.rawQuery("select URL from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+            if (cursor.count > 0) {
+                cursor.moveToFirst()
+                url = cursor.getString(cursor.getColumnIndex("URL"))
+            }
+            url
+        } finally {
+            cursor?.close()
+        }
     }
 
-//    @Override
-//    public void onClick(View v)
-//    {
-//        switch (v.getId())
-//        {
-//            case R.id.button1:
-//                c.finish();
-//                break;
-//            case R.id.button2:
-//                dismiss();
-//                break;
-//            default:
-//                break;
-//        }
-//        dismiss();
-//    }
+    fun portFromLabel(sch_label: String): String {
+        val db = this.writableDatabase
+        var cursor: Cursor? = null
+        var port: String? = ""
+        return try {
+            cursor = db.rawQuery("select PORT from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+            if (cursor.count > 0) {
+                cursor.moveToFirst()
+                port = cursor.getString(cursor.getColumnIndex("PORT"))
+            }
+            port ?: ""
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun driveFromLabel(sch_label: String): String {
+        val db = this.writableDatabase
+        var cursor: Cursor? = null
+        var driveLink: String? = ""
+        return try {
+            cursor = db.rawQuery("select * from $TABLE_NAME", null)
+            if (cursor.getColumnIndex("DRIVE") != -1) {
+                cursor = db.rawQuery("select DRIVE from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+                if (cursor.count > 0) {
+                    cursor.moveToFirst()
+                    driveLink = cursor.getString(cursor.getColumnIndex("DRIVE"))
+                }
+                driveLink ?: ""
+            } else {
+                ""
+            }
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun prevStatFromLabel(sch_label: String): String {
+        val db = this.writableDatabase
+        var cursor: Cursor? = null
+        var prev: String? = ""
+        return try {
+            cursor = db.rawQuery("select PREV from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+            if (cursor.count > 0) {
+                cursor.moveToFirst()
+                prev = cursor.getString(cursor.getColumnIndex("PREV"))
+            }
+            prev ?: ""
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun updateData(key_label: String, label: String?, url: String?, port: String?, drive: String?): Boolean {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(COL_2, label)
+        contentValues.put(COL_3, url)
+        contentValues.put(COL_4, port)
+        contentValues.put(COL_5, drive)
+        db.update(TABLE_NAME, contentValues, "LABEL = ?", arrayOf(key_label))
+        return true
+    }
+
+    fun updatePrevStat(key_label: String, prev_stat: String?): Boolean {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(COL_6, prev_stat)
+        db.update(TABLE_NAME, contentValues, "LABEL = ?", arrayOf(key_label))
+        return true
+    }
+
+    fun deleteData(id: String): Int {
+        val db = this.writableDatabase
+        return db.delete(TABLE_NAME, "LABEL = ?", arrayOf(id))
+    }
+
+    companion object {
+        private const val DATABASE_NAME = "Devices.db"
+        private const val TABLE_NAME = "device_detail_table"
+
+        //private static final String COL_1 = "ID";
+        private const val COL_2 = "LABEL"
+        private const val COL_3 = "URL"
+        private const val COL_4 = "PORT"
+        private const val COL_5 = "DRIVE"
+        private const val COL_6 = "PREV"
+    }
 }
