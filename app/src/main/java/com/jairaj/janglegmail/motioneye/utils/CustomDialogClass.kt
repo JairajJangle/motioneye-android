@@ -744,7 +744,7 @@ internal class CustomDialogClass //    public void onClick(View v)
                     showRateDialog(context, true)
                 }
             }
-            DialogType.WEBPAGE_ERROR_DIALOG -> {
+            DialogType.WEB_PAGE_ERROR_DIALOG -> {
                 dialogTitle.setText(R.string.uh_oh)
                 dialogIcon.setImageResource(android.R.drawable.ic_dialog_alert)
 

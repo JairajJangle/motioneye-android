@@ -727,13 +727,13 @@ class AddCamActivity : AppCompatActivity() {
     private lateinit var dummyAbout //for storing layout item of about option in toolbar
             : MenuItem
     private lateinit var dummyHelpFaq: MenuItem
-    private lateinit var dummy_settings: MenuItem
+    private lateinit var dummySettings: MenuItem
 
     //private AdView mAdView; //for storing layout item of Ad view
     //AdRequest adRequest; //for storing ad request to adUnit id in linked layout file
     //AdListener adListener; //Listener for ads
     private var isFirstTimeDriveV: Short = 0 //0 = never appeared before; 1 = First Time; 2 = not First Time
-    private var target_for_drive_icon = 0 //Resource target for tutorial
+    private var targetForDriveIcon = 0 //Resource target for tutorial
 
     // Create a HashMap List from String Array elements
     private var listItems: MutableList<HashMap<String, String?>> = ArrayList() //HashMap inside list
@@ -767,7 +767,7 @@ class AddCamActivity : AppCompatActivity() {
         if (isFirstTime) {
             displayTutorial(1)
         }
-        fab?.setOnClickListener(View.OnClickListener { gotoAddDeviceDetail(Constants.EDIT_MODE_NEW_DEV) })
+        fab?.setOnClickListener { gotoAddDeviceDetail(Constants.EDIT_MODE_NEW_DEV) }
 
         //Handler to handle data fetching from SQL in BG
         val handlerFetchData: Handler = object : Handler() {
@@ -812,8 +812,8 @@ class AddCamActivity : AppCompatActivity() {
             } else {
                 var checkbox = view.findViewById<CheckBox>(R.id.checkBox)
                 checkbox.isChecked = !checkbox.isChecked
-                val no_of_checked_items = itemCheckedCount_in_device_list
-                if (no_of_checked_items == 0) {
+                val noOfCheckedItems = itemcheckedcountInDeviceList
+                if (noOfCheckedItems == 0) {
                     for (i in 0 until device_list.childCount) {
                         view = device_list.getChildAt(i)
                         checkbox = view.findViewById(R.id.checkBox)
@@ -858,9 +858,9 @@ class AddCamActivity : AppCompatActivity() {
 
     private fun onPreviewClick(v: View) {
         val vwParentRow = v.parent as ConstraintLayout
-        val url_port_tv = vwParentRow.findViewById<TextView>(R.id.subtitle_url_port_text)
-        val url_port = url_port_tv.text.toString()
-        goToWebMotionEye(url_port, Constants.MODE_CAMERA)
+        val urlPortTv = vwParentRow.findViewById<TextView>(R.id.subtitle_url_port_text)
+        val urlPort = urlPortTv.text.toString()
+        goToWebMotionEye(urlPort, Constants.MODE_CAMERA)
     }
 
     private fun goToWebMotionEye(urlPort: String?, @ServerMode mode: Int) {
@@ -878,7 +878,7 @@ class AddCamActivity : AppCompatActivity() {
         var url: String //For storing url extracted from SQL
         var port: String //For storing port extracted from SQL
         var label: String //For storing label extracted from SQL
-        var url_port: String //For storing url:port merged
+        var urlPort: String //For storing url:port merged
         labelUrlPort.clear()
         val res = myDb?.allData
         if (res?.count ?: 0 != 0) {
@@ -887,8 +887,8 @@ class AddCamActivity : AppCompatActivity() {
                 label = res.getString(1)
                 url = res.getString(2)
                 port = res.getString(3)
-                url_port = if (port != "") "$url:$port" else url
-                labelUrlPort[label] = url_port
+                urlPort = if (port != "") "$url:$port" else url
+                labelUrlPort[label] = urlPort
             }
         }
         val handler: Handler = object : Handler() {
@@ -896,12 +896,12 @@ class AddCamActivity : AppCompatActivity() {
                 addToList()
             }
         }
-        val thread_add_to_list: Thread = object : Thread() {
+        val threadAddToList: Thread = object : Thread() {
             override fun run() {
                 handler.sendEmptyMessage(0)
             }
         }
-        thread_add_to_list.run()
+        threadAddToList.run()
         res?.close()
     }
 
@@ -920,7 +920,7 @@ class AddCamActivity : AppCompatActivity() {
     }
 
     private fun gotoAddDeviceDetail(edit_mode: Int) {
-        var delete_label = ""
+        var deleteLabel = ""
         val bundle = Bundle()
         if (edit_mode == Constants.EDIT_MODE_EXIST_DEV) {
             var i = 0
@@ -928,7 +928,7 @@ class AddCamActivity : AppCompatActivity() {
                 val view = device_list.getChildAt(i)
                 val checkbox = view.findViewById<CheckBox>(R.id.checkBox)
                 if (checkbox.isChecked) {
-                    delete_label = (view.findViewById<View>(R.id.title_label_text) as TextView).text.toString()
+                    deleteLabel = (view.findViewById<View>(R.id.title_label_text) as TextView).text.toString()
                     checkbox.isChecked = false
                 }
                 checkbox.visibility = View.GONE
@@ -936,13 +936,13 @@ class AddCamActivity : AppCompatActivity() {
             }
             checked = false
             toggleActionbarElements()
-            bundle.putString("LABEL", delete_label)
+            bundle.putString("LABEL", deleteLabel)
         }
         bundle.putInt("EDIT", edit_mode)
-        val intent_for_add_device = Intent(this@AddCamActivity, AddDeviceDetailsActivity::class.java)
+        val intentForAddDevice = Intent(this@AddCamActivity, AddDeviceDetailsActivity::class.java)
         //Add the bundle to the intent
-        intent_for_add_device.putExtras(bundle)
-        startActivityForResult(intent_for_add_device, 0)
+        intentForAddDevice.putExtras(bundle)
+        startActivityForResult(intentForAddDevice, 0)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -951,7 +951,7 @@ class AddCamActivity : AppCompatActivity() {
         dummyEdit.isVisible = false
         dummyAbout.isVisible = true
         dummyHelpFaq.isVisible = true
-        dummy_settings.isVisible = true
+        dummySettings.isVisible = true
         toolbar.setTitle(R.string.Camera_List)
         fab.show()
 
@@ -965,15 +965,15 @@ class AddCamActivity : AppCompatActivity() {
                     toggleVisibilityOfPrev()
                 }
             }
-            val thread_toggle_drive_prev: Thread = object : Thread() {
+            val threadToggleDrivePrev: Thread = object : Thread() {
                 override fun run() {
                     handler.sendEmptyMessage(0)
                 }
             }
-            thread_toggle_drive_prev.run()
+            threadToggleDrivePrev.run()
             if (resultCode != 2) {
-                val flag_isFirstDevice: Boolean = isFirstTimeDevice
-                if (flag_isFirstDevice && isFirstTimeDriveV.toInt() == 0) displayTutorial(2) else if (!flag_isFirstDevice && isFirstTimeDriveV.toInt() == 1) displayTutorial(3) else if (flag_isFirstDevice && isFirstTimeDriveV.toInt() == 1) displayTutorial(4)
+                val flagIsFirstDevice: Boolean = isFirstTimeDevice
+                if (flagIsFirstDevice && isFirstTimeDriveV.toInt() == 0) displayTutorial(2) else if (!flagIsFirstDevice && isFirstTimeDriveV.toInt() == 1) displayTutorial(3) else if (flagIsFirstDevice && isFirstTimeDriveV.toInt() == 1) displayTutorial(4)
             }
         }
     }
@@ -985,7 +985,7 @@ class AddCamActivity : AppCompatActivity() {
         dummyEdit = menu.findItem(R.id.edit)
         dummyAbout = menu.findItem(R.id.action_about)
         dummyHelpFaq = menu.findItem(R.id.action_help)
-        dummy_settings = menu.findItem(R.id.action_settings)
+        dummySettings = menu.findItem(R.id.action_settings)
         return true
     }
 
@@ -995,14 +995,14 @@ class AddCamActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
         if (id == R.id.delete) {
-            if (itemCheckedCount_in_device_list > 0 && checked) {
+            if (itemcheckedcountInDeviceList > 0 && checked) {
                 var i = 0
                 while (i < device_list.childCount) {
                     val view = device_list.getChildAt(i)
                     val checkbox = view.findViewById<CheckBox>(R.id.checkBox)
                     if (checkbox.isChecked) {
-                        val del_label = (view.findViewById<View>(R.id.title_label_text) as TextView).text.toString()
-                        deleteData(del_label)
+                        val delLabel = (view.findViewById<View>(R.id.title_label_text) as TextView).text.toString()
+                        deleteData(delLabel)
                         checkbox.isChecked = false
                     }
                     i++
@@ -1013,25 +1013,25 @@ class AddCamActivity : AppCompatActivity() {
         }
         if (id == R.id.edit) {
             if (checked) {
-                val f = itemCheckedCount_in_device_list
+                val f = itemcheckedcountInDeviceList
                 if (f > 1) {
                     Toast.makeText(baseContext, "Select only one entry to edit", Toast.LENGTH_SHORT).show()
                 } else gotoAddDeviceDetail(Constants.EDIT_MODE_EXIST_DEV)
             }
         }
         if (id == R.id.action_about) {
-            val intent_about_page = Intent(this@AddCamActivity, AboutActivity::class.java)
-            intent_about_page.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent_about_page)
+            val intentAboutPage = Intent(this@AddCamActivity, AboutActivity::class.java)
+            intentAboutPage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intentAboutPage)
         }
         if (id == R.id.action_help) {
-            val intent_help_faq = Intent(this@AddCamActivity, HelpFAQActivity::class.java)
-            intent_help_faq.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent_help_faq)
+            val intentHelpFaq = Intent(this@AddCamActivity, HelpFAQActivity::class.java)
+            intentHelpFaq.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intentHelpFaq)
         }
         if (id == R.id.action_settings) {
-            val intent_settings = Intent(this@AddCamActivity, SettingsActivity::class.java)
-            startActivity(intent_settings)
+            val intentSettings = Intent(this@AddCamActivity, SettingsActivity::class.java)
+            startActivity(intentSettings)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -1046,10 +1046,10 @@ class AddCamActivity : AppCompatActivity() {
     fun onDriveIconClick(v: View) {
         //get the row the clicked button is in
         val vwParentRow = v.parent as ConstraintLayout
-        val LabelView_at_Drive_ic_click = vwParentRow.findViewById<TextView>(R.id.title_label_text)
-        val Label_text_at_drive_ic_click = LabelView_at_Drive_ic_click.text.toString()
-        val drive_link = myDb?.driveFromLabel(Label_text_at_drive_ic_click)
-        goToWebMotionEye(drive_link, Constants.MODE_DRIVE)
+        val labelViewAtDriveICClick = vwParentRow.findViewById<TextView>(R.id.title_label_text)
+        val labelTextAtDriveICClick = labelViewAtDriveICClick.text.toString()
+        val driveLink = myDb?.driveFromLabel(labelTextAtDriveICClick)
+        goToWebMotionEye(driveLink, Constants.MODE_DRIVE)
     }
 
     private fun displayTutorial(call_number: Int) {
@@ -1066,7 +1066,7 @@ class AddCamActivity : AppCompatActivity() {
                         .setPrimaryText(R.string.tut_title_add_button)
                         .setSecondaryText(R.string.tut_sub_add_button)
                         .setBackgroundColour(Color.argb(255, 30, 90, 136))
-                        .setPromptStateChangeListener { prompt, state -> /*
+                        .setPromptStateChangeListener { _, _ -> /*
                             if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                             {
                                 // User has pressed the prompt target
@@ -1088,7 +1088,7 @@ class AddCamActivity : AppCompatActivity() {
                         .setBackgroundColour(Color.argb(255, 30, 90, 136))
                         .setPromptBackground(RectanglePromptBackground())
                         .setPromptFocal(RectanglePromptFocal())
-                        .setPromptStateChangeListener { prompt, state ->
+                        .setPromptStateChangeListener { _, state ->
                             if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
                                 val handler = Handler()
                                 handler.postDelayed({ displayTutorial(3) }, 800) //delay
@@ -1104,11 +1104,11 @@ class AddCamActivity : AppCompatActivity() {
             }
             3 -> {
                 MaterialTapTargetPrompt.Builder(this@AddCamActivity)
-                        .setTarget(target_for_drive_icon)
+                        .setTarget(targetForDriveIcon)
                         .setPrimaryText(R.string.tut_title_drive_icon)
                         .setSecondaryText(R.string.tut_sub_drive_icon)
                         .setBackgroundColour(Color.argb(255, 30, 90, 136))
-                        .setPromptStateChangeListener { prompt, state -> /*
+                        .setPromptStateChangeListener { _, _ -> /*
                             if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
                             {
                                 //display_ad();
@@ -1143,41 +1143,41 @@ class AddCamActivity : AppCompatActivity() {
         }
     }
 
-    fun handlePreviewView(view: View, checkAll: Boolean) {
-        val Each_Label = view.findViewById<TextView>(R.id.title_label_text)
-        val Each_label_text = Each_Label.text.toString()
-        val preview_view = view.findViewById<WebView>(R.id.preview_webview)
-        val expand_button = view.findViewById<ImageView>(R.id.expand_button)
+    private fun handlePreviewView(view: View, checkAll: Boolean) {
+        val eachLabel = view.findViewById<TextView>(R.id.title_label_text)
+        val eachLabelText = eachLabel.text.toString()
+        val previewView = view.findViewById<WebView>(R.id.preview_webview)
+        val expandButton = view.findViewById<ImageView>(R.id.expand_button)
         val progressBar = view.findViewById<ProgressBar>(R.id.preview_progressBar)
         var visibilityState = false
         if (checkAll)
-            visibilityState = myDb?.prevStatFromLabel(Each_label_text) != "0"
+            visibilityState = myDb?.prevStatFromLabel(eachLabelText) != "0"
         else {
-            if (preview_view.visibility == View.GONE) visibilityState = true
+            if (previewView.visibility == View.GONE) visibilityState = true
         }
         if (visibilityState) {
-            val url_link = myDb?.urlFromLabel(Each_label_text) ?: ""
-            var url_port = ""
-            val port = myDb?.portFromLabel(Each_label_text)
+            val urlLink = myDb?.urlFromLabel(eachLabelText) ?: ""
+            var urlPort = ""
+            val port = myDb?.portFromLabel(eachLabelText)
             if (port != null) {
-                url_port = if (port.isNotEmpty()) "$url_link:$port" else url_link
+                urlPort = if (port.isNotEmpty()) "$urlLink:$port" else urlLink
             }
-            expand_button.setImageResource(R.drawable.collapse_button)
-            preview_view.visibility = View.VISIBLE
-            (preview_view.parent as ConstraintLayout).setPadding(0, 0, 0, Constants.PREVIEW_PADDING)
-            preview_view.settings.javaScriptEnabled = true
-            preview_view.setLayerType(View.LAYER_TYPE_HARDWARE, null)
-            preview_view.webViewClient = WebViewClient()
-            preview_view.settings.javaScriptCanOpenWindowsAutomatically = true
-            preview_view.settings.useWideViewPort = true
-            preview_view.settings.loadWithOverviewMode = true
-            preview_view.loadUrl(url_port)
-            val LiveStream = checkWhetherStream(url_port)
-            preview_view.webChromeClient = object : WebChromeClient() {
+            expandButton.setImageResource(R.drawable.collapse_button)
+            previewView.visibility = View.VISIBLE
+            (previewView.parent as ConstraintLayout).setPadding(0, 0, 0, Constants.PREVIEW_PADDING)
+            previewView.settings.javaScriptEnabled = true
+            previewView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+            previewView.webViewClient = WebViewClient()
+            previewView.settings.javaScriptCanOpenWindowsAutomatically = true
+            previewView.settings.useWideViewPort = true
+            previewView.settings.loadWithOverviewMode = true
+            previewView.loadUrl(urlPort)
+            val liveStream = checkWhetherStream(urlPort)
+            previewView.webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(view: WebView, progress: Int) {
                     if (view.url != "about:blank") {
                         progressBar.progress = progress
-                        if (progress == 100 || progress >= 30 && LiveStream) {
+                        if (progress == 100 || progress >= 30 && liveStream) {
                             progressBar.visibility = View.GONE
                         } else {
                             progressBar.visibility = View.VISIBLE
@@ -1185,19 +1185,19 @@ class AddCamActivity : AppCompatActivity() {
                     }
                 }
             }
-            val isUpdate = myDb?.updatePrevStat(Each_label_text, "1") ?: false
+            val isUpdate = myDb?.updatePrevStat(eachLabelText, "1") ?: false
             if (!isUpdate) Toast.makeText(this@AddCamActivity, R.string.error_try_delete, Toast.LENGTH_LONG).show()
         } else {
-            val isUpdate = myDb?.updatePrevStat(Each_label_text, "0") ?: false
+            val isUpdate = myDb?.updatePrevStat(eachLabelText, "0") ?: false
             if (!isUpdate) Toast.makeText(this@AddCamActivity, R.string.error_try_delete, Toast.LENGTH_LONG).show()
-            (preview_view.parent as ConstraintLayout).setPadding(0, 0, 0, 0)
-            expand_button.setImageResource(R.drawable.expand_down)
-            preview_view.loadUrl("about:blank")
-            preview_view.visibility = View.GONE
+            (previewView.parent as ConstraintLayout).setPadding(0, 0, 0, 0)
+            expandButton.setImageResource(R.drawable.expand_down)
+            previewView.loadUrl("about:blank")
+            previewView.visibility = View.GONE
             progressBar.visibility = View.GONE
         }
-        val finalView: View = preview_view
-        preview_view.setOnTouchListener { view, event ->
+        val finalView: View = previewView
+        previewView.setOnTouchListener { view, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 onPreviewClick(finalView)
             }
@@ -1210,20 +1210,20 @@ class AddCamActivity : AppCompatActivity() {
         var i = 0
         while (i < device_list.childCount) {
             view = device_list.getChildAt(i)
-            val Each_Label = view.findViewById<TextView>(R.id.title_label_text)
-            val Each_label_text = Each_Label.text.toString()
-            val drive_link = myDb?.driveFromLabel(Each_label_text) ?: ""
-            val drive_button = view.findViewById<ImageButton>(R.id.button_drive)
-            if (drive_link == "") drive_button.visibility = View.GONE else {
-                target_for_drive_icon = R.id.button_drive
-                drive_button.visibility = View.VISIBLE
+            val eachLabel = view.findViewById<TextView>(R.id.title_label_text)
+            val eachLabelText = eachLabel.text.toString()
+            val driveLink = myDb?.driveFromLabel(eachLabelText) ?: ""
+            val driveButton = view.findViewById<ImageButton>(R.id.button_drive)
+            if (driveLink == "") driveButton.visibility = View.GONE else {
+                targetForDriveIcon = R.id.button_drive
+                driveButton.visibility = View.VISIBLE
                 isFirstTimeDriveV = if (isFirstTimeDrive) 1 else 2
             }
             i++
         }
     }
 
-    private val itemCheckedCount_in_device_list: Int
+    private val itemcheckedcountInDeviceList: Int
         private get() {
             var view: View
             var checkbox: CheckBox
@@ -1239,7 +1239,7 @@ class AddCamActivity : AppCompatActivity() {
     private fun toggleActionbarElements() {
         dummyAbout.isVisible = !dummyAbout.isVisible
         dummyHelpFaq.isVisible = !dummyHelpFaq.isVisible
-        dummy_settings.isVisible = !dummy_settings.isVisible
+        dummySettings.isVisible = !dummySettings.isVisible
         dummyDelete.isVisible = !dummyDelete.isVisible
         dummyEdit.isVisible = !dummyEdit.isVisible
         if (toolbar.title == "") toolbar.setTitle(R.string.Camera_List) else toolbar.title = ""
@@ -1325,7 +1325,7 @@ class AddCamActivity : AppCompatActivity() {
         });
     }*/
     override fun onBackPressed() {
-        val f = itemCheckedCount_in_device_list
+        val f = itemcheckedcountInDeviceList
         if (f != 0) {
             var view: View
             var checkbox: CheckBox

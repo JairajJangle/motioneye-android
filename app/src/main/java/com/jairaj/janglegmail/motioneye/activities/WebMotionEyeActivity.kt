@@ -912,7 +912,7 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
 
     internal fun showWebPageErrorDialog() {
         val cdd = CustomDialogClass(this@WebMotionEyeActivity)
-        cdd.dialogType(Constants.DialogType.WEBPAGE_ERROR_DIALOG)
+        cdd.dialogType(Constants.DialogType.WEB_PAGE_ERROR_DIALOG)
         cdd.setCancelable(false)
         cdd.show()
 
