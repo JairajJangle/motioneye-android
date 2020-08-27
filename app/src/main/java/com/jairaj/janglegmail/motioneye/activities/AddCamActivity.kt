@@ -1249,7 +1249,7 @@ class AddCamActivity : AppCompatActivity() {
 
     // first time
     private val isFirstTime: Boolean
-        private get() {
+        get() {
             val preferences = getPreferences(Context.MODE_PRIVATE)
             val ranBefore = preferences.getBoolean("RanBefore", false)
             if (!ranBefore) {
@@ -1263,7 +1263,7 @@ class AddCamActivity : AppCompatActivity() {
 
     // first time
     private val isFirstTimeDevice: Boolean
-        private get() {
+        get() {
             val preferences = getPreferences(Context.MODE_PRIVATE)
             val ranBefore = preferences.getBoolean("Device_added_before", false)
             if (!ranBefore) {
@@ -1277,7 +1277,7 @@ class AddCamActivity : AppCompatActivity() {
 
     // first time
     private val isFirstTimeDrive: Boolean
-        private get() {
+        get() {
             val preferences = getPreferences(Context.MODE_PRIVATE)
             val ranBefore = preferences.getBoolean("Drive_RanBefore", false)
             if (!ranBefore) {

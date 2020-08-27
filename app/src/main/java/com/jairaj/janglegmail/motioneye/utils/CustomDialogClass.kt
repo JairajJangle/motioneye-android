@@ -724,17 +724,17 @@ internal class CustomDialogClass //    public void onClick(View v)
         val negative = findViewById<Button>(R.id.button1)
         val neutral = findViewById<Button>(R.id.button3)
         val dialogTitle = findViewById<TextView>(R.id.alertTitle)
-        val dialogmessage = findViewById<TextView>(R.id.message)
+        val dialogMessage = findViewById<TextView>(R.id.message)
         val dialogIcon = findViewById<ImageView>(R.id.icon)
-        val titltePanel = findViewById<LinearLayout>(R.id.topPanel)
+        val titlePanel = findViewById<LinearLayout>(R.id.topPanel)
         when (type) {
             DialogType.RATE_DIALOG -> {
                 positive.text = c.getString(R.string.yes)
                 negative.text = c.getString(R.string.no)
                 neutral.visibility = View.GONE
                 dialogTitle.text = ""
-                titltePanel.visibility = View.GONE
-                dialogmessage.setText(R.string.are_you_enjoying)
+                titlePanel.visibility = View.GONE
+                dialogMessage.setText(R.string.are_you_enjoying)
                 negative.setOnClickListener {
                     dismiss()
                     sendFeedback(context)
@@ -754,7 +754,7 @@ internal class CustomDialogClass //    public void onClick(View v)
                 neutral.text = c.getString(R.string.send_feedback)
                 positive.text = c.getString(R.string.check_help_faq)
                 negative.text = c.getString(R.string.cancel)
-                dialogmessage.text = c.getString(R.string.page_error_dialog_message)
+                dialogMessage.text = c.getString(R.string.page_error_dialog_message)
                 neutral.setOnClickListener {
                     dismiss()
                     sendFeedback(context)

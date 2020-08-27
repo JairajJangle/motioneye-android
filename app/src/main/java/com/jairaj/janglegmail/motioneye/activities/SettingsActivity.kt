@@ -711,7 +711,7 @@ class SettingsActivity : AppCompatActivity() {
             // feedback preference click listener
             val feedbackPref = findPreference<Preference>(getString(R.string.key_send_feedback))
             feedbackPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                sendFeedback(activity!!)
+                sendFeedback(requireActivity())
                 true
             }
 
@@ -719,7 +719,7 @@ class SettingsActivity : AppCompatActivity() {
             ppPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val bundle = Bundle()
                 bundle.putSerializable(Constants.KEY_LEGAL_DOC_TYPE,
-                        Constants.LegalDocType.PRIVPOL)
+                        Constants.LegalDocType.PRIVACY_POLICY)
                 val i = Intent(activity, LegalDocShowActivity::class.java)
                 i.putExtras(bundle)
                 startActivity(i)

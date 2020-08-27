@@ -692,7 +692,7 @@ class LegalDocShowActivity : AppCompatActivity() {
 
         //Extract the data…
         if (bundle != null) {
-            if (bundle.getSerializable(Constants.KEY_LEGAL_DOC_TYPE) === Constants.LegalDocType.PRIVPOL) {
+            if (bundle.getSerializable(Constants.KEY_LEGAL_DOC_TYPE) === Constants.LegalDocType.PRIVACY_POLICY) {
                 htmlLegalDoc = getString(R.string.privacy_policy)
                 title = getString(R.string.title_privacy_policy)
             } else if (bundle.getSerializable(Constants.KEY_LEGAL_DOC_TYPE) === Constants.LegalDocType.TNC) {

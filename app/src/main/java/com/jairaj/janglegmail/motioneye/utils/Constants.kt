@@ -687,7 +687,7 @@ object Constants {
 
     //Enum for selecting Legal document to show as only 1 activity is used for it
     internal enum class LegalDocType {
-        PRIVPOL, TNC
+        PRIVACY_POLICY, TNC
     }
 
     //Enum for selecting Custom Dialog Box type
