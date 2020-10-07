@@ -691,14 +691,20 @@ import com.kobakei.ratethisapp.RateThisApp
 object AppUtils {
 
     fun sendFeedback(context: Context) {
-        var body: String
-        try {
-            body = context.packageManager.getPackageInfo(context.packageName, 0).versionName
-            body = "\n\n-----------------------------\nPlease don't remove this information\n Device OS: Android \n Device OS version: " +
-                    Build.VERSION.RELEASE + "\n App Version: " + body + "\n Device Brand: " + Build.BRAND +
-                    "\n Device Model: " + Build.MODEL + "\n Device Manufacturer: " + Build.MANUFACTURER
+        val body: String = try {
+            val appInfo = context.packageManager.getPackageInfo(context.packageName, 0).versionName
+            "\n\n-----------------------------\n" +
+                    "Please don't remove this information\n\n" +
+                    "Device OS: Android \n" +
+                    "Device OS version: ${Build.VERSION.RELEASE}\n" +
+                    "App Version: $appInfo\n" +
+                    "Device Brand: ${Build.BRAND}\n" +
+                    "Device Model: ${Build.MODEL}\n" +
+                    "Device Manufacturer: ${Build.MANUFACTURER}\n" +
+                    "-----------------------------\n"
+
         } catch (e: PackageManager.NameNotFoundException) {
-            body = ""
+            ""
         }
 
         val intent = Intent(Intent.ACTION_SEND)
