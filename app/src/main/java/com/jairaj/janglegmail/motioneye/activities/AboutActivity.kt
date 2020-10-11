@@ -700,17 +700,6 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
         setSupportActionBar(toolbar)
 
         init()
-
-
-        val appVersionText = "App Version: ${getVersionName(this)}"
-        app_version_text.text = appVersionText
-
-        Credit_ShowCase.text = Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt'> MaterialTapTargetPrompt</a>", Html.FROM_HTML_MODE_LEGACY)
-        Credit_ShowCase.movementMethod = LinkMovementMethod.getInstance()
-        Apache_1.text = Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/LICENSE'> Apache License</a>", Html.FROM_HTML_MODE_LEGACY)
-        Apache_1.movementMethod = LinkMovementMethod.getInstance()
-        Apache_2.text = Html.fromHtml("<a href= 'http://www.apache.org/licenses/LICENSE-2.0.txt'> Apache License</a>", Html.FROM_HTML_MODE_LEGACY)
-        Apache_2.movementMethod = LinkMovementMethod.getInstance()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -727,6 +716,16 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        val appVersionText = "App Version: ${getVersionName(this)}"
+        app_version_text.text = appVersionText
+
+        Credit_ShowCase.text = Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt'> MaterialTapTargetPrompt</a>", Html.FROM_HTML_MODE_LEGACY)
+        Credit_ShowCase.movementMethod = LinkMovementMethod.getInstance()
+        Apache_1.text = Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/LICENSE'> Apache License</a>", Html.FROM_HTML_MODE_LEGACY)
+        Apache_1.movementMethod = LinkMovementMethod.getInstance()
+        Apache_2.text = Html.fromHtml("<a href= 'http://www.apache.org/licenses/LICENSE-2.0.txt'> Apache License</a>", Html.FROM_HTML_MODE_LEGACY)
+        Apache_2.movementMethod = LinkMovementMethod.getInstance()
     }
 
     override fun onClick(v: View?) {
