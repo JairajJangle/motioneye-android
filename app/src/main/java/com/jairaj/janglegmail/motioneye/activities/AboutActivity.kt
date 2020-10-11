@@ -721,6 +721,10 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
     private fun init() {
         toolbar.title = "About"
 
+        send_feedb.setOnClickListener(this)
+        button_install_steps.setOnClickListener(this)
+        join_dev.setOnClickListener(this)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
     }
