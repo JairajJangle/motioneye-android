@@ -24,9 +24,9 @@ Beta Release here: [Beta Release Branch Link](https://github.com/JairajJangle/mo
 ###### Want to contribute?
 If you are a developer and you wish to contribute to the app please fork the project and submit a pull request on the dev branch. Here are some user requested features that are still yet to be introduced.
 
-1. Zoom and Pan ability in camera stream
-2. Android TV support
-3. Improve camera stream preview in home screen by using RecycleView instead of Listview
+1. Username and password authentication
+2. Zoom and Pan ability in camera stream
+3. Android TV support
 4. Design Layout for Tablet
 5. Add support for RTSP network cameras
 
