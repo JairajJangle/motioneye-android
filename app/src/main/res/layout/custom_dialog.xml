@@ -724,7 +724,7 @@
                 android:contentDescription="title icon"
                 android:paddingEnd="10dip" />
 
-            <com.android.internal.widget.DialogTitle
+            <TextView
                 android:id="@+id/alertTitle"
                 style="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"

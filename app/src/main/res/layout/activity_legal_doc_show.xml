@@ -1,48 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activities.LegalDocShowActivity"
-    android:id="@+id/linearLayout4">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/motioneye_dark_grey"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        tools:layout_conversion_absoluteHeight="56dp"
-        tools:layout_conversion_absoluteWidth="0dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".activities.LegalDocShowActivity"
+        android:id="@+id/linearLayout4">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/appBarPP"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/motioneye_dark_grey"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:theme="@style/AppTheme.AppBarOverlay"
             tools:layout_conversion_absoluteHeight="56dp"
             tools:layout_conversion_absoluteWidth="0dp"
             tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp" />
-    </com.google.android.material.appbar.AppBarLayout>
+            tools:layout_editor_absoluteY="0dp">
 
-    <TextView
-        android:id="@+id/textView_privacy_policy"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:padding="8dp"
-        android:scrollbars="vertical"
-        android:text="Privacy Policy here"
-        android:textColor="@android:color/black"
-        tools:layout_conversion_absoluteHeight="675dp"
-        tools:layout_conversion_absoluteWidth="411dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="56dp" />
-</LinearLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/appBarPP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/motioneye_dark_grey"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                tools:layout_conversion_absoluteHeight="56dp"
+                tools:layout_conversion_absoluteWidth="0dp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <TextView
+            android:id="@+id/textView_privacy_policy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:padding="8dp"
+            android:scrollbars="vertical"
+            android:text="Privacy Policy here"
+            android:textColor="@android:color/black"
+            tools:layout_conversion_absoluteHeight="675dp"
+            tools:layout_conversion_absoluteWidth="411dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="56dp" />
+    </LinearLayout>
+</layout>

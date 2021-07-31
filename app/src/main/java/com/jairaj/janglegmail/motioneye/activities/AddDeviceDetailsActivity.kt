@@ -684,16 +684,16 @@ import android.view.View
 import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.databinding.ActivityAddDeviceDetailBinding
 import com.jairaj.janglegmail.motioneye.utils.Constants
 import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
-import kotlinx.android.synthetic.main.activity_add_device_detail.*
 
 //import com.google.android.gms.ads.AdView;
 //import com.google.android.gms.ads.MobileAds;
 class AddDeviceDetailsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityAddDeviceDetailBinding
+
     private var myDb: DataBaseHelper? = null
     private var editMode = 0
     private var editLabel: String? = ""
@@ -710,6 +710,11 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
     private lateinit var previousScreen: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityAddDeviceDetailBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         myDb = DataBaseHelper(this)
         flag = 0
         val bundle = intent.extras
@@ -718,12 +723,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             editMode = bundle.getInt("EDIT")
             editLabel = bundle.getString("LABEL")
         }
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_device_detail)
         //MobileAds.initialize(this, "ca-app-pub-7081069887552324~4679468464");
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        val det = findViewById<FloatingActionButton>(R.id.det)
-        val can = findViewById<FloatingActionButton>(R.id.cancel)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             window.decorView.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
@@ -732,17 +732,17 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         previousScreen.putExtra("Code", 0)
 
         //display_ad();
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         if (editMode == Constants.EDIT_MODE_EXIST_DEV) {
             editUrl = myDb!!.urlFromLabel(editLabel!!)
             editPort = myDb!!.portFromLabel(editLabel!!)
             editDriveLink = myDb!!.driveFromLabel(editLabel!!)
-            url_input.setText(editUrl)
-            port_input.setText(editPort)
-            label_input.setText(editLabel)
-            drive_input.setText(editDriveLink)
+            binding.urlInput.setText(editUrl)
+            binding.portInput.setText(editPort)
+            binding.labelInput.setText(editLabel)
+            binding.driveInput.setText(editDriveLink)
         }
-        det.setOnClickListener {
+        binding.det.setOnClickListener {
             saveToFile()
             if (shouldProceed == 1) {
                 setResult(0, previousScreen)
@@ -751,7 +751,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             //1 to make changes on editing
             //2 to cancel edit
         }
-        can.setOnClickListener {
+        binding.cancel.setOnClickListener {
             Toast.makeText(baseContext, R.string.cancelled_toast,
                     Toast.LENGTH_SHORT).show()
             previousScreen = Intent(baseContext, AddCamActivity::class.java)
@@ -764,10 +764,10 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
     }
 
     private fun saveToFile() {
-        val urlInputString: String = url_input.text.toString()
-        val portInputString: String = port_input.text.toString()
-        val labelInputString: String = label_input.text.toString()
-        val driveLinkInputString: String = drive_input.text.toString()
+        val urlInputString: String = binding.urlInput.text.toString()
+        val portInputString: String = binding.portInput.text.toString()
+        val labelInputString: String = binding.labelInput.text.toString()
+        val driveLinkInputString: String = binding.driveInput.text.toString()
 
         //TODO: Check RTSP support
         if ((URLUtil.isValidUrl(urlInputString) || urlInputString.startsWith("rtsp://"))

@@ -680,29 +680,34 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.databinding.ActivityHelpFaqBinding
 import com.jairaj.janglegmail.motioneye.dataclass.QandA
 import com.jairaj.janglegmail.motioneye.views_and_adapters.QAndARVAdapter
-import kotlinx.android.synthetic.main.activity_help__faq.*
 import java.util.*
 
 class HelpFAQActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityHelpFaqBinding
+
     private val qAndAList: MutableList<QandA> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_help__faq)
-        setSupportActionBar(toolbar)
+        binding = ActivityHelpFaqBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        toolbar.title = R.string.help_and_faq.toString()
+        setSupportActionBar(binding.toolbar)
+
+        binding.toolbar.title = R.string.help_and_faq.toString()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        recycleview_HFAQ.setHasFixedSize(true)
+        binding.recycleviewHFAQ.setHasFixedSize(true)
         val llm = LinearLayoutManager(this)
         llm.orientation = LinearLayoutManager.VERTICAL
-        recycleview_HFAQ.layoutManager = llm
+        binding.recycleviewHFAQ.layoutManager = llm
         createList()
 
         val qAndARvAdapter = QAndARVAdapter(qAndAList)
-        recycleview_HFAQ.adapter = qAndARvAdapter
+        binding.recycleviewHFAQ.adapter = qAndARvAdapter
     }
 
     private fun createList() {

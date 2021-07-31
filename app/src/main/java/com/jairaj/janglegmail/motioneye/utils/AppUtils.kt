@@ -692,8 +692,12 @@ object AppUtils {
 
     fun sendFeedback(context: Context) {
         val body: String = try {
-            val appInfo = context.packageManager.getPackageInfo(context.packageName, 0).versionName
-            "\n\n-----------------------------\n" +
+            val appInfo = context
+                .packageManager
+                .getPackageInfo(context.packageName, 0)
+                .versionName
+            "< Insert Issue description here >\n" +
+                    "\n\n-----------------------------\n" +
                     "Please don't remove this information\n\n" +
                     "Device OS: Android \n" +
                     "Device OS version: ${Build.VERSION.RELEASE}\n" +
@@ -786,7 +790,7 @@ object AppUtils {
     fun getVersionName(context: Context): String {
         val manager: PackageManager = context.packageManager
         val info: PackageInfo = manager.getPackageInfo(
-                context.packageName, 0)
+            context.packageName, 0)
 
         return info.versionName
     }

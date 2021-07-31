@@ -1,107 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:background="@color/motioneye_grey"
-    android:fitsSystemWindows="true"
-    tools:context=".activities.AddCamActivity"
-    tools:ignore="ContentDescription"
-    android:contentDescription="@string/constraintlayout_for_list_ad_and_etc"
-    android:labelFor="@+id/device_list">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout2"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/motioneye_dark_grey"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@color/motioneye_grey"
+        android:fitsSystemWindows="true"
+        tools:context=".activities.AddCamActivity"
+        tools:ignore="ContentDescription"
+        android:contentDescription="@string/constraintlayout_for_list_ad_and_etc"
+        android:labelFor="@+id/device_list">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout2"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:animateLayoutChanges="true"
+            android:layout_height="wrap_content"
             android:background="@color/motioneye_dark_grey"
-            app:popupTheme="@style/DarkPopUpStyle" />
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:animateLayoutChanges="true"
+                android:background="@color/motioneye_dark_grey"
+                app:popupTheme="@style/DarkPopUpStyle" />
 
-    <include
-        android:id="@+id/include2"
-        layout="@layout/content_add__cam"
-        app:layout_constraintTop_toTopOf="parent" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <Button
-        android:id="@+id/dummy_show_case_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:background="@color/transparent"
-        android:clickable="false"
-        android:contentDescription="@string/dummy_button_for_showcaseview"
-        android:labelFor="@+id/device_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/device_list" />
+        <include
+            android:id="@+id/include2"
+            layout="@layout/content_add__cam"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:id="@+id/device_list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:divider="@color/motioneye_grey"
-        android:dividerHeight="10dp"
-        android:footerDividersEnabled="false"
-        android:paddingStart="2dp"
-        android:paddingLeft="2dp"
-        android:paddingEnd="2dp"
-        android:paddingRight="2dp"
-        app:layout_constraintBottom_toBottomOf="@+id/include2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
-        app:layout_constraintVertical_bias="0.0" />
+        <Button
+            android:id="@+id/dummy_show_case_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@color/transparent"
+            android:clickable="false"
+            android:contentDescription="@string/dummy_button_for_showcaseview"
+            android:labelFor="@+id/device_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/device_list" />
 
-    <com.jairaj.janglegmail.motioneye.views_and_adapters.MovableFloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_marginTop="344dp"
-        android:layout_marginBottom="8dp"
-        android:contentDescription="@string/button_for_device_detail_intent"
-        app:backgroundTint="@color/motioneye_blue"
-        app:layout_constraintBottom_toBottomOf="@+id/device_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/plus_white" />
+        <ListView
+            android:id="@+id/device_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:divider="@color/motioneye_grey"
+            android:dividerHeight="10dp"
+            android:footerDividersEnabled="false"
+            android:paddingStart="2dp"
+            android:paddingLeft="2dp"
+            android:paddingEnd="2dp"
+            android:paddingRight="2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/include2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <com.jairaj.janglegmail.motioneye.views_and_adapters.MovableFloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_marginTop="344dp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/button_for_device_detail_intent"
+            app:backgroundTint="@color/motioneye_blue"
+            app:layout_constraintBottom_toBottomOf="@+id/device_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/plus_white" />
 
         <!-- TODO Add this to above block in id/fab
              app:layout_constraintBottom_toTopOf="@+id/adView" -->
 
-    <!--<com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:contentDescription="@string/for_displaying_ads_by_admob"
-        android:visibility="gone"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-7081069887552324/7493759090"
-        app:layout_constraintBottom_toBottomOf="@+id/device_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        <!--<com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/for_displaying_ads_by_admob"
+            android:visibility="gone"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-7081069887552324/7493759090"
+            app:layout_constraintBottom_toBottomOf="@+id/device_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-    </com.google.android.gms.ads.AdView>-->
+        </com.google.android.gms.ads.AdView>-->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

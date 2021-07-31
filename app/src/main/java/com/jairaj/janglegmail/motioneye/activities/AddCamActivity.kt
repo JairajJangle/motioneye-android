@@ -701,13 +701,14 @@ import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.databinding.ActivityAddCamBinding
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.checkWhetherStream
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.showRateDialog
 import com.jairaj.janglegmail.motioneye.utils.Constants
 import com.jairaj.janglegmail.motioneye.utils.Constants.ServerMode
 import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
-import kotlinx.android.synthetic.main.activity_add__cam.*
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal
@@ -718,6 +719,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;*/
 class AddCamActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityAddCamBinding
+
     private var myDb: DataBaseHelper? = null
     private var checked = false //Flag to store state of ListView device_list' items: checked or not checked
     private lateinit var dummyDelete //for storing layout item of delete button in toolbar
@@ -744,14 +747,17 @@ class AddCamActivity : AppCompatActivity() {
     private var labelUrlPort = HashMap<String, String>() //HashMap to store Label, Url + Port
     private var autoOpenPref = true
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityAddCamBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         if (!checkWriteExternalPermission()) ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_CODE)
         myDb = DataBaseHelper(this) // init DataBase object
 
         //Insert Preview status column in Data Base if the previous version of app didn't have it
         //TODO: Find if there is better way to handle SQL Table column addition over previous app version
         myDb!!.insertNewColumn()
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add__cam)
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         autoOpenPref = prefs.getBoolean(getString(R.string.key_autoopen), true)
 
@@ -760,14 +766,14 @@ class AddCamActivity : AppCompatActivity() {
         adapter = SimpleAdapter(this, listItems, R.layout.custom_list_item, arrayOf("First Line", "Second Line"), intArrayOf(R.id.title_label_text, R.id.subtitle_url_port_text))
 
         //TODO: Check necessity
-        setSupportActionBar(toolbar)
-        toolbar?.setTitle(R.string.Camera_List)
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.setTitle(R.string.Camera_List)
 
         //If this is the first run of the app show tutorial
         if (isFirstTime) {
             displayTutorial(1)
         }
-        fab?.setOnClickListener { gotoAddDeviceDetail(Constants.EDIT_MODE_NEW_DEV) }
+        binding.fab.setOnClickListener { gotoAddDeviceDetail(Constants.EDIT_MODE_NEW_DEV) }
 
         //Handler to handle data fetching from SQL in BG
         val handlerFetchData: Handler = object : Handler() {
@@ -783,12 +789,12 @@ class AddCamActivity : AppCompatActivity() {
         tFetchData.run()
 
         // Add this Runnable
-        device_list?.post {
+        binding.deviceList.post {
             val handler: Handler = object : Handler() {
                 override fun handleMessage(msg: Message) {
                     toggleVisibilityOfDriveButton()
                     toggleVisibilityOfPrev()
-                    if (device_list.count == 1 && autoOpenPref) {
+                    if (binding.deviceList.count == 1 && autoOpenPref) {
                         val url = listItems[0]["Second Line"]
                         val mode = if (TextUtils.isEmpty(
                                         myDb?.driveFromLabel(listItems[0]["First Line"]
@@ -804,8 +810,7 @@ class AddCamActivity : AppCompatActivity() {
             }
             threadToggleDrivePrev.run()
         }
-        device_list.onItemClickListener = OnItemClickListener { parent, view, position, id ->
-            var view = view
+        binding.deviceList.onItemClickListener = OnItemClickListener { parent, view, position, id ->
             if (!checked) {
                 val selectedUrlPort = (view.findViewById<View>(R.id.subtitle_url_port_text) as TextView).text.toString()
                 goToWebMotionEye(selectedUrlPort, Constants.MODE_CAMERA)
@@ -814,22 +819,21 @@ class AddCamActivity : AppCompatActivity() {
                 checkbox.isChecked = !checkbox.isChecked
                 val noOfCheckedItems = itemcheckedcountInDeviceList
                 if (noOfCheckedItems == 0) {
-                    for (i in 0 until device_list.childCount) {
-                        view = device_list.getChildAt(i)
-                        checkbox = view.findViewById(R.id.checkBox)
+                    for (i in 0 until binding.deviceList.childCount) {
+                        val childView = binding.deviceList.getChildAt(i)
+                        checkbox = childView.findViewById(R.id.checkBox)
                         checkbox.visibility = View.GONE
                     }
                     toggleActionbarElements()
                 }
             }
         }
-        device_list.onItemLongClickListener = OnItemLongClickListener { parent, view, position, id ->
-            var view = view
+        binding.deviceList.onItemLongClickListener = OnItemLongClickListener { parent, view, position, id ->
             if (!checked) {
                 var i = 0
-                while (i < device_list.childCount) {
-                    view = device_list.getChildAt(i)
-                    val checkbox = view.findViewById<CheckBox>(R.id.checkBox)
+                while (i < binding.deviceList.childCount) {
+                    val childView = binding.deviceList.getChildAt(i)
+                    val checkbox = childView.findViewById<CheckBox>(R.id.checkBox)
                     checkbox.visibility = View.VISIBLE
                     if (i == position) checkbox.isChecked = true
                     i++
@@ -837,9 +841,9 @@ class AddCamActivity : AppCompatActivity() {
                 toggleActionbarElements()
             } else {
                 var i = 0
-                while (i < device_list.childCount) {
-                    view = device_list.getChildAt(i)
-                    val checkbox = view.findViewById<CheckBox>(R.id.checkBox)
+                while (i < binding.deviceList.childCount) {
+                    val childView = binding.deviceList.getChildAt(i)
+                    val checkbox = childView.findViewById<CheckBox>(R.id.checkBox)
                     checkbox.visibility = View.GONE
                     if (i == position) checkbox.isChecked = false
                     i++
@@ -906,7 +910,7 @@ class AddCamActivity : AppCompatActivity() {
     }
 
     private fun addToList() {
-        device_list.adapter = null
+        binding.deviceList.adapter = null
         listItems.clear()
         for (o in labelUrlPort.entries) {
             val resultsMap = HashMap<String, String?>()
@@ -915,7 +919,7 @@ class AddCamActivity : AppCompatActivity() {
             resultsMap["Second Line"] = pair.value.toString()
             listItems.add(resultsMap)
         }
-        device_list.adapter = adapter
+        binding.deviceList.adapter = adapter
         adapter.notifyDataSetChanged()
     }
 
@@ -924,8 +928,8 @@ class AddCamActivity : AppCompatActivity() {
         val bundle = Bundle()
         if (edit_mode == Constants.EDIT_MODE_EXIST_DEV) {
             var i = 0
-            while (i < device_list.childCount) {
-                val view = device_list.getChildAt(i)
+            while (i < binding.deviceList.childCount) {
+                val view = binding.deviceList.getChildAt(i)
                 val checkbox = view.findViewById<CheckBox>(R.id.checkBox)
                 if (checkbox.isChecked) {
                     deleteLabel = (view.findViewById<View>(R.id.title_label_text) as TextView).text.toString()
@@ -952,13 +956,13 @@ class AddCamActivity : AppCompatActivity() {
         dummyAbout.isVisible = true
         dummyHelpFaq.isVisible = true
         dummySettings.isVisible = true
-        toolbar.setTitle(R.string.Camera_List)
-        fab.show()
+        binding.toolbar.setTitle(R.string.Camera_List)
+        binding.fab.show()
 
         //display_ad();
         checked = false
         fetchData()
-        device_list.post {
+        binding.deviceList.post {
             val handler: Handler = object : Handler() {
                 override fun handleMessage(msg: Message) {
                     toggleVisibilityOfDriveButton()
@@ -997,8 +1001,8 @@ class AddCamActivity : AppCompatActivity() {
         if (id == R.id.delete) {
             if (itemcheckedcountInDeviceList > 0 && checked) {
                 var i = 0
-                while (i < device_list.childCount) {
-                    val view = device_list.getChildAt(i)
+                while (i < binding.deviceList.childCount) {
+                    val view = binding.deviceList.getChildAt(i)
                     val checkbox = view.findViewById<CheckBox>(R.id.checkBox)
                     if (checkbox.isChecked) {
                         val delLabel = (view.findViewById<View>(R.id.title_label_text) as TextView).text.toString()
@@ -1136,8 +1140,8 @@ class AddCamActivity : AppCompatActivity() {
     fun toggleVisibilityOfPrev() {
         var view: View
         var i = 0
-        while (i < device_list.childCount) {
-            view = device_list.getChildAt(i)
+        while (i < binding.deviceList.childCount) {
+            view = binding.deviceList.getChildAt(i)
             handlePreviewView(view, true)
             i++
         }
@@ -1208,8 +1212,8 @@ class AddCamActivity : AppCompatActivity() {
     private fun toggleVisibilityOfDriveButton() {
         var view: View
         var i = 0
-        while (i < device_list.childCount) {
-            view = device_list.getChildAt(i)
+        while (i < binding.deviceList.childCount) {
+            view = binding.deviceList.getChildAt(i)
             val eachLabel = view.findViewById<TextView>(R.id.title_label_text)
             val eachLabelText = eachLabel.text.toString()
             val driveLink = myDb?.driveFromLabel(eachLabelText) ?: ""
@@ -1228,8 +1232,8 @@ class AddCamActivity : AppCompatActivity() {
             var view: View
             var checkbox: CheckBox
             var f = 0
-            for (i in 0 until device_list.childCount) {
-                view = device_list.getChildAt(i)
+            for (i in 0 until binding.deviceList.childCount) {
+                view = binding.deviceList.getChildAt(i)
                 checkbox = view.findViewById(R.id.checkBox)
                 if (checkbox.isChecked) f++
             }
@@ -1242,8 +1246,12 @@ class AddCamActivity : AppCompatActivity() {
         dummySettings.isVisible = !dummySettings.isVisible
         dummyDelete.isVisible = !dummyDelete.isVisible
         dummyEdit.isVisible = !dummyEdit.isVisible
-        if (toolbar.title == "") toolbar.setTitle(R.string.Camera_List) else toolbar.title = ""
-        if (fab.visibility == View.GONE) fab.show() else fab.hide()
+        if (binding.toolbar.title == "")
+            binding.toolbar.setTitle(R.string.Camera_List)
+        else binding.toolbar.title = ""
+        if (binding.fab.visibility == View.GONE)
+            binding.fab.show()
+        else binding.fab.hide()
         checked = !checked
     }
 
@@ -1329,8 +1337,8 @@ class AddCamActivity : AppCompatActivity() {
         if (f != 0) {
             var view: View
             var checkbox: CheckBox
-            for (i in 0 until device_list.childCount) {
-                view = device_list.getChildAt(i)
+            for (i in 0 until binding.deviceList.childCount) {
+                view = binding.deviceList.getChildAt(i)
                 checkbox = view.findViewById(R.id.checkBox)
                 checkbox.isChecked = false
                 checkbox.visibility = View.GONE
