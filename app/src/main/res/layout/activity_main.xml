@@ -1,97 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:background="@color/motioneye_grey"
-    android:contentDescription="@string/constraintlayout_for_list_ad_and_etc"
-    android:fitsSystemWindows="true"
-    android:labelFor="@+id/device_list"
-    tools:context=".activities.MainActivity"
-    tools:ignore="ContentDescription">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <Button
-        android:id="@+id/dummy_show_case_button"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:background="@color/transparent"
-        android:clickable="false"
-        android:contentDescription="@string/dummy_button_for_showcaseview"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@color/motioneye_grey"
+        android:contentDescription="@string/constraintlayout_for_list_ad_and_etc"
+        android:fitsSystemWindows="true"
         android:labelFor="@+id/device_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/device_list_rv" />
+        tools:context=".activities.MainActivity"
+        tools:ignore="ContentDescription">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/device_list_rv"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:paddingStart="2dp"
-        android:paddingEnd="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout2">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/motioneye_dark_grey"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <Button
+            android:id="@+id/dummy_show_case_button"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:animateLayoutChanges="true"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@color/transparent"
+            android:clickable="false"
+            android:contentDescription="@string/dummy_button_for_showcaseview"
+            android:labelFor="@+id/device_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/device_list_rv" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/device_list_rv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout2">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/motioneye_dark_grey"
-            app:popupTheme="@style/DarkPopUpStyle" />
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:animateLayoutChanges="true"
+                android:background="@color/motioneye_dark_grey"
+                app:popupTheme="@style/DarkPopUpStyle" />
 
-    <com.jairaj.janglegmail.motioneye.views_and_adapters.MovableFloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_marginTop="344dp"
-        android:layout_marginBottom="8dp"
-        android:contentDescription="@string/button_for_device_detail_intent"
-        app:backgroundTint="@color/motioneye_blue"
-        app:layout_constraintBottom_toBottomOf="@+id/device_list_rv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/plus_white" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- TODO Add this to above block in id/fab
-         app:layout_constraintBottom_toTopOf="@+id/adView" -->
+        <com.jairaj.janglegmail.motioneye.views_and_adapters.MovableFloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_marginTop="344dp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/button_for_device_detail_intent"
+            app:backgroundTint="@color/motioneye_blue"
+            app:layout_constraintBottom_toBottomOf="@+id/device_list_rv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/plus_white" />
 
-    <!--<com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:contentDescription="@string/for_displaying_ads_by_admob"
-        android:visibility="gone"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-7081069887552324/7493759090"
-        app:layout_constraintBottom_toBottomOf="@+id/device_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        <!-- TODO Add this to above block in id/fab
+             app:layout_constraintBottom_toTopOf="@+id/adView" -->
 
-    </com.google.android.gms.ads.AdView>-->
+        <!--<com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/for_displaying_ads_by_admob"
+            android:visibility="gone"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-7081069887552324/7493759090"
+            app:layout_constraintBottom_toBottomOf="@+id/device_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.gms.ads.AdView>-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

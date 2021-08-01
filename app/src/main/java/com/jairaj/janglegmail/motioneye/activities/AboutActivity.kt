@@ -682,8 +682,6 @@ import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityAboutPageBinding
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.getVersionName
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.openInChrome
@@ -694,7 +692,7 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAboutPageBinding.inflate(layoutInflater);
+        binding = ActivityAboutPageBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 

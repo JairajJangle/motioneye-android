@@ -687,16 +687,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.databinding.ActivityAddDeviceDetailBinding
 import com.jairaj.janglegmail.motioneye.utils.Constants
 import com.jairaj.janglegmail.motioneye.utils.Constants.EDIT
 import com.jairaj.janglegmail.motioneye.utils.Constants.LABEL
 import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
-import kotlinx.android.synthetic.main.activity_add_device_detail.*
-import kotlinx.android.synthetic.main.activity_help__faq.*
 
 //import com.google.android.gms.ads.AdView;
 //import com.google.android.gms.ads.MobileAds;
 class AddDeviceDetailsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityAddDeviceDetailBinding
+
     private lateinit var myDb: DataBaseHelper
     private var editMode = 0
     private var editLabel: String? = ""
@@ -714,7 +715,9 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_device_detail)
+        binding = ActivityAddDeviceDetailBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         myDb = DataBaseHelper(this)
 
@@ -746,10 +749,10 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             editUrl = myDb.urlFromLabel(editLabel!!)
             editPort = myDb.portFromLabel(editLabel!!)
             editDriveLink = myDb.driveFromLabel(editLabel!!)
-            url_input.setText(editUrl)
-            port_input.setText(editPort)
-            label_input.setText(editLabel)
-            drive_input.setText(editDriveLink)
+            binding.urlInput.setText(editUrl)
+            binding.portInput.setText(editPort)
+            binding.labelInput.setText(editLabel)
+            binding.driveInput.setText(editDriveLink)
         }
         det.setOnClickListener {
             saveToFile()
@@ -763,15 +766,16 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
     }
 
     private fun saveToFile() {
-        val urlInputString: String = url_input.text.toString()
-        val portInputString: String = port_input.text.toString()
-        val labelInputString: String = label_input.text.toString()
-        val driveLinkInputString: String = drive_input.text.toString()
+        val urlInputString: String = binding.urlInput.text.toString()
+        val portInputString: String = binding.portInput.text.toString()
+        val labelInputString: String = binding.labelInput.text.toString()
+        val driveLinkInputString: String = binding.driveInput.text.toString()
 
         //TODO: Check RTSP support
         if ((URLUtil.isValidUrl(urlInputString) || urlInputString.startsWith("rtsp://"))
-                && labelInputString != ""
-                && (URLUtil.isValidUrl(driveLinkInputString) || driveLinkInputString == "")) {
+            && labelInputString != ""
+            && (URLUtil.isValidUrl(driveLinkInputString) || driveLinkInputString == "")
+        ) {
             when (editMode) {
                 Constants.EDIT_MODE_NEW_DEV -> {
                     val isInserted = myDb.insertData(

@@ -697,6 +697,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.databinding.ActivityMainBinding
 import com.jairaj.janglegmail.motioneye.dataclass.CamDevice
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.displayMainActivityTutorial
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.isFirstTimeAppOpened
@@ -709,7 +710,6 @@ import com.jairaj.janglegmail.motioneye.utils.Constants.ServerMode
 import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
 import com.jairaj.janglegmail.motioneye.utils.TextDrawable
 import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter
-import kotlinx.android.synthetic.main.activity_main.*
 
 /*import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -717,6 +717,8 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;*/
 class MainActivity : AppCompatActivity() {
     internal val logTAG = MainActivity::class.java.name
+
+    internal lateinit var binding: ActivityMainBinding
 
     internal lateinit var myDb: DataBaseHelper
     private var shortcutManager: ShortcutManager? = null
@@ -744,18 +746,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         instance = this
 
-        setSupportActionBar(toolbar)
-        toolbar?.setTitle(R.string.Camera_List)
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.setTitle(R.string.Camera_List)
 
-        device_list_rv.setHasFixedSize(true)
+        binding.deviceListRv.setHasFixedSize(true)
 
         val llm = LinearLayoutManager(this)
         llm.orientation = LinearLayoutManager.VERTICAL
-        device_list_rv.layoutManager = llm
+        binding.deviceListRv.layoutManager = llm
 
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
@@ -793,7 +797,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        fab?.setOnClickListener {
+        binding.fab.setOnClickListener {
             gotoAddDeviceDetail(Constants.EDIT_MODE_NEW_DEV)
         }
 
@@ -811,7 +815,7 @@ class MainActivity : AppCompatActivity() {
         tFetchData.run()
 
         // Add this Runnable
-        device_list_rv?.post {
+        binding.deviceListRv.post {
             val handler = object : Handler(Looper.getMainLooper()) {
                 override fun handleMessage(msg: Message) {
                     if (camDeviceList.size == 1 && autoOpenPref) {
@@ -894,7 +898,7 @@ class MainActivity : AppCompatActivity() {
     private fun addToList() {
         Log.d(logTAG, "In addToList(...)")
 
-        device_list_rv.adapter = null
+        binding.deviceListRv.adapter = null
 
         val shortcut: MutableList<ShortcutInfo> = mutableListOf()
 
@@ -932,7 +936,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val camDevicesRvAdapter = CamDeviceRVAdapter(camDeviceList)
-        device_list_rv.adapter = camDevicesRvAdapter
+        binding.deviceListRv.adapter = camDevicesRvAdapter
 
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && shortcut.isNotEmpty()) {
@@ -951,7 +955,7 @@ class MainActivity : AppCompatActivity() {
 
         if (editMode == Constants.EDIT_MODE_EXIST_DEV) {
 
-            for (deviceView in device_list_rv.children) {
+            for (deviceView in binding.deviceListRv.children) {
                 val checkbox = deviceView.findViewById<CheckBox>(R.id.checkBox)
 
                 if (checkbox.isChecked) {
@@ -987,16 +991,16 @@ class MainActivity : AppCompatActivity() {
         actionHelpFaq.isVisible = true
         actionSettings.isVisible = true
 
-        toolbar.setTitle(R.string.Camera_List)
+        binding.toolbar.setTitle(R.string.Camera_List)
 
-        fab.show()
+        binding.fab.show()
 
         //display_ad();
         isListViewInCheckedState = false
 
         fetchData()
 
-        device_list_rv.post {
+        binding.deviceListRv.post {
             if (resultCode != 2) {
                 val flagIsFirstDevice: Boolean = isFirstTimeDevice(this)
 
@@ -1045,7 +1049,7 @@ class MainActivity : AppCompatActivity() {
             R.id.delete -> {
                 if (itemCheckedCountInDeviceList > 0 && isListViewInCheckedState) {
 
-                    for (deviceView in device_list_rv.children) {
+                    for (deviceView in binding.deviceListRv.children) {
                         val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
                         if (checkbox.isChecked) {
                             val delLabel =
@@ -1106,7 +1110,7 @@ class MainActivity : AppCompatActivity() {
         get() {
             var checkedItemCount = 0
 
-            for (deviceView in device_list_rv.children) {
+            for (deviceView in binding.deviceListRv.children) {
                 val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
                 if (checkbox.isChecked) checkedItemCount++
             }
@@ -1121,8 +1125,14 @@ class MainActivity : AppCompatActivity() {
         buttonDelete.isVisible = !buttonDelete.isVisible
         buttonEdit.isVisible = !buttonEdit.isVisible
 
-        if (toolbar.title == "") toolbar.setTitle(R.string.Camera_List) else toolbar.title = ""
-        if (fab.visibility == View.GONE) fab.show() else fab.hide()
+        if (binding.toolbar.title == "")
+            binding.toolbar.setTitle(R.string.Camera_List)
+        else
+            binding.toolbar.title = ""
+        if (binding.fab.visibility == View.GONE)
+            binding.fab.show()
+        else
+            binding.fab.hide()
 
         isListViewInCheckedState = !isListViewInCheckedState
     }
@@ -1167,7 +1177,7 @@ class MainActivity : AppCompatActivity() {
         val f = itemCheckedCountInDeviceList
         if (f != 0) {
 
-            for (deviceView in device_list_rv.children) {
+            for (deviceView in binding.deviceListRv.children) {
                 val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
                 checkbox.isChecked = false
                 checkbox.visibility = View.GONE
