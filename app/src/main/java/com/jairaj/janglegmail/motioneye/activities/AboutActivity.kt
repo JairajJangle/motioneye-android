@@ -682,22 +682,23 @@ import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
 import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.databinding.ActivityAboutPageBinding
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.getVersionName
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.openInChrome
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.sendFeedback
-import kotlinx.android.synthetic.main.activity_about__page.*
-
 
 class AboutActivity : AppCompatActivity(), View.OnClickListener {
-    private lateinit var toolbar: Toolbar
+    private lateinit var binding: ActivityAboutPageBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityAboutPageBinding.inflate(layoutInflater);
+        val view = binding.root
+        setContentView(view)
 
-        setContentView(R.layout.activity_about__page)
-        toolbar = findViewById(R.id.about_toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.aboutToolbar)
 
         init()
     }
@@ -708,34 +709,34 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun init() {
-        toolbar.title = "About"
+        binding.aboutToolbar.title = "About"
 
-        send_feedb.setOnClickListener(this)
-        button_install_steps.setOnClickListener(this)
-        join_dev.setOnClickListener(this)
+        binding.sendFeedb.setOnClickListener(this)
+        binding.buttonInstallSteps.setOnClickListener(this)
+        binding.joinDev.setOnClickListener(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         val appVersionText = "App Version: ${getVersionName(this)}"
-        app_version_text.text = appVersionText
+        binding.appVersionText.text = appVersionText
 
-        Credit_ShowCase.text = Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt'> MaterialTapTargetPrompt</a>", Html.FROM_HTML_MODE_LEGACY)
-        Credit_ShowCase.movementMethod = LinkMovementMethod.getInstance()
-        Apache_1.text = Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/LICENSE'> Apache License</a>", Html.FROM_HTML_MODE_LEGACY)
-        Apache_1.movementMethod = LinkMovementMethod.getInstance()
-        Apache_2.text = Html.fromHtml("<a href= 'http://www.apache.org/licenses/LICENSE-2.0.txt'> Apache License</a>", Html.FROM_HTML_MODE_LEGACY)
-        Apache_2.movementMethod = LinkMovementMethod.getInstance()
+        binding.CreditShowCase.text = Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt'> MaterialTapTargetPrompt</a>", Html.FROM_HTML_MODE_LEGACY)
+        binding.CreditShowCase.movementMethod = LinkMovementMethod.getInstance()
+        binding.Apache1.text = Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/LICENSE'> Apache License</a>", Html.FROM_HTML_MODE_LEGACY)
+        binding.Apache1.movementMethod = LinkMovementMethod.getInstance()
+        binding.Apache2.text = Html.fromHtml("<a href= 'http://www.apache.org/licenses/LICENSE-2.0.txt'> Apache License</a>", Html.FROM_HTML_MODE_LEGACY)
+        binding.Apache2.movementMethod = LinkMovementMethod.getInstance()
     }
 
     override fun onClick(v: View?) {
         when (v) {
-            send_feedb -> sendFeedback(this@AboutActivity)
-            button_install_steps -> {
+            binding.sendFeedb -> sendFeedback(this@AboutActivity)
+            binding.buttonInstallSteps -> {
                 val motionEyeSteps = "https://github.com/ccrisan/motioneye/wiki/Installation"
                 openInChrome(motionEyeSteps, this@AboutActivity)
             }
-            join_dev -> {
+            binding.joinDev -> {
                 val motionEyeSteps = "https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem"
                 openInChrome(motionEyeSteps, this@AboutActivity)
             }

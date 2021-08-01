@@ -678,19 +678,34 @@
 package com.jairaj.janglegmail.motioneye.activities
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.Window
+import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.databinding.ActivityLoadingScreenBinding
 
 class LoadingScreenActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityLoadingScreenBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        setContentView(R.layout.activity_loading_screen)
+        binding = ActivityLoadingScreenBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
+
         Handler().postDelayed({ // This method will be executed once the timer is over
             // Start your app main activity
             val i = Intent(this@LoadingScreenActivity, MainActivity::class.java)

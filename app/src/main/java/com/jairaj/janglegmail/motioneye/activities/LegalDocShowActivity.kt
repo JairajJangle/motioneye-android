@@ -681,11 +681,18 @@ import android.text.Html
 import android.text.method.ScrollingMovementMethod
 import androidx.appcompat.app.AppCompatActivity
 import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.databinding.ActivityLegalDocShowBinding
 import com.jairaj.janglegmail.motioneye.utils.Constants
-import kotlinx.android.synthetic.main.activity_legal_doc_show.*
 
 class LegalDocShowActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityLegalDocShowBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityLegalDocShowBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         val bundle = intent.extras
         var htmlLegalDoc = ""
         var title = ""
@@ -700,9 +707,8 @@ class LegalDocShowActivity : AppCompatActivity() {
                 title = getString(R.string.title_tnc)
             }
         }
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_legal_doc_show)
-        setSupportActionBar(appBarPP)
+
+        setSupportActionBar(binding.appBarPP)
 
         supportActionBar?.title = title
 
@@ -710,8 +716,8 @@ class LegalDocShowActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
         val htmlAsSpanned = Html.fromHtml(htmlLegalDoc, Html.FROM_HTML_MODE_LEGACY)
-        textView_privacy_policy.text = htmlAsSpanned
-        textView_privacy_policy.movementMethod = ScrollingMovementMethod()
+        binding.textViewPrivacyPolicy.text = htmlAsSpanned
+        binding.textViewPrivacyPolicy.movementMethod = ScrollingMovementMethod()
     }
 
     override fun onSupportNavigateUp(): Boolean {
