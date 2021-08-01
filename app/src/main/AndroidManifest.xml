@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.jairaj.janglegmail.motioneye">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -25,14 +21,15 @@
             android:label="Help and FAQ"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.AddCamActivity"
+            android:name=".activities.MainActivity"
             android:label="Camera List"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".activities.AddDeviceDetailsActivity"
             android:label="Add Device"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.LoadingScreenActivity"
             android:label="Motion Eye">
@@ -69,11 +66,18 @@
     </application>
 
     <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false"
+        tools:ignore="ManifestOrder" />
+
+    <uses-feature
         android:name="android.software.leanback"
         android:required="false" />
 
-    <uses-feature
-        android:name="android.hardware.touchscreen"
-        android:required="false" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

@@ -10,8 +10,12 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="Camera_List">Camera List</string>
     <string name="action_about">About</string>
-    <string name="tut_sub_device_list">Tap once to connect, Hold to reveal edit and delete options\n\n
-        Click on minus button to hide the preview</string>
+    <string name="tut_sub_device_list">Tap once to view full-screen, Hold to reveal edit and delete options\n\n
+        If this motionEye device is password protected, enter full-screen, type in the credentials and click on
+        \"Remember Me\" to save the password and to connect your motionEye camera without entering
+        the credentials again :)\n\n
+        Click on minus button to hide the preview\n\n
+        For more info check out Help and FAQ section by clicking menu buttons in top right corner</string>
     <string name="tut_title_device_list">This is your first device</string>
     <string name="tut_title_add_button">Add your first device</string>
     <string name="tut_sub_add_button">Tap the + button to get started \nThis button can be dragged and dropped</string>
@@ -330,28 +334,29 @@
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">
-        <!-- 1 -->
         <item>Q: App does not connect to the IP camera</item>
         <item>A: Check whether you have correctly mentioned http:// or https:// before the url and the port number
         by default the port number of motionEye is 8765, you may also enter port number 8081 for streaming only</item>
 
-        <!-- 2 -->
+        <item>Q: I am not able to enter Username and Password for my motionEye camera</item>
+        <item>A: Please tap on your Password Protected camera stream to open it in full screen mode,
+            fill in the Username and Password and tick the Remember Me option.
+            If this option to enter password does not appears, click on the admin icon on the top left
+            corner to enter the Username and Password</item>
+
         <item>Q: App crashes frequently / I cannot view the camera stream</item>
         <item>A: Check whether the Android System WebView app in your device is up to date, check this link to update the app:
             https://play.google.com/store/apps/details?id=com.google.android.webview&amp;hl</item>
 
-        <!-- 3 -->
         <item>Q: motionEye links cannot be opened as global links/port forwarded</item>
         <item>A: To access global links, first enable port forwarding in the WiFi router to which motionEye device
             is connected, for step by step guide checkout this link:
             https://github.com/ccrisan/motioneyeos/issues/58</item>
 
-        <!-- 4 -->
         <item>Q: My WiFi router does not support Port forwarding but I want to access my camera globally</item>
         <item>A: Check out https://www.dataplicity.com/ they have an awesome method to make your motionEye device
         available globally without actual port forwarding</item>
 
-        <!-- X -->
         <item>Q: I am facing an unmentioned problem</item>
         <item>A: Please consider contacting us on our feedback mail in the About section before rating the app, we will fix the issue as soon as possible</item>
     </string-array>

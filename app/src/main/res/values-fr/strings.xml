@@ -10,8 +10,12 @@
     <string name="dummy_content">CONTENU\nFACTICE</string>
     <string name="Camera_List">Liste de caméras</string>
     <string name="action_about">À propos</string>
-    <string name="tut_sub_device_list">Touchez une fois pour vous connecter, maintenez pour révéler les options de modification et de suppression\n\n
-        Cliquez sur le bouton "moins" pour masquer l\'aperçu</string>
+    <string name="tut_sub_device_list">Appuyez une fois pour afficher en plein écran, maintenez enfoncé pour afficher les options de modification et de suppression\n\n
+        Si cet appareil motionEye est protégé par mot de passe, entrez en plein écran, saisissez les informations d\'identification et cliquez sur
+        \ "Remember Me \" pour enregistrer le mot de passe et connecter votre caméra motionEye sans entrer
+        les informations d'identification à nouveau:)\n\n
+        Cliquez sur le bouton moins pour masquer l'aperçu\n\n
+        Pour plus d'informations, consultez la section Aide et FAQ en cliquant sur les boutons de menu dans le coin supérieur droit</string>
     <string name="tut_title_device_list">C\'est votre premier appareil</string>
     <string name="tut_title_add_button">Ajoutez votre premier appareil</string>
     <string name="tut_sub_add_button">Appuyez sur le bouton + pour commencer \nCe bouton peut être glissé/déposé</string>
@@ -334,6 +338,12 @@
         <item>Q: L\'application ne se connecte pas à la caméra IP</item>
         <item>R: Vérifiez si vous avez correctement mentionné http:// ou https:// avant l\'url et le numéro de port
         par défaut, le numéro de port de motionEye est 8765, vous pouvez également saisir le numéro de port 8081 pour la diffusion en streaming uniquement</item>
+
+        <item>Q: Je ne parviens pas à saisir le nom d\'utilisateur et le mot de passe de ma caméra motionEye</item>
+        <item>A: Veuillez appuyer sur votre flux de caméra protégé par mot de passe pour l\'ouvrir en mode plein écran,
+            remplissez le nom d\'utilisateur et le mot de passe et cochez l\'option Se souvenir de moi.
+            Si cette option pour saisir le mot de passe n\'apparaît pas, cliquez sur l\'icône d\'administration en haut à gauche
+            coin pour entrer le nom d\'utilisateur et le mot de passe</item>
 
         <!-- 2 -->
         <item>Q: L\'application crash fréquemment / je ne peux pas voir le flux de la caméra</item>

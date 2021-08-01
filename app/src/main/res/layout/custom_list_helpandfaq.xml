@@ -5,47 +5,73 @@
     android:id="@+id/custom_list_helpfaq_rl"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:layout_marginBottom="10dp"
-    android:animateLayoutChanges="true"
-    android:animationCache="true"
-    android:background="@drawable/lv_element_bg"
-    android:descendantFocusability="blocksDescendants"
-    android:padding="10dp"
-    android:paddingBottom="0dp">
+    android:layout_margin="5dp">
 
-    <TextView
-        android:id="@+id/title_q"
-        android:layout_width="0dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:includeFontPadding="true"
-        android:paddingStart="10dp"
-        android:paddingTop="6dp"
-        android:paddingEnd="5dp"
-        android:singleLine="false"
-        android:text="@string/Eg_HAF_Question"
-        android:textAlignment="textStart"
-        android:textColor="@android:color/background_light"
-        android:textSize="21sp"
-        android:textStyle="normal"
+        android:elevation="0dp"
+        app:cardBackgroundColor="@color/listview_bg"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/subtitle_ans"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:autoLink="web"
-        android:background="@drawable/lv_element_answer_bg"
-        android:padding="10dp"
-        android:singleLine="false"
-        android:text="@string/Eg_HAF_Answer"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:textStyle="normal"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/title_q"
-        app:layout_constraintTop_toBottomOf="@+id/title_q" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:animationCache="true"
+            android:descendantFocusability="blocksDescendants"
+            android:padding="10dp"
+            android:paddingBottom="0dp">
+
+            <TextView
+                android:id="@+id/title_q"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="true"
+                android:paddingStart="10dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="5dp"
+                android:singleLine="false"
+                android:text="@string/Eg_HAF_Question"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/subtitle_ans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:autoLink="web"
+                android:padding="10dp"
+                android:singleLine="false"
+                android:text="@string/Eg_HAF_Answer"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/qa_divider_line" />
+
+            <View
+                android:id="@+id/qa_divider_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/text_dark_grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title_q" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

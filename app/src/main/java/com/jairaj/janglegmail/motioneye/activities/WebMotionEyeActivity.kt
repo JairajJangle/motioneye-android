@@ -689,10 +689,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.os.Looper
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.*
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -702,6 +704,7 @@ import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.utils.AppUtils
 import com.jairaj.janglegmail.motioneye.utils.Constants
 import com.jairaj.janglegmail.motioneye.utils.CustomDialogClass
+import kotlinx.android.synthetic.main.activity_web_motion_eye.*
 
 class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.OnRefreshListener
 () {
@@ -709,9 +712,8 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
     private lateinit var cancelButton: AlertDialog
 
     private var fullScreenPref = true
-    private val mHideHandler = Handler()
-    private var mHandler = Handler()
-    private lateinit var mContentView: WebView
+    private val mHideHandler = Handler(Looper.getMainLooper())
+    private var mHandler = Handler(Looper.getMainLooper())
     private var urlPort: String = ""
     internal var mode = -1
     //private SwipeRefreshLayout swipe;
@@ -725,12 +727,13 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
 
         val uiVisibilityFlag = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
-        mContentView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
+        fullscreen_content.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
                 //|View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 
         if (fullScreenPref)
-            mContentView.systemUiVisibility = mContentView.systemUiVisibility or uiVisibilityFlag
+            fullscreen_content.systemUiVisibility =
+                fullscreen_content.systemUiVisibility or uiVisibilityFlag
     }
 
     //    private View mControlsView;
@@ -792,14 +795,13 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
         fullScreenPref = prefs.getBoolean(getString(R.string.key_fullscreen), true)
 
         //        mControlsView = findViewById(R.id.fullscreen_content_controls);
-        mContentView = findViewById(R.id.fullscreen_content)
-        mContentView.settings.javaScriptEnabled = true
-        mContentView.webViewClient = WebViewClient()
-        mContentView.settings.javaScriptCanOpenWindowsAutomatically = true
+        fullscreen_content.settings.javaScriptEnabled = true
+        fullscreen_content.settings.javaScriptCanOpenWindowsAutomatically = true
 
-        mContentView.settings.builtInZoomControls = true
-        mContentView.settings.setSupportZoom(true)
-        mContentView.settings.displayZoomControls = true // disable the default zoom controls on the page
+        fullscreen_content.settings.builtInZoomControls = true
+        fullscreen_content.settings.setSupportZoom(true)
+        fullscreen_content.settings.displayZoomControls =
+            true // disable the default zoom controls on the page
 
         //        swipe = findViewById(R.id.swipe);
         //        swipe.setOnRefreshListener(this);
@@ -807,9 +809,12 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
         CookieManager.getInstance().setAcceptCookie(true)
 
         progressBar = when (mode) {
-            Constants.MODE_CAMERA -> ProgressDialog.show(this@WebMotionEyeActivity,
-                    getString(R.string.connecting_mE), getString(R.string.loading))
-            Constants.MODE_DRIVE -> ProgressDialog.show(this@WebMotionEyeActivity,
+            Constants.MODE_CAMERA -> ProgressDialog.show(
+                this@WebMotionEyeActivity,
+                getString(R.string.connecting_mE), getString(R.string.loading)
+            )
+            Constants.MODE_DRIVE -> ProgressDialog.show(
+                this@WebMotionEyeActivity,
                     getString(R.string.connecting_gD), getString(R.string.loading))
             else -> ProgressDialog.show(this@WebMotionEyeActivity,
                     getString(R.string.connecting_uM), getString(R.string.loading))
@@ -838,7 +843,7 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
             finish()
         }
 
-        mContentView.webViewClient = object : WebViewClient() {
+        fullscreen_content.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 view.loadUrl(url)
                 return true
@@ -849,23 +854,35 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
                 //                swipe.setRefreshing(false);
             }
 
-            override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
+            override fun onReceivedError(
+                view: WebView,
+                errorCode: Int,
+                description: String,
+                failingUrl: String
+            ) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
                 showWebPageErrorDialog()
+            }
+
+            override fun onReceivedHttpAuthRequest(
+                view: WebView,
+                handler: HttpAuthHandler, host: String, realm: String
+            ) {
+                handler.proceed("admin", "1234")
             }
         }
 
         val liveStream = AppUtils.checkWhetherStream(urlPort)
-        mContentView.webChromeClient = object : WebChromeClient() {
+        fullscreen_content.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView, progress: Int) {
                 if (liveStream && progress >= 30)
                     handleOnPageFinished()
             }
         }
 
-        mContentView.loadUrl(urlPort)
+        fullscreen_content.loadUrl(urlPort)
 
-        mContentView.setDownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
+        fullscreen_content.setDownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
             val request = DownloadManager.Request(Uri.parse(url))
 
             if (isStoragePermissionGranted) {
@@ -895,9 +912,15 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
 
     //To prevent crashes on some devices WebView needs to be safely destroyed
     override fun onDestroy() {
+        fullscreen_content.visibility = View.GONE
+
+        fullscreen_content.loadUrl("about:blank")
+        if (fullscreen_content.parent != null) {
+            (fullscreen_content.parent as ViewGroup).removeView(fullscreen_content)
+            fullscreen_content.destroy()
+        }
+
         super.onDestroy()
-        mContentView.loadUrl("about:blank")
-        mContentView.destroy()
     }
 
     internal fun handleOnPageFinished() {
@@ -1002,3 +1025,5 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
         private const val UI_ANIMATION_DELAY = 300
     }
 }
+
+private class MyWebViewClient : WebViewClient()
