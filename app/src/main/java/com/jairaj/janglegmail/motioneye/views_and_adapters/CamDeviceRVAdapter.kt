@@ -675,62 +675,230 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.jairaj.janglegmail.motioneye.utils
+package com.jairaj.janglegmail.motioneye.views_and_adapters
 
-import androidx.annotation.IntDef
+import android.annotation.SuppressLint
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.children
+import androidx.recyclerview.widget.RecyclerView
+import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.activities.MainActivity
+import com.jairaj.janglegmail.motioneye.dataclass.CamDevice
+import com.jairaj.janglegmail.motioneye.utils.AppUtils
+import com.jairaj.janglegmail.motioneye.utils.Constants
+import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter.MyViewHolder
 
-object Constants {
-    //Bundle Keys
-    const val KEY_URL_PORT = "url_port"
-    const val KEY_MODE = "mode"
-    const val KEY_LEGAL_DOC_TYPE = "LEGAL_DOC"
-    const val LABEL = "LABEL"
-    const val EDIT = "EDIT"
+class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<CamDevice>) :
+    RecyclerView.Adapter<MyViewHolder>() {
 
-    // Shared Prefs keys
-    const val DRIVE_RAN_BEFORE = "Drive_RanBefore"
-    const val DEVICE_ADDED_BEFORE = "Device_added_before"
-    const val RAN_BEFORE = "RanBefore"
 
-    enum class DisplayTutorialMode {
-        FirstTimeAppOpened,
-        FirstTimeDeviceAdded,
-        NotFirstTimeForDeviceAdditionButFirstTimeForDrive,
-        FirstTimeForDeviceAdditionAsWellAsDrive
+    inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val labelText: TextView = view.findViewById(R.id.title_label_text)
+        val urlPortText: TextView = view.findViewById(R.id.subtitle_url_port_text)
+        val previewView: WebView = view.findViewById(R.id.preview_webview)
+        val prevTouch: View = view.findViewById(R.id.prev_touch_overlay)
+        val expandButton: ImageView = view.findViewById(R.id.expand_button)
+        val progressBar: ProgressBar = view.findViewById(R.id.preview_progressBar)
+
+        val driveButton: ImageButton = view.findViewById(R.id.button_drive)
     }
 
-    enum class FirstTimeDriveType {
-        DriveNotAddedYet,
-        FirstTime,
-        NotFirstTime
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        println("Bind [$holder] - Pos [$position]")
+        val camDevice = camDeviceList[position]
+        holder.labelText.text = camDevice.label
+        holder.urlPortText.text = camDevice.urlPort
+
+        if (camDevice.driveLink == "")
+            holder.driveButton.visibility = View.GONE
+        else {
+            holder.driveButton.visibility = View.VISIBLE
+
+            MainActivity.instance.isFirstTimeDriveV =
+                if (AppUtils.isFirstTimeDrive(MainActivity.instance))
+                    Constants.FirstTimeDriveType.FirstTime
+                else
+                    Constants.FirstTimeDriveType.NotFirstTime
+        }
+
+        handlePreviewView(holder, camDevice, true)
+
+        holder.itemView.setOnClickListener {
+            MainActivity.instance.camViewClickListener(camDevice, holder.itemView)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            MainActivity.instance.camViewAddOnLongClickListener(position)
+            true
+        }
+
+        holder.prevTouch.setOnClickListener {
+            MainActivity.instance.onPreviewClick(holder.itemView, camDevice)
+        }
+
+        holder.prevTouch.setOnLongClickListener {
+            MainActivity.instance.camViewAddOnLongClickListener(position)
+            true
+        }
+
+        holder.expandButton.setOnClickListener {
+            handlePreviewView(holder, camDevice, false)
+        }
+
+        holder.driveButton.setOnClickListener {
+            MainActivity.instance.goToWebMotionEye(camDevice.driveLink, Constants.MODE_DRIVE)
+        }
     }
 
-    //Enum for selecting Legal document to show as only 1 activity is used for it
-    internal enum class LegalDocType {
-        PRIVACY_POLICY, TNC
+    override fun getItemCount(): Int {
+        Log.d("RV", "Item size [" + camDeviceList.size + "]")
+        return camDeviceList.size
     }
 
-    //Enum for selecting Custom Dialog Box type
-    internal enum class DialogType {
-        RATE_DIALOG, WEB_PAGE_ERROR_DIALOG,
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(
+            R.layout.custom_list_item,
+            parent, false
+        )
+        return MyViewHolder(v)
     }
 
-    @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-    @IntDef(MODE_CAMERA, MODE_DRIVE)
-    internal annotation class ServerMode
+    private fun MainActivity.camViewClickListener(camDevice: CamDevice, view: View) {
+        if (!isListViewInCheckedState) {
+            goToWebMotionEye(camDevice.urlPort, Constants.MODE_CAMERA)
+            return
+        }
+        // else
+        handleListCheckedState(view)
+    }
 
-    //CONNECTION MODES
-    const val MODE_CAMERA = 1
-    const val MODE_DRIVE = 2
+    private fun MainActivity.camViewAddOnLongClickListener(position: Int) {
+        if (!isListViewInCheckedState) {
+            for ((index, deviceView) in binding.deviceListRv.children.withIndex()) {
+                val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
+                checkbox.visibility = View.VISIBLE
 
-    //EDIT MODES
-    const val EDIT_MODE_NEW_DEV = 0
-    const val EDIT_MODE_EXIST_DEV = 1
-    const val EDIT_CANCELLED = 2
+                if (index == position)
+                    checkbox.isChecked = true
+            }
+            toggleActionbarElements()
+        } else {
+            for ((index, deviceView) in binding.deviceListRv.children.withIndex()) {
+                val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
+                checkbox.visibility = View.GONE
+                if (index == position) checkbox.isChecked = false
+            }
+            toggleActionbarElements()
+        }
+    }
 
-    //UI parameters
-    const val PREVIEW_PADDING = 40
+    private fun MainActivity.onPreviewClick(view: View, camDevice: CamDevice) {
+        Log.d(logTAG, "onPreviewClick called")
 
-    const val RATE_CRITERIA_INSTALL_DAYS = 14
-    const val RATE_CRITERIA_LAUNCH_TIMES = 20
+        if (!isListViewInCheckedState) {
+            val urlPort = camDevice.urlPort
+            goToWebMotionEye(urlPort, Constants.MODE_CAMERA)
+
+            return
+        }
+
+        handleListCheckedState(view)
+    }
+
+    private fun MainActivity.handleListCheckedState(view: View) {
+        val checkBox: CheckBox = view.findViewById(R.id.checkBox)
+
+        checkBox.isChecked = !checkBox.isChecked
+
+        val numberOfCheckedItems = itemCheckedCountInDeviceList
+
+        if (numberOfCheckedItems == 0) {
+            for (deviceView in binding.deviceListRv.children) {
+                val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
+                checkbox.visibility = View.GONE
+            }
+            toggleActionbarElements()
+        }
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    internal fun handlePreviewView(
+        holder: MyViewHolder, camDevice: CamDevice, checkAll: Boolean,
+        forceCollapse: Boolean = false
+    ) {
+        val label = camDevice.label
+
+        var visibilityState = false
+        if (checkAll)
+            visibilityState = MainActivity.instance.myDb.prevStatFromLabel(label) != "0"
+        else {
+            if (holder.previewView.visibility == View.GONE)
+                visibilityState = true
+        }
+
+        if (forceCollapse) {
+            Log.d(MainActivity.instance.logTAG, "Force Collapse = True")
+            visibilityState = false
+        }
+
+        if (visibilityState) {
+            holder.expandButton.setImageResource(R.drawable.collapse_button)
+
+            holder.previewView.visibility = View.VISIBLE
+            (holder.previewView.parent as ConstraintLayout).setPadding(
+                0,
+                0,
+                0,
+                Constants.PREVIEW_PADDING
+            )
+
+            holder.previewView.settings.javaScriptEnabled = true
+            holder.previewView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+            holder.previewView.webViewClient = WebViewClient()
+            holder.previewView.settings.javaScriptCanOpenWindowsAutomatically = true
+            holder.previewView.settings.useWideViewPort = true
+            holder.previewView.settings.loadWithOverviewMode = true
+            holder.previewView.loadUrl(camDevice.urlPort)
+
+            val liveStream = AppUtils.checkWhetherStream(camDevice.urlPort)
+            holder.previewView.webChromeClient = object : WebChromeClient() {
+                override fun onProgressChanged(view: WebView, progress: Int) {
+                    if (view.url != "about:blank") {
+                        holder.progressBar.progress = progress
+                        if (progress == 100 || progress >= 30 && liveStream) {
+                            holder.progressBar.visibility = View.GONE
+                        } else {
+                            holder.progressBar.visibility = View.VISIBLE
+                        }
+                    }
+                }
+            }
+            val isUpdate = MainActivity.instance.myDb.updatePrevStat(label, "1")
+
+            if (!isUpdate)
+                Toast.makeText(MainActivity.instance, R.string.error_try_delete, Toast.LENGTH_LONG)
+                    .show()
+        } else {
+            val isUpdate = MainActivity.instance.myDb.updatePrevStat(label, "0")
+
+            if (!isUpdate)
+                Toast.makeText(MainActivity.instance, R.string.error_try_delete, Toast.LENGTH_LONG)
+                    .show()
+
+            (holder.previewView.parent as ConstraintLayout).setPadding(0, 0, 0, 0)
+            holder.expandButton.setImageResource(R.drawable.expand_down)
+            holder.previewView.loadUrl("about:blank")
+            holder.previewView.visibility = View.GONE
+            holder.progressBar.visibility = View.GONE
+        }
+    }
 }

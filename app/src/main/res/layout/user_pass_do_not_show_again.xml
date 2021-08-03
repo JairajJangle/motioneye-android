@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal"
-    android:padding="10dp" >
+    android:padding="10dp">
 
     <CheckBox
         android:id="@+id/skip"
@@ -13,6 +13,5 @@
         android:checked="false"
         android:text="@string/ok_do_not_show_again"
         android:textAlignment="center"
-        android:textColor="@color/white">
-    </CheckBox>
+        android:textColor="@color/white" />
 </LinearLayout>

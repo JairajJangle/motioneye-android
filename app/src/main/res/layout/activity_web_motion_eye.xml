@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <FrameLayout
         android:id="@+id/webview_FL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#0099cc"
-        tools:context=".activities.WebMotionEyeActivity"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        tools:context=".activities.WebMotionEyeActivity">
 
         <!-- The primary full-screen view. This can be replaced with whatever view
              is needed to present your content, e.g. VideoView, SurfaceView,
@@ -19,16 +20,6 @@
         <!--android:layout_marginTop="0dp"-->
         <!--android:hapticFeedbackEnabled="true">-->
 
-        <WebView
-            android:id="@+id/webView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:keepScreenOn="true" />
-        <!--</android.support.v4.widget.SwipeRefreshLayout>-->
-
-        <!-- This FrameLayout insets its children based on system windows using
-             android:fitsSystemWindows. -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -46,6 +37,16 @@
 
             </LinearLayout>
         </FrameLayout>
+        <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+
+        <!-- This FrameLayout insets its children based on system windows using
+             android:fitsSystemWindows. -->
+        <WebView
+            android:id="@+id/fullscreen_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:keepScreenOn="true" />
 
     </FrameLayout>
 </layout>

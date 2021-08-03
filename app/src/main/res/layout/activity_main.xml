@@ -1,16 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
         android:background="@color/motioneye_grey"
-        android:fitsSystemWindows="true"
-        tools:context=".activities.AddCamActivity"
-        tools:ignore="ContentDescription"
         android:contentDescription="@string/constraintlayout_for_list_ad_and_etc"
-        android:labelFor="@+id/device_list">
+        android:fitsSystemWindows="true"
+        android:labelFor="@+id/device_list"
+        tools:context=".activities.MainActivity"
+        tools:ignore="ContentDescription">
+
+        <Button
+            android:id="@+id/dummy_show_case_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@color/transparent"
+            android:clickable="false"
+            android:contentDescription="@string/dummy_button_for_showcaseview"
+            android:labelFor="@+id/device_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/device_list_rv" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/device_list_rv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout2">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout2"
@@ -30,43 +58,6 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <include
-            android:id="@+id/include2"
-            layout="@layout/content_add__cam"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/dummy_show_case_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:background="@color/transparent"
-            android:clickable="false"
-            android:contentDescription="@string/dummy_button_for_showcaseview"
-            android:labelFor="@+id/device_list"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/device_list" />
-
-        <ListView
-            android:id="@+id/device_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:divider="@color/motioneye_grey"
-            android:dividerHeight="10dp"
-            android:footerDividersEnabled="false"
-            android:paddingStart="2dp"
-            android:paddingLeft="2dp"
-            android:paddingEnd="2dp"
-            android:paddingRight="2dp"
-            app:layout_constraintBottom_toBottomOf="@+id/include2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
-            app:layout_constraintVertical_bias="0.0" />
-
         <com.jairaj.janglegmail.motioneye.views_and_adapters.MovableFloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
@@ -77,7 +68,7 @@
             android:layout_marginBottom="8dp"
             android:contentDescription="@string/button_for_device_detail_intent"
             app:backgroundTint="@color/motioneye_blue"
-            app:layout_constraintBottom_toBottomOf="@+id/device_list"
+            app:layout_constraintBottom_toBottomOf="@+id/device_list_rv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"

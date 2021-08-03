@@ -677,60 +677,66 @@
 
 package com.jairaj.janglegmail.motioneye.utils
 
-import androidx.annotation.IntDef
+import android.content.Context
+import android.graphics.*
+import android.graphics.drawable.Drawable
+import android.text.TextPaint
+import android.util.TypedValue
+import androidx.appcompat.content.res.AppCompatResources
+import com.jairaj.janglegmail.motioneye.R
 
-object Constants {
-    //Bundle Keys
-    const val KEY_URL_PORT = "url_port"
-    const val KEY_MODE = "mode"
-    const val KEY_LEGAL_DOC_TYPE = "LEGAL_DOC"
-    const val LABEL = "LABEL"
-    const val EDIT = "EDIT"
-
-    // Shared Prefs keys
-    const val DRIVE_RAN_BEFORE = "Drive_RanBefore"
-    const val DEVICE_ADDED_BEFORE = "Device_added_before"
-    const val RAN_BEFORE = "RanBefore"
-
-    enum class DisplayTutorialMode {
-        FirstTimeAppOpened,
-        FirstTimeDeviceAdded,
-        NotFirstTimeForDeviceAdditionButFirstTimeForDrive,
-        FirstTimeForDeviceAdditionAsWellAsDrive
+class TextDrawable(context: Context, text: CharSequence) : Drawable() {
+    companion object {
+        private val DEFAULT_COLOR = Color.WHITE
+        private val DEFAULT_TEXT_SIZE_IN_DP = 60
     }
 
-    enum class FirstTimeDriveType {
-        DriveNotAddedYet,
-        FirstTime,
-        NotFirstTime
+    private val mTextBounds = Rect()
+    private val mPaint: TextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
+    private val mDrawable: Drawable?
+
+    var text: CharSequence = text
+        set(value) {
+            field = value
+            invalidateSelf()
+        }
+
+    init {
+        mPaint.color = DEFAULT_COLOR
+        mPaint.textAlign = Paint.Align.CENTER
+        val textSize = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            DEFAULT_TEXT_SIZE_IN_DP.toFloat(), context.resources.displayMetrics
+        )
+        mPaint.textSize = textSize
+        mDrawable = AppCompatResources.getDrawable(context, R.drawable.circle_shortcut)
+        mDrawable!!.setBounds(0, 0, mDrawable.intrinsicWidth, mDrawable.intrinsicHeight)
     }
 
-    //Enum for selecting Legal document to show as only 1 activity is used for it
-    internal enum class LegalDocType {
-        PRIVACY_POLICY, TNC
+    override fun draw(canvas: Canvas) {
+        val bounds = bounds
+        mDrawable!!.draw(canvas)
+        mPaint.getTextBounds(text.toString(), 0, text.length, mTextBounds)
+        val textHeight = mTextBounds.bottom - mTextBounds.top
+        canvas.drawText(
+            text as String, (bounds.right / 2).toFloat(),
+            (bounds.bottom.toFloat() + textHeight + 1) / 2,
+            mPaint
+        )
     }
 
-    //Enum for selecting Custom Dialog Box type
-    internal enum class DialogType {
-        RATE_DIALOG, WEB_PAGE_ERROR_DIALOG,
+    override fun getOpacity(): Int = mPaint.alpha
+    override fun getIntrinsicWidth(): Int = mDrawable!!.intrinsicWidth
+    override fun getIntrinsicHeight(): Int = mDrawable!!.intrinsicHeight
+
+    override fun setAlpha(alpha: Int) {
+        mPaint.alpha = alpha
+        invalidateSelf()
     }
 
-    @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-    @IntDef(MODE_CAMERA, MODE_DRIVE)
-    internal annotation class ServerMode
+    override fun setColorFilter(filter: ColorFilter?) {
+        mPaint.colorFilter = filter
+        invalidateSelf()
+    }
 
-    //CONNECTION MODES
-    const val MODE_CAMERA = 1
-    const val MODE_DRIVE = 2
-
-    //EDIT MODES
-    const val EDIT_MODE_NEW_DEV = 0
-    const val EDIT_MODE_EXIST_DEV = 1
-    const val EDIT_CANCELLED = 2
-
-    //UI parameters
-    const val PREVIEW_PADDING = 40
-
-    const val RATE_CRITERIA_INSTALL_DAYS = 14
-    const val RATE_CRITERIA_LAUNCH_TIMES = 20
 }

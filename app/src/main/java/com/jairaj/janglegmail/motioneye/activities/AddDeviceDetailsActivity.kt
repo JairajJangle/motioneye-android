@@ -682,11 +682,15 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.webkit.URLUtil
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityAddDeviceDetailBinding
 import com.jairaj.janglegmail.motioneye.utils.Constants
+import com.jairaj.janglegmail.motioneye.utils.Constants.EDIT
+import com.jairaj.janglegmail.motioneye.utils.Constants.LABEL
 import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
 
 //import com.google.android.gms.ads.AdView;
@@ -694,7 +698,7 @@ import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
 class AddDeviceDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddDeviceDetailBinding
 
-    private var myDb: DataBaseHelper? = null
+    private lateinit var myDb: DataBaseHelper
     private var editMode = 0
     private var editLabel: String? = ""
     private var editPort = ""
@@ -716,33 +720,41 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         setContentView(view)
 
         myDb = DataBaseHelper(this)
+
         flag = 0
         val bundle = intent.extras
         //Extract the data…
         if (bundle != null) {
-            editMode = bundle.getInt("EDIT")
-            editLabel = bundle.getString("LABEL")
+            editMode = bundle.getInt(EDIT)
+            editLabel = bundle.getString(LABEL)
         }
         //MobileAds.initialize(this, "ca-app-pub-7081069887552324~4679468464");
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val det: TextView = findViewById(R.id.text_save)
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            window.decorView.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
+            window.decorView.importantForAutofill =
+                View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
         }
-        previousScreen = Intent(baseContext, AddCamActivity::class.java)
+        previousScreen = Intent(baseContext, MainActivity::class.java)
         previousScreen.putExtra("Code", 0)
 
         //display_ad();
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(toolbar)
+
         if (editMode == Constants.EDIT_MODE_EXIST_DEV) {
-            editUrl = myDb!!.urlFromLabel(editLabel!!)
-            editPort = myDb!!.portFromLabel(editLabel!!)
-            editDriveLink = myDb!!.driveFromLabel(editLabel!!)
+            editUrl = myDb.urlFromLabel(editLabel!!)
+            editPort = myDb.portFromLabel(editLabel!!)
+            editDriveLink = myDb.driveFromLabel(editLabel!!)
             binding.urlInput.setText(editUrl)
             binding.portInput.setText(editPort)
             binding.labelInput.setText(editLabel)
             binding.driveInput.setText(editDriveLink)
         }
-        binding.det.setOnClickListener {
+        det.setOnClickListener {
             saveToFile()
             if (shouldProceed == 1) {
                 setResult(0, previousScreen)
@@ -750,16 +762,6 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             } //0 to add entries
             //1 to make changes on editing
             //2 to cancel edit
-        }
-        binding.cancel.setOnClickListener {
-            Toast.makeText(baseContext, R.string.cancelled_toast,
-                    Toast.LENGTH_SHORT).show()
-            previousScreen = Intent(baseContext, AddCamActivity::class.java)
-            previousScreen.putExtra("Code", 0)
-            editMode = Constants.EDIT_CANCELLED
-            saveToFile()
-            setResult(2, previousScreen)
-            finish()
         }
     }
 
@@ -771,19 +773,24 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
 
         //TODO: Check RTSP support
         if ((URLUtil.isValidUrl(urlInputString) || urlInputString.startsWith("rtsp://"))
-                && labelInputString != ""
-                && (URLUtil.isValidUrl(driveLinkInputString) || driveLinkInputString == "")) {
+            && labelInputString != ""
+            && (URLUtil.isValidUrl(driveLinkInputString) || driveLinkInputString == "")
+        ) {
             when (editMode) {
                 Constants.EDIT_MODE_NEW_DEV -> {
-                    val isInserted = myDb!!.insertData(labelInputString, urlInputString, portInputString,
-                            driveLinkInputString, "1")
+                    val isInserted = myDb.insertData(
+                        labelInputString, urlInputString, portInputString,
+                        driveLinkInputString, "1"
+                    )
                     if (isInserted) Toast.makeText(baseContext, R.string.toast_added,
                             Toast.LENGTH_SHORT).show() else Toast.makeText(baseContext, R.string.error_try_again,
                             Toast.LENGTH_SHORT).show()
                 }
                 Constants.EDIT_MODE_EXIST_DEV -> {
-                    val isUpdate = myDb!!.updateData(editLabel!!, labelInputString, urlInputString,
-                            portInputString, driveLinkInputString)
+                    val isUpdate = myDb.updateData(
+                        editLabel!!, labelInputString, urlInputString,
+                        portInputString, driveLinkInputString
+                    )
                     if (!isUpdate) Toast.makeText(this@AddDeviceDetailsActivity,
                             R.string.error_try_delete, Toast.LENGTH_LONG).show()
                 }
@@ -796,20 +803,42 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(baseContext, R.string.warning_empty_url, Toast.LENGTH_SHORT).show()
             shouldProceed = 0
         } else if (labelInputString == "") {
-            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(baseContext, R.string.warning_empty_label, Toast.LENGTH_SHORT).show()
+            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
+                baseContext,
+                R.string.warning_empty_label,
+                Toast.LENGTH_SHORT
+            ).show()
             shouldProceed = 0
         } else if (!URLUtil.isValidUrl(driveLinkInputString)) {
-            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(baseContext, R.string.invalid_drive_warning,
-                    Toast.LENGTH_SHORT).show()
+            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
+                baseContext, R.string.invalid_drive_warning,
+                Toast.LENGTH_SHORT
+            ).show()
             shouldProceed = 0
         }
     }
 
-    override fun onBackPressed() {
-        Toast.makeText(this@AddDeviceDetailsActivity, "Cancelled", Toast.LENGTH_LONG).show()
+    override fun onSupportNavigateUp(): Boolean {
+        Toast.makeText(
+            baseContext, R.string.cancelled_toast,
+            Toast.LENGTH_SHORT
+        ).show()
+        previousScreen = Intent(baseContext, MainActivity::class.java)
+        previousScreen.putExtra("Code", 0)
+        editMode = Constants.EDIT_CANCELLED
+        saveToFile()
         setResult(2, previousScreen)
+
+        onBackPressed()
+        return true
+    }
+
+    override fun onBackPressed() {
+        Toast.makeText(this@AddDeviceDetailsActivity, "Cancelled", Toast.LENGTH_SHORT).show()
         finish()
-    } /*public void display_tutorial(int call_number)
+    }
+
+    /*public void display_tutorial(int call_number)
     {
 //        / * call_number usage
 //         * 1 = First Time App Opened

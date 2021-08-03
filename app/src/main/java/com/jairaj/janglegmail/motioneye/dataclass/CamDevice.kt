@@ -675,62 +675,13 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.jairaj.janglegmail.motioneye.utils
+package com.jairaj.janglegmail.motioneye.dataclass
 
-import androidx.annotation.IntDef
+internal class CamDevice(
+    var label: String,
+    var urlPort: String,
+    var driveLink: String,
 
-object Constants {
-    //Bundle Keys
-    const val KEY_URL_PORT = "url_port"
-    const val KEY_MODE = "mode"
-    const val KEY_LEGAL_DOC_TYPE = "LEGAL_DOC"
-    const val LABEL = "LABEL"
-    const val EDIT = "EDIT"
-
-    // Shared Prefs keys
-    const val DRIVE_RAN_BEFORE = "Drive_RanBefore"
-    const val DEVICE_ADDED_BEFORE = "Device_added_before"
-    const val RAN_BEFORE = "RanBefore"
-
-    enum class DisplayTutorialMode {
-        FirstTimeAppOpened,
-        FirstTimeDeviceAdded,
-        NotFirstTimeForDeviceAdditionButFirstTimeForDrive,
-        FirstTimeForDeviceAdditionAsWellAsDrive
-    }
-
-    enum class FirstTimeDriveType {
-        DriveNotAddedYet,
-        FirstTime,
-        NotFirstTime
-    }
-
-    //Enum for selecting Legal document to show as only 1 activity is used for it
-    internal enum class LegalDocType {
-        PRIVACY_POLICY, TNC
-    }
-
-    //Enum for selecting Custom Dialog Box type
-    internal enum class DialogType {
-        RATE_DIALOG, WEB_PAGE_ERROR_DIALOG,
-    }
-
-    @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-    @IntDef(MODE_CAMERA, MODE_DRIVE)
-    internal annotation class ServerMode
-
-    //CONNECTION MODES
-    const val MODE_CAMERA = 1
-    const val MODE_DRIVE = 2
-
-    //EDIT MODES
-    const val EDIT_MODE_NEW_DEV = 0
-    const val EDIT_MODE_EXIST_DEV = 1
-    const val EDIT_CANCELLED = 2
-
-    //UI parameters
-    const val PREVIEW_PADDING = 40
-
-    const val RATE_CRITERIA_INSTALL_DAYS = 14
-    const val RATE_CRITERIA_LAUNCH_TIMES = 20
-}
+    // TODO: Add previewVisibility while building CamDevice List
+    var previewVisibility: Boolean = false
+)

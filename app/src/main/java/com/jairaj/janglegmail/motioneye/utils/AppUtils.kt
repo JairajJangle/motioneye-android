@@ -683,21 +683,31 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.activities.MainActivity
+import com.jairaj.janglegmail.motioneye.utils.Constants.DEVICE_ADDED_BEFORE
+import com.jairaj.janglegmail.motioneye.utils.Constants.DRIVE_RAN_BEFORE
+import com.jairaj.janglegmail.motioneye.utils.Constants.RAN_BEFORE
+import com.jairaj.janglegmail.motioneye.utils.Constants.RATE_CRITERIA_INSTALL_DAYS
+import com.jairaj.janglegmail.motioneye.utils.Constants.RATE_CRITERIA_LAUNCH_TIMES
 import com.kobakei.ratethisapp.RateThisApp
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal
 
 object AppUtils {
+    private val logTAG = AppUtils::class.java.name
 
     fun sendFeedback(context: Context) {
         val body: String = try {
-            val appInfo = context
-                .packageManager
-                .getPackageInfo(context.packageName, 0)
-                .versionName
-            "< Insert Issue description here >\n" +
-                    "\n\n-----------------------------\n" +
+            val appInfo = context.packageManager.getPackageInfo(context.packageName, 0).versionName
+            "\n\n-----------------------------\n" +
                     "Please don't remove this information\n\n" +
                     "Device OS: Android \n" +
                     "Device OS version: ${Build.VERSION.RELEASE}\n" +
@@ -707,7 +717,8 @@ object AppUtils {
                     "Device Manufacturer: ${Build.MANUFACTURER}\n" +
                     "-----------------------------\n"
 
-        } catch (e: PackageManager.NameNotFoundException) {
+        } catch (e: Exception) {
+            Log.e(logTAG, "Exception occurred while framing the feedback mail body: $e")
             ""
         }
 
@@ -726,8 +737,10 @@ object AppUtils {
         intent.setPackage("com.android.chrome")
         try {
             context.startActivity(intent)
-        } catch (ex: ActivityNotFoundException) {
+        } catch (e: ActivityNotFoundException) {
             // Chrome browser presumably not installed so allow user to choose instead
+            Log.e(logTAG, "Exception while opening url in chrome: $e")
+
             intent.setPackage(null)
             context.startActivity(intent)
         }
@@ -735,47 +748,20 @@ object AppUtils {
     }
 
     fun checkWhetherStream(url_port: String): Boolean {
-        return url_port.toLowerCase().contains("8081")
+        return url_port.contains("8081")
     }
 
     fun askToRate(context: Context?) {
-        //        int style;
-        //        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1)
-        //            style = android.R.style.Theme_Material_Dialog;
-        //
-        //        else
-        //            style = R.style.AlertDialogCustom;
+        Log.d(logTAG, "askToRate called")
 
-        val cdd = CustomDialogClass(context as Activity)
-        cdd.dialogType(Constants.DialogType.RATE_DIALOG)
-        cdd.show()
-
-        //        new AlertDialog.Builder(new ContextThemeWrapper(context, style))
-        //                .setMessage("Are you enjoying the app?")
-        //
-        //                // Specifying a listener allows you to take an action before dismissing the dialog.
-        //                // The dialog is automatically dismissed when a dialog button is clicked.
-        //                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-        //                {
-        //                    public void onClick(DialogInterface dialog, int which)
-        //                    {
-        //                        showRateDialog(context, true);
-        //                    }
-        //                })
-        //
-        //                .setNegativeButton("No", new DialogInterface.OnClickListener()
-        //                {
-        //                    public void onClick(DialogInterface dialog, int which)
-        //                    {
-        //                        sendFeedback(context);
-        //                    }
-        //                })
-        //                .show();
+        val customDialogClass = CustomDialogClass(context as Activity)
+        customDialogClass.dialogType(Constants.DialogType.RATE_DIALOG)
+        customDialogClass.show()
     }
 
     fun showRateDialog(context: Context, showRightAway: Boolean) {
         // Custom condition: x days and y launches
-        val config = RateThisApp.Config(14, 20)
+        val config = RateThisApp.Config(RATE_CRITERIA_INSTALL_DAYS, RATE_CRITERIA_LAUNCH_TIMES)
         RateThisApp.init(config)
 
         // Monitor launch times and interval from installation
@@ -790,8 +776,138 @@ object AppUtils {
     fun getVersionName(context: Context): String {
         val manager: PackageManager = context.packageManager
         val info: PackageInfo = manager.getPackageInfo(
-            context.packageName, 0)
+            context.packageName, 0
+        )
 
         return info.versionName
+    }
+
+    // return true if for the first time drive/cloud storage link is added
+    fun isFirstTimeDrive(activity: Activity): Boolean {
+        val preferences = activity.getPreferences(Context.MODE_PRIVATE)
+        val ranBefore = preferences.getBoolean(DRIVE_RAN_BEFORE, false)
+
+        if (!ranBefore) {
+            // first time
+            val editor = preferences.edit()
+            editor.putBoolean(DRIVE_RAN_BEFORE, true)
+            editor.apply()
+        }
+        return !ranBefore
+    }
+
+    // returns true if for the first time any device is added
+    fun isFirstTimeDevice(activity: Activity): Boolean {
+        val preferences = activity.getPreferences(Context.MODE_PRIVATE)
+        val ranBefore = preferences.getBoolean(DEVICE_ADDED_BEFORE, false)
+        if (!ranBefore) {
+            // first time
+            val editor = preferences.edit()
+            editor.putBoolean(DEVICE_ADDED_BEFORE, true)
+            editor.apply()
+        }
+        return !ranBefore
+    }
+
+    // return true if ap is opened for the first time
+    fun isFirstTimeAppOpened(activity: Activity): Boolean {
+        val preferences = activity.getPreferences(Context.MODE_PRIVATE)
+        val ranBefore = preferences.getBoolean(RAN_BEFORE, false)
+        if (!ranBefore) {
+            // first time
+            val editor = preferences.edit()
+            editor.putBoolean(RAN_BEFORE, true)
+            editor.apply()
+        }
+        return !ranBefore
+    }
+
+    fun displayMainActivityTutorial(
+        mainActivity: MainActivity,
+        mode: Constants.DisplayTutorialMode
+    ) {
+        /* call_number usage
+         * 1 = First Time App Opened
+         * 2 = First Time Device added
+         * 3 = Not First Time for Device addition but First Time for Drive
+         * 4 = First Time for device addition as well as drive
+         */
+        when (mode) {
+            Constants.DisplayTutorialMode.FirstTimeAppOpened -> {
+                MaterialTapTargetPrompt.Builder(mainActivity)
+                    .setTarget(R.id.fab)
+                    .setPrimaryText(R.string.tut_title_add_button)
+                    .setSecondaryText(R.string.tut_sub_add_button)
+                    .setBackgroundColour(Color.argb(255, 30, 90, 136))
+                    .setPromptStateChangeListener { _, _ -> /*
+                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+                            {
+                                // User has pressed the prompt target
+                            }
+                            if(state == MaterialTapTargetPrompt.STATE_DISMISSED)
+                            {
+                                //display_ad();
+                            }
+                            */
+                    }
+                    .show()
+            }
+            Constants.DisplayTutorialMode.FirstTimeDeviceAdded -> {
+                MaterialTapTargetPrompt.Builder(mainActivity)
+                    .setTarget(R.id.dummy_show_case_button)
+                    .setFocalColour(Color.argb(0, 0, 0, 0))
+                    .setPrimaryText(R.string.tut_title_device_list)
+                    .setSecondaryText(R.string.tut_sub_device_list)
+                    .setBackgroundColour(Color.argb(255, 30, 90, 136))
+                    .setPromptBackground(RectanglePromptBackground())
+                    .setPromptFocal(RectanglePromptFocal())
+                    .setPromptStateChangeListener { _, state ->
+                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                displayMainActivityTutorial(
+                                    mainActivity,
+                                    Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive
+                                )
+                            }, 800)
+                            //display_ad();
+                        }
+                        if (state == MaterialTapTargetPrompt.STATE_DISMISSED) {
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                displayMainActivityTutorial(
+                                    mainActivity,
+                                    Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive
+                                )
+                            }, 1000)
+                            //display_ad();
+                        }
+                    }
+                    .show()
+            }
+            Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive -> {
+                MaterialTapTargetPrompt.Builder(mainActivity)
+                    .setTarget(mainActivity.targetForDriveIcon)
+                    .setPrimaryText(R.string.tut_title_drive_icon)
+                    .setSecondaryText(R.string.tut_sub_drive_icon)
+                    .setBackgroundColour(Color.argb(255, 30, 90, 136))
+                    .setPromptStateChangeListener { _, _ -> /*
+                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+                            {
+                                //display_ad();
+                            }
+                            if (state == MaterialTapTargetPrompt.STATE_DISMISSED)
+                            {
+                                //display_ad();
+                            }
+                            */
+                    }
+                    .show()
+            }
+            Constants.DisplayTutorialMode.FirstTimeForDeviceAdditionAsWellAsDrive -> {
+                displayMainActivityTutorial(
+                    mainActivity,
+                    Constants.DisplayTutorialMode.FirstTimeDeviceAdded
+                )
+            }
+        }
     }
 }
