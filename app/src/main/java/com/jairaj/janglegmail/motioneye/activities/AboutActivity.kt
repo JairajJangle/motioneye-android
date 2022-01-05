@@ -682,6 +682,7 @@ import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityAboutPageBinding
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.getVersionName
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.openInChrome
@@ -708,6 +709,8 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun init() {
         binding.aboutToolbar.title = "About"
+
+        window.navigationBarColor = getColor(R.color.motioneye_dark_grey)
 
         binding.sendFeedb.setOnClickListener(this)
         binding.buttonInstallSteps.setOnClickListener(this)
