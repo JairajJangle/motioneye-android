@@ -9,6 +9,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="Camera_List">Camera List</string>
+    <string name="add_camera_title">Add Camera</string>
     <string name="action_about">About</string>
     <string name="tut_sub_device_list">Tap once to view full-screen, Hold to reveal edit and delete options\n\n
         If this motionEye device is password protected, enter full-screen, type in the credentials and click on
@@ -27,7 +28,7 @@
     <string name="https_github_com_sjwall">https://github.com/sjwall</string>
     <string name="credits">Credits</string>
     <string name="motion_eye_logo">MOTION_EYE_LOGO</string>
-    <string name="app_created_by_jairaj_jangle">App Created by: Jairaj Jangle</string>
+    <string name="app_created_by_futurejj">App Created by: FutureJJ</string>
     <string name="cc_calin_crisan">Logo by Calin Crisan</string>
     <string name="email_icon">EMAIL_ICON</string>
     <string name="cancelled_toast">Cancelled</string>

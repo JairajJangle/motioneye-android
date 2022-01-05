@@ -9,6 +9,7 @@
     <string name="dummy_button">Bouton factice</string>
     <string name="dummy_content">CONTENU\nFACTICE</string>
     <string name="Camera_List">Liste de caméras</string>
+    <string name="add_camera_title">Ajouter une caméra</string>
     <string name="action_about">À propos</string>
     <string name="tut_sub_device_list">Appuyez une fois pour afficher en plein écran, maintenez enfoncé pour afficher les options de modification et de suppression\n\n
         Si cet appareil motionEye est protégé par mot de passe, entrez en plein écran, saisissez les informations d\'identification et cliquez sur
@@ -27,7 +28,7 @@
     <string name="https_github_com_sjwall">https://github.com/sjwall</string>
     <string name="credits">crédits</string>
     <string name="motion_eye_logo">MOTION_EYE_LOGO</string>
-    <string name="app_created_by_jairaj_jangle">App crée par : Jairaj Jangle</string>
+    <string name="app_created_by_futurejj">App crée par: FutureJJ</string>
     <string name="cc_calin_crisan">Logo par Calin Crisan</string>
     <string name="email_icon">EMAIL_ICON</string>
     <string name="cancelled_toast">Annulé</string>

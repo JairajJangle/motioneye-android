@@ -706,8 +706,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
     private var editDriveLink = ""
 
     //private AdView mAdView;
-    private var shouldProceed = 0 //0 = no, 1 = yes
-    private var flag = 0
+    private var canProceed = false
 
     //AdRequest adRequest;
     //AdListener adListener;
@@ -721,7 +720,6 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
 
         myDb = DataBaseHelper(this)
 
-        flag = 0
         val bundle = intent.extras
         //Extract the data…
         if (bundle != null) {
@@ -756,7 +754,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         }
         det.setOnClickListener {
             saveToFile()
-            if (shouldProceed == 1) {
+            if (canProceed) {
                 setResult(0, previousScreen)
                 finish()
             } //0 to add entries
@@ -795,26 +793,26 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                             R.string.error_try_delete, Toast.LENGTH_LONG).show()
                 }
             }
-            shouldProceed = 1
+            canProceed = true
         } else if (!(URLUtil.isValidUrl(urlInputString) || urlInputString.startsWith("rtsp://"))) {
             if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(baseContext, R.string.warning_invalid_url, Toast.LENGTH_SHORT).show()
-            shouldProceed = 0
+            canProceed = false
         } else if (urlInputString == "") {
             if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(baseContext, R.string.warning_empty_url, Toast.LENGTH_SHORT).show()
-            shouldProceed = 0
+            canProceed = false
         } else if (labelInputString == "") {
             if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
                 baseContext,
                 R.string.warning_empty_label,
                 Toast.LENGTH_SHORT
             ).show()
-            shouldProceed = 0
+            canProceed = false
         } else if (!URLUtil.isValidUrl(driveLinkInputString)) {
             if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
                 baseContext, R.string.invalid_drive_warning,
                 Toast.LENGTH_SHORT
             ).show()
-            shouldProceed = 0
+            canProceed = false
         }
     }
 
