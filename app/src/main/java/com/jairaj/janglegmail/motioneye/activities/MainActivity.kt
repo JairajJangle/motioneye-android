@@ -684,7 +684,6 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.*
-import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Log
 import android.view.Menu
@@ -695,6 +694,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.children
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityMainBinding
@@ -864,6 +864,13 @@ class MainActivity : AppCompatActivity() {
         camDeviceList.clear()
 
         val data = myDb.allData
+
+        binding.noCamBackgroundLayout.root.visibility =
+            if (data.count == 0)
+                View.VISIBLE
+            else
+                View.GONE
+
         if (data.count != 0) {
             //isFirstTimeDevice();
             while (data.moveToNext()) {
