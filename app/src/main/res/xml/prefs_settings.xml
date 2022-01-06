@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--suppress AndroidDomInspection -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/PreferenceScreen">
 
@@ -22,10 +20,10 @@
 
         <SwitchPreference
             android:defaultValue="true"
-            app:iconSpaceReserved="false"
             android:key="@string/key_autoopen"
             android:summary="@string/autoopen_summary"
-            android:title="Auto-Open Camera stream" />
+            android:title="Auto-Open Camera stream"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
@@ -49,8 +47,8 @@
 
         <Preference
             android:summary="@string/versionName"
-            app:iconSpaceReserved="false"
-            android:title="@string/app_version_text" />
+            android:title="@string/app_version_text"
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:clickable="false"
@@ -58,9 +56,9 @@
 
         <Preference
             android:key="@string/key_send_feedback"
-            app:iconSpaceReserved="false"
             android:summary="@string/summary_support"
-            android:title="@string/send_feedback" />
+            android:title="@string/send_feedback"
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:clickable="false"
@@ -84,8 +82,8 @@
 
         <Preference
             android:key="@string/key_pp"
-            android:title="@string/title_privacy_policy"
             android:summary="@string/pp_summary"
+            android:title="@string/title_privacy_policy"
             app:iconSpaceReserved="false">
             <intent
                 android:action="android.intent.action.VIEW"
@@ -114,12 +112,11 @@
 
         <Preference
             android:icon="@drawable/ic_rate_me"
-            android:title="@string/title_rate_me"
             android:key="@string/key_rate_me"
             android:summary="@string/rate_me_summary"
-            app:iconSpaceReserved="false">
-        </Preference>
+            android:title="@string/title_rate_me"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>
