@@ -9,4 +9,4 @@
 /build
 /captures
 .externalNativeBuild
-.deployment_cert.der
+/deployment_cert.der
