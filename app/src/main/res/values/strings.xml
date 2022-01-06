@@ -332,6 +332,7 @@
     <string name="no">No</string>
     <string name="check_help_faq">Check Help and FAQ</string>
     <string name="page_error_dialog_message">Please help us fix the issue by letting us know by sending a feedback</string>
+    <string name="no_camera_added">No Camra Added</string>
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">

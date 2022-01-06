@@ -14,6 +14,11 @@
         tools:context=".activities.MainActivity"
         tools:ignore="ContentDescription">
 
+        <include
+            android:id="@+id/no_cam_background_layout"
+            layout="@layout/no_cam_background"
+            android:visibility="gone" />
+
         <Button
             android:id="@+id/dummy_show_case_button"
             android:layout_width="match_parent"
@@ -31,7 +36,6 @@
             android:id="@+id/device_list_rv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
             app:layout_constraintBottom_toBottomOf="parent"

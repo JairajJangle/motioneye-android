@@ -684,11 +684,13 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.core.content.res.ResourcesCompat
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.activities.MainActivity
 import com.jairaj.janglegmail.motioneye.utils.Constants.DEVICE_ADDED_BEFORE
@@ -700,6 +702,7 @@ import com.kobakei.ratethisapp.RateThisApp
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal
+
 
 object AppUtils {
     private val logTAG = AppUtils::class.java.name
@@ -826,6 +829,7 @@ object AppUtils {
         mainActivity: MainActivity,
         mode: Constants.DisplayTutorialMode
     ) {
+        val font = ResourcesCompat.getFont(mainActivity, R.font.mavenpro_variable)
         /* call_number usage
          * 1 = First Time App Opened
          * 2 = First Time Device added
@@ -850,6 +854,8 @@ object AppUtils {
                             }
                             */
                     }
+                    .setPrimaryTextTypeface(font, Typeface.NORMAL)
+                    .setSecondaryTextTypeface(font, Typeface.NORMAL)
                     .show()
             }
             Constants.DisplayTutorialMode.FirstTimeDeviceAdded -> {
@@ -881,6 +887,8 @@ object AppUtils {
                             //display_ad();
                         }
                     }
+                    .setPrimaryTextTypeface(font, Typeface.NORMAL)
+                    .setSecondaryTextTypeface(font, Typeface.NORMAL)
                     .show()
             }
             Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive -> {
@@ -900,6 +908,8 @@ object AppUtils {
                             }
                             */
                     }
+                    .setPrimaryTextTypeface(font, Typeface.NORMAL)
+                    .setSecondaryTextTypeface(font, Typeface.NORMAL)
                     .show()
             }
             Constants.DisplayTutorialMode.FirstTimeForDeviceAdditionAsWellAsDrive -> {
