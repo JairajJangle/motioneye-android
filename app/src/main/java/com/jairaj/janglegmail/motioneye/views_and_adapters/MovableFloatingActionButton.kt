@@ -701,7 +701,11 @@ class MovableFloatingActionButton : FloatingActionButton, OnTouchListener {
         init()
     }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context!!, attrs, defStyleAttr) {
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context!!,
+        attrs,
+        defStyleAttr
+    ) {
         init()
     }
 
@@ -725,15 +729,21 @@ class MovableFloatingActionButton : FloatingActionButton, OnTouchListener {
             val parentHeight = viewParent.height
             var newX = motionEvent.rawX + dX
             newX = max(0f, newX) // Don't allow the FAB past the left hand side of the parent
-            newX = min(parentWidth - viewWidth.toFloat(), newX) // Don't allow the FAB past the right hand side of the parent
+            newX = min(
+                parentWidth - viewWidth.toFloat(),
+                newX
+            ) // Don't allow the FAB past the right hand side of the parent
             var newY = motionEvent.rawY + dY
             newY = max(0f, newY) // Don't allow the FAB past the top of the parent
-            newY = min(parentHeight - viewHeight.toFloat(), newY) // Don't allow the FAB past the bottom of the parent
+            newY = min(
+                parentHeight - viewHeight.toFloat(),
+                newY
+            ) // Don't allow the FAB past the bottom of the parent
             view.animate()
-                    .x(newX)
-                    .y(newY)
-                    .setDuration(0)
-                    .start()
+                .x(newX)
+                .y(newY)
+                .setDuration(0)
+                .start()
             true // Consumed
         } else if (action == MotionEvent.ACTION_UP) {
             val upRawX = motionEvent.rawX
@@ -751,6 +761,7 @@ class MovableFloatingActionButton : FloatingActionButton, OnTouchListener {
     }
 
     companion object {
-        private const val CLICK_DRAG_TOLERANCE = 10f // Often, there will be a slight, unintentional, drag when the user taps the FAB, so we need to account for this.
+        private const val CLICK_DRAG_TOLERANCE =
+            10f // Often, there will be a slight, unintentional, drag when the user taps the FAB, so we need to account for this.
     }
 }

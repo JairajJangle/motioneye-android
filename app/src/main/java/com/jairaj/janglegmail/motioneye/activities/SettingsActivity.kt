@@ -695,7 +695,8 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         // load settings fragment
-        supportFragmentManager.beginTransaction().replace(android.R.id.content, MainPreferenceFragment()).commit()
+        supportFragmentManager.beginTransaction()
+            .replace(android.R.id.content, MainPreferenceFragment()).commit()
     }
 
     class MainPreferenceFragment : PreferenceFragmentCompat() {
@@ -718,8 +719,10 @@ class SettingsActivity : AppCompatActivity() {
             val ppPref = findPreference<Preference>(getString(R.string.key_pp))
             ppPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val bundle = Bundle()
-                bundle.putSerializable(Constants.KEY_LEGAL_DOC_TYPE,
-                        Constants.LegalDocType.PRIVACY_POLICY)
+                bundle.putSerializable(
+                    Constants.KEY_LEGAL_DOC_TYPE,
+                    Constants.LegalDocType.PRIVACY_POLICY
+                )
                 val i = Intent(activity, LegalDocShowActivity::class.java)
                 i.putExtras(bundle)
                 startActivity(i)
@@ -729,8 +732,10 @@ class SettingsActivity : AppCompatActivity() {
             val tncPref = findPreference<Preference>(getString(R.string.key_tnc))
             tncPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val bundle = Bundle()
-                bundle.putSerializable(Constants.KEY_LEGAL_DOC_TYPE,
-                        Constants.LegalDocType.TNC)
+                bundle.putSerializable(
+                    Constants.KEY_LEGAL_DOC_TYPE,
+                    Constants.LegalDocType.TNC
+                )
                 val i = Intent(activity, LegalDocShowActivity::class.java)
                 i.putExtras(bundle)
                 startActivity(i)
@@ -758,16 +763,19 @@ class SettingsActivity : AppCompatActivity() {
     companion object {
         private fun bindPreferenceSummaryToValue(preference: Preference?) {
             preference?.onPreferenceChangeListener = sBindPreferenceSummaryToValueListener
-            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                    PreferenceManager
-                            .getDefaultSharedPreferences(preference?.context)
-                            .getBoolean(preference?.key, true))
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(
+                preference,
+                PreferenceManager
+                    .getDefaultSharedPreferences(preference?.context)
+                    .getBoolean(preference?.key, true)
+            )
         }
 
         /**
          * A preference value change listener that updates the preference's summary
          * to reflect its new value. Currently Blank, here for future scope
          */
-        private val sBindPreferenceSummaryToValueListener = Preference.OnPreferenceChangeListener { _, _ -> true }
+        private val sBindPreferenceSummaryToValueListener =
+            Preference.OnPreferenceChangeListener { _, _ -> true }
     }
 }

@@ -780,25 +780,39 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                         labelInputString, urlInputString, portInputString,
                         driveLinkInputString, "1"
                     )
-                    if (isInserted) Toast.makeText(baseContext, R.string.toast_added,
-                            Toast.LENGTH_SHORT).show() else Toast.makeText(baseContext, R.string.error_try_again,
-                            Toast.LENGTH_SHORT).show()
+                    if (isInserted) Toast.makeText(
+                        baseContext, R.string.toast_added,
+                        Toast.LENGTH_SHORT
+                    ).show() else Toast.makeText(
+                        baseContext, R.string.error_try_again,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 Constants.EDIT_MODE_EXIST_DEV -> {
                     val isUpdate = myDb.updateData(
                         editLabel!!, labelInputString, urlInputString,
                         portInputString, driveLinkInputString
                     )
-                    if (!isUpdate) Toast.makeText(this@AddDeviceDetailsActivity,
-                            R.string.error_try_delete, Toast.LENGTH_LONG).show()
+                    if (!isUpdate) Toast.makeText(
+                        this@AddDeviceDetailsActivity,
+                        R.string.error_try_delete, Toast.LENGTH_LONG
+                    ).show()
                 }
             }
             canProceed = true
         } else if (!(URLUtil.isValidUrl(urlInputString) || urlInputString.startsWith("rtsp://"))) {
-            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(baseContext, R.string.warning_invalid_url, Toast.LENGTH_SHORT).show()
+            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
+                baseContext,
+                R.string.warning_invalid_url,
+                Toast.LENGTH_SHORT
+            ).show()
             canProceed = false
         } else if (urlInputString == "") {
-            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(baseContext, R.string.warning_empty_url, Toast.LENGTH_SHORT).show()
+            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
+                baseContext,
+                R.string.warning_empty_url,
+                Toast.LENGTH_SHORT
+            ).show()
             canProceed = false
         } else if (labelInputString == "") {
             if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(

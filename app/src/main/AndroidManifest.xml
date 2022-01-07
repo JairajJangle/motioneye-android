@@ -5,9 +5,9 @@
 
     <application
         android:allowBackup="true"
+        android:banner="@drawable/motion_eye_banner"
         android:exported="true"
         android:fullBackupContent="true"
-        android:banner="@drawable/motion_eye_banner"
         android:icon="@mipmap/me_adp_ic"
         android:label="Motion Eye"
         android:roundIcon="@mipmap/me_adp_ic_round"

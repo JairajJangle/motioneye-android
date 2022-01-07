@@ -707,7 +707,7 @@ internal class CustomDialogClass //    public void onClick(View v)
 //        }
 //        dismiss();
 //    }
-(var c: Activity) : Dialog(c) //        implements android.view.View.OnClickListener
+    (var c: Activity) : Dialog(c) //        implements android.view.View.OnClickListener
 {
     var d: Dialog? = null
     private var type: DialogType? = null

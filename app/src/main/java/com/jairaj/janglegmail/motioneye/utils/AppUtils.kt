@@ -731,7 +731,12 @@ object AppUtils {
         intent.putExtra(Intent.EXTRA_SUBJECT, "motionEye app Feedback")
         intent.putExtra(Intent.EXTRA_TEXT, body)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(Intent.createChooser(intent, context.getString(R.string.choose_email_client)))
+        context.startActivity(
+            Intent.createChooser(
+                intent,
+                context.getString(R.string.choose_email_client)
+            )
+        )
     }
 
     fun openInChrome(url: String, context: Context) {
