@@ -686,7 +686,8 @@ import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.dataclass.QandA
 import com.jairaj.janglegmail.motioneye.views_and_adapters.QAndARVAdapter.MyViewHolder
 
-class QAndARVAdapter internal constructor(private val QandAList: List<QandA>) : RecyclerView.Adapter<MyViewHolder>() {
+class QAndARVAdapter internal constructor(private val QandAList: List<QandA>) :
+    RecyclerView.Adapter<MyViewHolder>() {
 
     /**
      * View holder class
@@ -709,7 +710,8 @@ class QAndARVAdapter internal constructor(private val QandAList: List<QandA>) : 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.custom_list_helpandfaq, parent, false)
+        val v = LayoutInflater.from(parent.context)
+            .inflate(R.layout.custom_list_helpandfaq, parent, false)
         return MyViewHolder(v)
     }
 

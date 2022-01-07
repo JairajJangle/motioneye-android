@@ -23,16 +23,16 @@
 
     <item
         android:id="@+id/delete"
-        app:showAsAction="ifRoom"
+        android:icon="@drawable/delete_ic"
         android:title=""
         android:visible="false"
-        android:icon="@drawable/delete_ic" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/edit"
-        app:showAsAction="ifRoom"
+        android:icon="@drawable/edit_ic"
         android:title=""
         android:visible="false"
-        android:icon="@drawable/edit_ic" />
+        app:showAsAction="ifRoom" />
 
 </menu>

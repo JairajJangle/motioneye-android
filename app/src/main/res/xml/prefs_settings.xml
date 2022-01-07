@@ -7,10 +7,6 @@
         android:title="General"
         app:iconSpaceReserved="false">
 
-        <Preference
-            android:clickable="false"
-            android:layout="@layout/preferences_category" />
-
         <SwitchPreference
             android:defaultValue="true"
             android:key="@string/key_fullscreen"
@@ -24,6 +20,10 @@
             android:summary="@string/autoopen_summary"
             android:title="Auto-Open Camera stream"
             app:iconSpaceReserved="false" />
+
+        <Preference
+            android:clickable="false"
+            android:layout="@layout/preferences_category" />
 
     </PreferenceCategory>
 
@@ -116,6 +116,10 @@
             android:summary="@string/rate_me_summary"
             android:title="@string/title_rate_me"
             app:iconSpaceReserved="false" />
+
+        <Preference
+            android:clickable="false"
+            android:layout="@layout/preference_bottom_margin" />
 
     </PreferenceCategory>
 

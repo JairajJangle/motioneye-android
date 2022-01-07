@@ -710,7 +710,7 @@ import com.jairaj.janglegmail.motioneye.utils.Constants
 import com.jairaj.janglegmail.motioneye.utils.CustomDialogClass
 
 class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.OnRefreshListener
-() {
+    () {
     private lateinit var binding: ActivityWebMotionEyeBinding
 
     private var progressBar: ProgressDialog? = null
@@ -778,7 +778,11 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
                 true
             } else {
                 Log.v(TAG, "Permission is revoked")
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    1
+                )
                 false
             }
         }
@@ -823,15 +827,20 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
             )
             Constants.MODE_DRIVE -> ProgressDialog.show(
                 this@WebMotionEyeActivity,
-                    getString(R.string.connecting_gD), getString(R.string.loading))
-            else -> ProgressDialog.show(this@WebMotionEyeActivity,
-                    getString(R.string.connecting_uM), getString(R.string.loading))
+                getString(R.string.connecting_gD), getString(R.string.loading)
+            )
+            else -> ProgressDialog.show(
+                this@WebMotionEyeActivity,
+                getString(R.string.connecting_uM), getString(R.string.loading)
+            )
         }
 
         val progressbar = progressBar!!.findViewById<ProgressBar>(android.R.id.progress)
         progressbar.indeterminateDrawable
-                .setColorFilter(resources.getColor(R.color.motioneye_blue),
-                        android.graphics.PorterDuff.Mode.SRC_IN)
+            .setColorFilter(
+                resources.getColor(R.color.motioneye_blue),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
 
         progressBar!!.setCancelable(true)
 
@@ -842,7 +851,10 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
 
         cancelButton.setMessage(":'( Taking too long to load?")
 
-        cancelButton.setButton(DialogInterface.BUTTON_NEGATIVE, "Click to Dismiss") { _, _ -> progressBar!!.dismiss() }
+        cancelButton.setButton(
+            DialogInterface.BUTTON_NEGATIVE,
+            "Click to Dismiss"
+        ) { _, _ -> progressBar!!.dismiss() }
 
         progressBar!!.setOnCancelListener {
             if (progressBar != null)
@@ -910,7 +922,10 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
                 request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType))
                 request.allowScanningByMediaScanner()
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType))
+                request.setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS,
+                    URLUtil.guessFileName(url, contentDisposition, mimeType)
+                )
                 val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                 dm.enqueue(request)
                 Toast.makeText(baseContext, "Downloading File", Toast.LENGTH_LONG).show()
@@ -1023,7 +1038,11 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
         mHideHandler.postDelayed(mHideRunnable, delayMillis.toLong())
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0])

@@ -684,10 +684,13 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 
-class DataBaseHelper internal constructor(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+class DataBaseHelper internal constructor(context: Context?) :
+    SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("create table " + TABLE_NAME
-                + "(ID INTEGER PRIMARY KEY AUTOINCREMENT,LABEL TEXT,URL TEXT,PORT TEXT,DRIVE TEXT,PREV TEXT)")
+        db.execSQL(
+            "create table " + TABLE_NAME
+                    + "(ID INTEGER PRIMARY KEY AUTOINCREMENT,LABEL TEXT,URL TEXT,PORT TEXT,DRIVE TEXT,PREV TEXT)"
+        )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -700,10 +703,21 @@ class DataBaseHelper internal constructor(context: Context?) : SQLiteOpenHelper(
 
     fun insertNewColumn() {
         val db = this.writableDatabase
-        if (!existsColumnInTable(db, TABLE_NAME, COL_6)) db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $COL_6 TEXT  DEFAULT 0")
+        if (!existsColumnInTable(
+                db,
+                TABLE_NAME,
+                COL_6
+            )
+        ) db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $COL_6 TEXT  DEFAULT 0")
     }
 
-    fun insertData(label: String?, url: String?, port: String?, drive: String?, prev: String?): Boolean {
+    fun insertData(
+        label: String?,
+        url: String?,
+        port: String?,
+        drive: String?,
+        prev: String?
+    ): Boolean {
         insertNewColumn()
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -716,7 +730,11 @@ class DataBaseHelper internal constructor(context: Context?) : SQLiteOpenHelper(
         return result != -1L
     }
 
-    private fun existsColumnInTable(inDatabase: SQLiteDatabase, inTable: String, columnToCheck: String): Boolean {
+    private fun existsColumnInTable(
+        inDatabase: SQLiteDatabase,
+        inTable: String,
+        columnToCheck: String
+    ): Boolean {
         var mCursor: Cursor? = null
         return try {
             // Query 1 row
@@ -726,7 +744,10 @@ class DataBaseHelper internal constructor(context: Context?) : SQLiteOpenHelper(
             mCursor.getColumnIndex(columnToCheck) != -1
         } catch (Exp: Exception) {
             // Something went wrong. Missing the database? The table?
-            Log.d("existsColumnInTable", "When checking whether a column exists in the table, an error occurred: " + Exp.message)
+            Log.d(
+                "existsColumnInTable",
+                "When checking whether a column exists in the table, an error occurred: " + Exp.message
+            )
             false
         } finally {
             mCursor?.close()
@@ -744,7 +765,8 @@ class DataBaseHelper internal constructor(context: Context?) : SQLiteOpenHelper(
         var cursor: Cursor? = null
         var url = ""
         return try {
-            cursor = db.rawQuery("select URL from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+            cursor =
+                db.rawQuery("select URL from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
             if (cursor.count > 0) {
                 cursor.moveToFirst()
                 url = cursor.getString(cursor.getColumnIndex("URL"))
@@ -760,7 +782,8 @@ class DataBaseHelper internal constructor(context: Context?) : SQLiteOpenHelper(
         var cursor: Cursor? = null
         var port: String? = ""
         return try {
-            cursor = db.rawQuery("select PORT from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+            cursor =
+                db.rawQuery("select PORT from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
             if (cursor.count > 0) {
                 cursor.moveToFirst()
                 port = cursor.getString(cursor.getColumnIndex("PORT"))
@@ -778,7 +801,10 @@ class DataBaseHelper internal constructor(context: Context?) : SQLiteOpenHelper(
         return try {
             cursor = db.rawQuery("select * from $TABLE_NAME", null)
             if (cursor.getColumnIndex("DRIVE") != -1) {
-                cursor = db.rawQuery("select DRIVE from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+                cursor = db.rawQuery(
+                    "select DRIVE from $TABLE_NAME where LABEL=?",
+                    arrayOf(sch_label + "")
+                )
                 if (cursor.count > 0) {
                     cursor.moveToFirst()
                     driveLink = cursor.getString(cursor.getColumnIndex("DRIVE"))
@@ -797,7 +823,8 @@ class DataBaseHelper internal constructor(context: Context?) : SQLiteOpenHelper(
         var cursor: Cursor? = null
         var prev: String? = ""
         return try {
-            cursor = db.rawQuery("select PREV from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+            cursor =
+                db.rawQuery("select PREV from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
             if (cursor.count > 0) {
                 cursor.moveToFirst()
                 prev = cursor.getString(cursor.getColumnIndex("PREV"))
@@ -808,7 +835,13 @@ class DataBaseHelper internal constructor(context: Context?) : SQLiteOpenHelper(
         }
     }
 
-    fun updateData(key_label: String, label: String?, url: String?, port: String?, drive: String?): Boolean {
+    fun updateData(
+        key_label: String,
+        label: String?,
+        url: String?,
+        port: String?,
+        drive: String?
+    ): Boolean {
         val db = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put(COL_2, label)
