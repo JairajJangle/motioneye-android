@@ -722,11 +722,20 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
         val appVersionText = "App Version: ${getVersionName(this)}"
         binding.appVersionText.text = appVersionText
 
-        binding.CreditShowCase.text = Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt'> MaterialTapTargetPrompt</a>", Html.FROM_HTML_MODE_LEGACY)
+        binding.CreditShowCase.text = Html.fromHtml(
+            "<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt'> MaterialTapTargetPrompt</a>",
+            Html.FROM_HTML_MODE_LEGACY
+        )
         binding.CreditShowCase.movementMethod = LinkMovementMethod.getInstance()
-        binding.Apache1.text = Html.fromHtml("<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/LICENSE'> Apache License</a>", Html.FROM_HTML_MODE_LEGACY)
+        binding.Apache1.text = Html.fromHtml(
+            "<a href= 'https://github.com/sjwall/MaterialTapTargetPrompt/blob/master/LICENSE'> Apache License</a>",
+            Html.FROM_HTML_MODE_LEGACY
+        )
         binding.Apache1.movementMethod = LinkMovementMethod.getInstance()
-        binding.Apache2.text = Html.fromHtml("<a href= 'http://www.apache.org/licenses/LICENSE-2.0.txt'> Apache License</a>", Html.FROM_HTML_MODE_LEGACY)
+        binding.Apache2.text = Html.fromHtml(
+            "<a href= 'http://www.apache.org/licenses/LICENSE-2.0.txt'> Apache License</a>",
+            Html.FROM_HTML_MODE_LEGACY
+        )
         binding.Apache2.movementMethod = LinkMovementMethod.getInstance()
     }
 
@@ -738,7 +747,8 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
                 openInChrome(motionEyeSteps, this@AboutActivity)
             }
             binding.joinDev -> {
-                val motionEyeSteps = "https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem"
+                val motionEyeSteps =
+                    "https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem"
                 openInChrome(motionEyeSteps, this@AboutActivity)
             }
         }

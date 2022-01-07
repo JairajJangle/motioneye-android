@@ -82,7 +82,7 @@
       <meta name=\'viewport\' content=\'width=device-width\'>
     </head>
     <body>
-    <h2>Privacy Policy</h2> <p>
+    <p>
                     FutureJJ built the motionEye app - HomeSurveillance System app as
                     an Open Source app. This SERVICE is provided by
                     FutureJJ at no cost and is intended for
@@ -198,7 +198,7 @@
       <meta name=\'viewport\' content=\'width=device-width\'>
       </head>
     <body>
-    <h2>Terms &amp; Conditions</h2> <p>
+    <p>
                     By downloading or using the app, these terms will
                     automatically apply to you – you should make sure therefore
                     that you read them carefully before using the app. You’re
@@ -332,7 +332,8 @@
     <string name="no">No</string>
     <string name="check_help_faq">Check Help and FAQ</string>
     <string name="page_error_dialog_message">Please help us fix the issue by letting us know by sending a feedback</string>
-    <string name="no_camera_added">No Camra Added</string>
+    <string name="no_camera_added">No Camera Added</string>
+    <string name="privacy_policy_here">Privacy Policy here</string>
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">

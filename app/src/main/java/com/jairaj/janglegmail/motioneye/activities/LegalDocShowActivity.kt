@@ -708,7 +708,7 @@ class LegalDocShowActivity : AppCompatActivity() {
             }
         }
 
-        setSupportActionBar(binding.appBarPP)
+        setSupportActionBar(binding.toolbar)
 
         supportActionBar?.title = title
 
