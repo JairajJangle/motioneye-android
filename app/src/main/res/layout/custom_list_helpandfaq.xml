@@ -10,7 +10,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="0dp"
+        android:elevation="6dp"
+        app:cardPreventCornerOverlap="false"
         app:cardBackgroundColor="@color/listview_bg"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,55 +22,63 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/listview_bg"
             android:animateLayoutChanges="true"
             android:animationCache="true"
             android:descendantFocusability="blocksDescendants"
-            android:padding="10dp"
+            android:padding="0dp"
             android:paddingBottom="0dp">
 
             <TextView
                 android:id="@+id/title_q"
                 android:layout_width="0dp"
+                android:layout_margin="10dp"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="true"
                 android:paddingStart="10dp"
-                android:paddingTop="6dp"
+                android:paddingTop="2dp"
                 android:paddingEnd="5dp"
                 android:singleLine="false"
                 android:text="@string/Eg_HAF_Question"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/background_light"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <View
+                android:id="@+id/help_faq_a_bg"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/listview_answer_bg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title_q" />
+
             <TextView
                 android:id="@+id/subtitle_ans"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:autoLink="web"
-                android:padding="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:paddingHorizontal="10dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:singleLine="false"
                 android:text="@string/Eg_HAF_Answer"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/qa_divider_line" />
-
-            <View
-                android:id="@+id/qa_divider_line"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/text_dark_grey"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title_q" />
+                app:layout_constraintTop_toBottomOf="@+id/title_q" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
