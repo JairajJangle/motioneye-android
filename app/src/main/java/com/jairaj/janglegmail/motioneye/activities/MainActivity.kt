@@ -683,13 +683,20 @@ import android.content.pm.PackageManager
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
-import android.os.*
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.text.TextUtils
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -762,9 +769,7 @@ class MainActivity : AppCompatActivity() {
         binding.deviceListRv.layoutManager = llm
 
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                shortcutManager = this.getSystemService(ShortcutManager::class.java)
-            }
+            shortcutManager = this.getSystemService(ShortcutManager::class.java)
         } catch (e: Exception) {
             Log.e(logTAG, "Exception in getting ShortcutManager service: $e")
         }
@@ -927,16 +932,14 @@ class MainActivity : AppCompatActivity() {
 
                 val labelShortcutIcon = TextDrawable(this, shortcutText as CharSequence)
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                    shortcut.add(
-                        ShortcutInfo.Builder(this, "$index")
-                            .setShortLabel(camDevice.label)
-                            .setLongLabel("${camDevice.label} - ${camDevice.urlPort}")
-                            .setIcon(Icon.createWithBitmap(labelShortcutIcon.toBitmap()))
-                            .setIntent(webMotionEyeIntent)
-                            .build()
-                    )
-                }
+                shortcut.add(
+                    ShortcutInfo.Builder(this, "$index")
+                        .setShortLabel(camDevice.label)
+                        .setLongLabel("${camDevice.label} - ${camDevice.urlPort}")
+                        .setIcon(Icon.createWithBitmap(labelShortcutIcon.toBitmap()))
+                        .setIntent(webMotionEyeIntent)
+                        .build()
+                )
             } catch (e: Exception) {
                 Log.e(logTAG, "Error while creating shortcuts: $e")
             }
@@ -946,7 +949,7 @@ class MainActivity : AppCompatActivity() {
         binding.deviceListRv.adapter = camDevicesRvAdapter
 
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && shortcut.isNotEmpty()) {
+            if (shortcut.isNotEmpty()) {
                 shortcutManager?.dynamicShortcuts = shortcut
             }
         } catch (e: Exception) {
@@ -983,15 +986,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         bundle.putInt(EDIT, editMode)
-        val intentForAddDevice = Intent(this@MainActivity, AddDeviceDetailsActivity::class.java)
-        intentForAddDevice.putExtras(bundle)
-
-        startActivityForResult(intentForAddDevice, 0)
+        val intentForAddDevice = Intent(this, AddDeviceDetailsActivity::class.java)
+            .apply {
+                putExtras(bundle)
+            }
+        resultLauncher.launch(intentForAddDevice)
+        Log.d(logTAG, "opening Add device!!!")
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
+    private var resultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
         buttonDelete.isVisible = false
         buttonEdit.isVisible = false
         actionAbout.isVisible = true
@@ -1008,15 +1013,17 @@ class MainActivity : AppCompatActivity() {
         fetchData()
 
         binding.deviceListRv.post {
-            if (resultCode != 2) {
-                val flagIsFirstDevice: Boolean = isFirstTimeDevice(this)
+            if (result.resultCode == Constants.DEVICE_ADDITION_CANCELLED_RESULT_CODE)
+                return@post
 
-                if (flagIsFirstDevice && isFirstTimeDriveV == Constants.FirstTimeDriveType.DriveNotAddedYet)
-                    displayMainActivityTutorial(
-                        this,
-                        Constants.DisplayTutorialMode.FirstTimeDeviceAdded
-                    )
-                else if (!flagIsFirstDevice && isFirstTimeDriveV == Constants.FirstTimeDriveType.FirstTime) {
+            val flagIsFirstDevice: Boolean = isFirstTimeDevice(this)
+
+            if (flagIsFirstDevice && isFirstTimeDriveV == Constants.FirstTimeDriveType.DriveNotAddedYet)
+                displayMainActivityTutorial(
+                    this,
+                    Constants.DisplayTutorialMode.FirstTimeDeviceAdded
+                )
+            else if (!flagIsFirstDevice && isFirstTimeDriveV == Constants.FirstTimeDriveType.FirstTime) {
 //                    for ((index, _) in device_list_rv.children.withIndex()) {
 //                        (device_list_rv.adapter as CamDeviceRVAdapter).handlePreviewView(
 //                                (device_list_rv.findViewHolderForAdapterPosition(index)
@@ -1024,16 +1031,15 @@ class MainActivity : AppCompatActivity() {
 //                                checkAll = false, forceCollapse = true)
 //                    }
 
-                    displayMainActivityTutorial(
-                        this,
-                        Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive
-                    )
-                } else if (flagIsFirstDevice && isFirstTimeDriveV == Constants.FirstTimeDriveType.FirstTime)
-                    displayMainActivityTutorial(
-                        this,
-                        Constants.DisplayTutorialMode.FirstTimeForDeviceAdditionAsWellAsDrive
-                    )
-            }
+                displayMainActivityTutorial(
+                    this,
+                    Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive
+                )
+            } else if (flagIsFirstDevice && isFirstTimeDriveV == Constants.FirstTimeDriveType.FirstTime)
+                displayMainActivityTutorial(
+                    this,
+                    Constants.DisplayTutorialMode.FirstTimeForDeviceAdditionAsWellAsDrive
+                )
         }
     }
 

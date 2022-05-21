@@ -730,6 +730,7 @@ class DataBaseHelper internal constructor(context: Context?) :
         return result != -1L
     }
 
+    @Suppress("SameParameterValue")
     private fun existsColumnInTable(
         inDatabase: SQLiteDatabase,
         inTable: String,
@@ -769,7 +770,7 @@ class DataBaseHelper internal constructor(context: Context?) :
                 db.rawQuery("select URL from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
             if (cursor.count > 0) {
                 cursor.moveToFirst()
-                url = cursor.getString(cursor.getColumnIndex("URL"))
+                url = cursor.getString(cursor.getColumnIndexOrThrow("URL"))
             }
             url
         } finally {
@@ -786,7 +787,7 @@ class DataBaseHelper internal constructor(context: Context?) :
                 db.rawQuery("select PORT from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
             if (cursor.count > 0) {
                 cursor.moveToFirst()
-                port = cursor.getString(cursor.getColumnIndex("PORT"))
+                port = cursor.getString(cursor.getColumnIndexOrThrow("PORT"))
             }
             port ?: ""
         } finally {
@@ -807,7 +808,7 @@ class DataBaseHelper internal constructor(context: Context?) :
                 )
                 if (cursor.count > 0) {
                     cursor.moveToFirst()
-                    driveLink = cursor.getString(cursor.getColumnIndex("DRIVE"))
+                    driveLink = cursor.getString(cursor.getColumnIndexOrThrow("DRIVE"))
                 }
                 driveLink ?: ""
             } else {
@@ -827,7 +828,7 @@ class DataBaseHelper internal constructor(context: Context?) :
                 db.rawQuery("select PREV from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
             if (cursor.count > 0) {
                 cursor.moveToFirst()
-                prev = cursor.getString(cursor.getColumnIndex("PREV"))
+                prev = cursor.getString(cursor.getColumnIndexOrThrow("PREV"))
             }
             prev ?: ""
         } finally {

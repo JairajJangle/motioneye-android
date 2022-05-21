@@ -687,8 +687,8 @@ import com.jairaj.janglegmail.motioneye.R
 
 class TextDrawable(context: Context, text: CharSequence) : Drawable() {
     companion object {
-        private val DEFAULT_COLOR = Color.WHITE
-        private val DEFAULT_TEXT_SIZE_IN_DP = 60
+        private const val DEFAULT_COLOR = Color.WHITE
+        private const val DEFAULT_TEXT_SIZE_IN_DP = 60
     }
 
     private val mTextBounds = Rect()
