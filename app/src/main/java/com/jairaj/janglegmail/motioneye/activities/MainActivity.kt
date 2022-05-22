@@ -709,8 +709,10 @@ import com.jairaj.janglegmail.motioneye.dataclass.CamDevice
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.displayMainActivityTutorial
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.isFirstTimeAppOpened
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.isFirstTimeDevice
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.isFirstTimeDrive
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.showRateDialog
 import com.jairaj.janglegmail.motioneye.utils.Constants
+import com.jairaj.janglegmail.motioneye.utils.Constants.DATA_IS_DRIVE_ADDED
 import com.jairaj.janglegmail.motioneye.utils.Constants.EDIT
 import com.jairaj.janglegmail.motioneye.utils.Constants.LABEL
 import com.jairaj.janglegmail.motioneye.utils.Constants.ServerMode
@@ -1016,26 +1018,31 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == Constants.DEVICE_ADDITION_CANCELLED_RESULT_CODE)
                 return@post
 
+            val isDriveAdded = result.data?.extras?.getBoolean(
+                DATA_IS_DRIVE_ADDED, false
+            ) ?: false
+
             val flagIsFirstDevice: Boolean = isFirstTimeDevice(this)
 
-            if (flagIsFirstDevice && isFirstTimeDriveV == Constants.FirstTimeDriveType.DriveNotAddedYet)
+            var flagIsFirstDrive  = false
+            if (isDriveAdded) {
+                flagIsFirstDrive = isFirstTimeDrive(this)
+            }
+
+            Log.d(logTAG, "flagIsFirstDevice = $flagIsFirstDevice")
+            Log.d(logTAG, "flagIsFirstDrive = $flagIsFirstDrive")
+
+            if (flagIsFirstDevice && !flagIsFirstDrive)
                 displayMainActivityTutorial(
                     this,
                     Constants.DisplayTutorialMode.FirstTimeDeviceAdded
                 )
-            else if (!flagIsFirstDevice && isFirstTimeDriveV == Constants.FirstTimeDriveType.FirstTime) {
-//                    for ((index, _) in device_list_rv.children.withIndex()) {
-//                        (device_list_rv.adapter as CamDeviceRVAdapter).handlePreviewView(
-//                                (device_list_rv.findViewHolderForAdapterPosition(index)
-//                                        as CamDeviceRVAdapter.MyViewHolder), camDeviceList[index],
-//                                checkAll = false, forceCollapse = true)
-//                    }
-
+            else if (!flagIsFirstDevice && flagIsFirstDrive) {
                 displayMainActivityTutorial(
                     this,
                     Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive
                 )
-            } else if (flagIsFirstDevice && isFirstTimeDriveV == Constants.FirstTimeDriveType.FirstTime)
+            } else if (flagIsFirstDevice && flagIsFirstDrive)
                 displayMainActivityTutorial(
                     this,
                     Constants.DisplayTutorialMode.FirstTimeForDeviceAdditionAsWellAsDrive
