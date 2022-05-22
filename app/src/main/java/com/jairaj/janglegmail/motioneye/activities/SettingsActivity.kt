@@ -763,12 +763,14 @@ class SettingsActivity : AppCompatActivity() {
     companion object {
         private fun bindPreferenceSummaryToValue(preference: Preference?) {
             preference?.onPreferenceChangeListener = sBindPreferenceSummaryToValueListener
-            sBindPreferenceSummaryToValueListener.onPreferenceChange(
-                preference,
-                PreferenceManager
-                    .getDefaultSharedPreferences(preference?.context)
-                    .getBoolean(preference?.key, true)
-            )
+            if (preference != null) {
+                sBindPreferenceSummaryToValueListener.onPreferenceChange(
+                    preference,
+                    PreferenceManager
+                        .getDefaultSharedPreferences(preference.context)
+                        .getBoolean(preference.key, true)
+                )
+            }
         }
 
         /**

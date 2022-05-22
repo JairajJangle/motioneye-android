@@ -693,9 +693,9 @@ import android.util.Log
 import androidx.core.content.res.ResourcesCompat
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.activities.MainActivity
-import com.jairaj.janglegmail.motioneye.utils.Constants.DEVICE_ADDED_BEFORE
-import com.jairaj.janglegmail.motioneye.utils.Constants.DRIVE_RAN_BEFORE
-import com.jairaj.janglegmail.motioneye.utils.Constants.RAN_BEFORE
+import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_DEVICE_ADDED_BEFORE
+import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_DRIVE_ADDED_BEFORE
+import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_IS_APP_OPENED_BEFORE
 import com.jairaj.janglegmail.motioneye.utils.Constants.RATE_CRITERIA_INSTALL_DAYS
 import com.jairaj.janglegmail.motioneye.utils.Constants.RATE_CRITERIA_LAUNCH_TIMES
 import com.kobakei.ratethisapp.RateThisApp
@@ -793,12 +793,12 @@ object AppUtils {
     // return true if for the first time drive/cloud storage link is added
     fun isFirstTimeDrive(activity: Activity): Boolean {
         val preferences = activity.getPreferences(Context.MODE_PRIVATE)
-        val ranBefore = preferences.getBoolean(DRIVE_RAN_BEFORE, false)
+        val ranBefore = preferences.getBoolean(KEY_DRIVE_ADDED_BEFORE, false)
 
         if (!ranBefore) {
             // first time
             val editor = preferences.edit()
-            editor.putBoolean(DRIVE_RAN_BEFORE, true)
+            editor.putBoolean(KEY_DRIVE_ADDED_BEFORE, true)
             editor.apply()
         }
         return !ranBefore
@@ -807,24 +807,24 @@ object AppUtils {
     // returns true if for the first time any device is added
     fun isFirstTimeDevice(activity: Activity): Boolean {
         val preferences = activity.getPreferences(Context.MODE_PRIVATE)
-        val ranBefore = preferences.getBoolean(DEVICE_ADDED_BEFORE, false)
-        if (!ranBefore) {
+        val isDeviceAddedBefore = preferences.getBoolean(KEY_DEVICE_ADDED_BEFORE, false)
+        if (!isDeviceAddedBefore) {
             // first time
             val editor = preferences.edit()
-            editor.putBoolean(DEVICE_ADDED_BEFORE, true)
+            editor.putBoolean(KEY_DEVICE_ADDED_BEFORE, true)
             editor.apply()
         }
-        return !ranBefore
+        return !isDeviceAddedBefore
     }
 
     // return true if ap is opened for the first time
     fun isFirstTimeAppOpened(activity: Activity): Boolean {
         val preferences = activity.getPreferences(Context.MODE_PRIVATE)
-        val ranBefore = preferences.getBoolean(RAN_BEFORE, false)
+        val ranBefore = preferences.getBoolean(KEY_IS_APP_OPENED_BEFORE, false)
         if (!ranBefore) {
             // first time
             val editor = preferences.edit()
-            editor.putBoolean(RAN_BEFORE, true)
+            editor.putBoolean(KEY_IS_APP_OPENED_BEFORE, true)
             editor.apply()
         }
         return !ranBefore

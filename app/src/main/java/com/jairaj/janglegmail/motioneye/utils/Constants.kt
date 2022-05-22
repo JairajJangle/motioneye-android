@@ -688,9 +688,12 @@ object Constants {
     const val EDIT = "EDIT"
 
     // Shared Prefs keys
-    const val DRIVE_RAN_BEFORE = "Drive_RanBefore"
-    const val DEVICE_ADDED_BEFORE = "Device_added_before"
-    const val RAN_BEFORE = "RanBefore"
+    const val KEY_DRIVE_ADDED_BEFORE = "DRIVE_ADDED_BEFORE"
+    const val KEY_DEVICE_ADDED_BEFORE = "DEVICE_ADDED_BEFORE"
+    const val KEY_IS_APP_OPENED_BEFORE = "IS_APP_OPENED_BEFORE"
+
+    const val DEVICE_ADDITION_CANCELLED_RESULT_CODE = 2
+    const val DEVICE_ADDITION_DONE_RESULT_CODE = 0
 
     enum class DisplayTutorialMode {
         FirstTimeAppOpened,

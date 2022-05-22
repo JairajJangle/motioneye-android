@@ -678,7 +678,6 @@
 package com.jairaj.janglegmail.motioneye.activities
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.webkit.URLUtil
@@ -689,6 +688,8 @@ import androidx.appcompat.widget.Toolbar
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityAddDeviceDetailBinding
 import com.jairaj.janglegmail.motioneye.utils.Constants
+import com.jairaj.janglegmail.motioneye.utils.Constants.DEVICE_ADDITION_CANCELLED_RESULT_CODE
+import com.jairaj.janglegmail.motioneye.utils.Constants.DEVICE_ADDITION_DONE_RESULT_CODE
 import com.jairaj.janglegmail.motioneye.utils.Constants.EDIT
 import com.jairaj.janglegmail.motioneye.utils.Constants.LABEL
 import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
@@ -728,15 +729,13 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         }
         //MobileAds.initialize(this, "ca-app-pub-7081069887552324~4679468464");
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        val det: TextView = findViewById(R.id.text_save)
+        val saveButton: TextView = findViewById(R.id.text_save)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            window.decorView.importantForAutofill =
-                View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
-        }
+        window.decorView.importantForAutofill =
+            View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
         previousScreen = Intent(baseContext, MainActivity::class.java)
         previousScreen.putExtra("Code", 0)
 
@@ -752,10 +751,10 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             binding.labelInput.setText(editLabel)
             binding.driveInput.setText(editDriveLink)
         }
-        det.setOnClickListener {
+        saveButton.setOnClickListener {
             saveToFile()
             if (canProceed) {
-                setResult(0, previousScreen)
+                setResult(DEVICE_ADDITION_DONE_RESULT_CODE, previousScreen)
                 finish()
             } //0 to add entries
             //1 to make changes on editing
@@ -839,7 +838,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         previousScreen.putExtra("Code", 0)
         editMode = Constants.EDIT_CANCELLED
         saveToFile()
-        setResult(2, previousScreen)
+        setResult(DEVICE_ADDITION_CANCELLED_RESULT_CODE, previousScreen)
 
         onBackPressed()
         return true
