@@ -755,7 +755,7 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
         }
 
         holder.driveButton.setOnClickListener {
-            MainActivity.instance.goToWebMotionEye(camDevice.driveLink, Constants.MODE_DRIVE)
+            MainActivity.instance.goToWebMotionEye(camDevice.label, camDevice.driveLink, Constants.MODE_DRIVE)
         }
     }
 
@@ -774,7 +774,7 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
 
     private fun MainActivity.camViewClickListener(camDevice: CamDevice, view: View) {
         if (!isListViewInCheckedState) {
-            goToWebMotionEye(camDevice.urlPort, Constants.MODE_CAMERA)
+            goToWebMotionEye(camDevice.label, camDevice.urlPort, Constants.MODE_CAMERA)
             return
         }
         // else
@@ -805,8 +805,9 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
         Log.d(logTAG, "onPreviewClick called")
 
         if (!isListViewInCheckedState) {
+            val label = camDevice.label
             val urlPort = camDevice.urlPort
-            goToWebMotionEye(urlPort, Constants.MODE_CAMERA)
+            goToWebMotionEye(label, urlPort, Constants.MODE_CAMERA)
 
             return
         }
