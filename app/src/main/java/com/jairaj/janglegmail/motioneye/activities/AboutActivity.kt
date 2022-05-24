@@ -743,7 +743,7 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
         when (v) {
             binding.sendFeedb -> sendFeedback(this@AboutActivity)
             binding.buttonInstallSteps -> {
-                val motionEyeSteps = "https://github.com/ccrisan/motioneye/wiki/Installation"
+                val motionEyeSteps = "https://github.com/motioneye-project/motioneye/wiki/Installation"
                 openInChrome(motionEyeSteps, this@AboutActivity)
             }
             binding.joinDev -> {
