@@ -737,7 +737,6 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         window.decorView.importantForAutofill =
             View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
         previousScreen = Intent(baseContext, MainActivity::class.java)
-        previousScreen.putExtra("Code", 0)
 
         //display_ad();
         setSupportActionBar(toolbar)
@@ -768,11 +767,15 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         val labelInputString: String = binding.labelInput.text.toString()
         val driveLinkInputString: String = binding.driveInput.text.toString()
 
+        val isValidDriveURL = URLUtil.isValidUrl(driveLinkInputString)
+
         //TODO: Check RTSP support
         if ((URLUtil.isValidUrl(urlInputString) || urlInputString.startsWith("rtsp://"))
             && labelInputString != ""
-            && (URLUtil.isValidUrl(driveLinkInputString) || driveLinkInputString == "")
+            && (isValidDriveURL || driveLinkInputString == "")
         ) {
+            previousScreen.putExtra("IS_DRIVE_ADDED", isValidDriveURL)
+
             when (editMode) {
                 Constants.EDIT_MODE_NEW_DEV -> {
                     val isInserted = myDb.insertData(

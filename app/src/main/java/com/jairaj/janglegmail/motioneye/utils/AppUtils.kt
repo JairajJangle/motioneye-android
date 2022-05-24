@@ -793,15 +793,15 @@ object AppUtils {
     // return true if for the first time drive/cloud storage link is added
     fun isFirstTimeDrive(activity: Activity): Boolean {
         val preferences = activity.getPreferences(Context.MODE_PRIVATE)
-        val ranBefore = preferences.getBoolean(KEY_DRIVE_ADDED_BEFORE, false)
+        val isDriveAddedBefore = preferences.getBoolean(KEY_DRIVE_ADDED_BEFORE, false)
 
-        if (!ranBefore) {
+        if (!isDriveAddedBefore) {
             // first time
             val editor = preferences.edit()
             editor.putBoolean(KEY_DRIVE_ADDED_BEFORE, true)
             editor.apply()
         }
-        return !ranBefore
+        return !isDriveAddedBefore
     }
 
     // returns true if for the first time any device is added

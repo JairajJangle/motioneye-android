@@ -681,6 +681,7 @@ import androidx.annotation.IntDef
 
 object Constants {
     //Bundle Keys
+    const val KEY_LABEL = "label"
     const val KEY_URL_PORT = "url_port"
     const val KEY_MODE = "mode"
     const val KEY_LEGAL_DOC_TYPE = "LEGAL_DOC"
@@ -692,8 +693,13 @@ object Constants {
     const val KEY_DEVICE_ADDED_BEFORE = "DEVICE_ADDED_BEFORE"
     const val KEY_IS_APP_OPENED_BEFORE = "IS_APP_OPENED_BEFORE"
 
+    const val DATA_IS_DRIVE_ADDED = "IS_DRIVE_ADDED"
+
     const val DEVICE_ADDITION_CANCELLED_RESULT_CODE = 2
     const val DEVICE_ADDITION_DONE_RESULT_CODE = 0
+
+    // Inside Download directory
+    const val downloadFolderName = "motionEye"
 
     enum class DisplayTutorialMode {
         FirstTimeAppOpened,

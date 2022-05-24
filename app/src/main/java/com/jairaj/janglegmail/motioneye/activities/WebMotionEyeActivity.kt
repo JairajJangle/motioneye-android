@@ -707,10 +707,13 @@ import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityWebMotionEyeBinding
 import com.jairaj.janglegmail.motioneye.utils.AppUtils
 import com.jairaj.janglegmail.motioneye.utils.Constants
+import com.jairaj.janglegmail.motioneye.utils.Constants.downloadFolderName
 import com.jairaj.janglegmail.motioneye.utils.CustomDialogClass
+import java.io.File
 
 class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.OnRefreshListener
     () {
+    private val logTAG = WebMotionEyeActivity::class.java.name
     private lateinit var binding: ActivityWebMotionEyeBinding
 
     private var progressBar: ProgressDialog? = null
@@ -719,6 +722,7 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
     private var fullScreenPref = true
     private val mHideHandler = Handler(Looper.getMainLooper())
     private var mHandler = Handler(Looper.getMainLooper())
+    private var label: String = ""
     private var urlPort: String = ""
     internal var mode = -1
     //private SwipeRefreshLayout swipe;
@@ -798,6 +802,7 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
         val bundle = intent.extras
         //Extract the data…
         if (bundle != null) {
+            label = bundle.getString(Constants.KEY_LABEL) ?: ""
             urlPort = bundle.getString(Constants.KEY_URL_PORT) ?: "about:blank"
             mode = bundle.getInt(Constants.KEY_MODE)
         }
@@ -919,16 +924,24 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
                 //------------------------COOKIE!!------------------------
                 request.addRequestHeader("User-Agent", userAgent)
                 request.setDescription("Downloading file...")
-                request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType))
+
+                var fileName = URLUtil.guessFileName(url, contentDisposition, mimeType)
+                fileName = "${label}_${fileName.replace(";+$".toRegex(), "")}"
+
+                Log.d(logTAG, "Downloading filename = $fileName")
+
+                request.setTitle(fileName)
                 request.allowScanningByMediaScanner()
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 request.setDestinationInExternalPublicDir(
                     Environment.DIRECTORY_DOWNLOADS,
-                    URLUtil.guessFileName(url, contentDisposition, mimeType)
+                    File.separator + downloadFolderName + File.separator + fileName
                 )
                 val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                 dm.enqueue(request)
-                Toast.makeText(baseContext, "Downloading File", Toast.LENGTH_LONG).show()
+                Toast.makeText(baseContext, "Downloading to Downloads/motionEye", Toast.LENGTH_LONG).show()
+            }else{
+                Toast.makeText(baseContext, "Storage Permission not granted", Toast.LENGTH_SHORT).show()
             }
         }
 

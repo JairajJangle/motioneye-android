@@ -683,10 +683,8 @@ import android.content.pm.PackageManager
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
+import android.net.Uri
+import android.os.*
 import android.text.TextUtils
 import android.util.Log
 import android.view.Menu
@@ -709,8 +707,10 @@ import com.jairaj.janglegmail.motioneye.dataclass.CamDevice
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.displayMainActivityTutorial
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.isFirstTimeAppOpened
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.isFirstTimeDevice
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.isFirstTimeDrive
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.showRateDialog
 import com.jairaj.janglegmail.motioneye.utils.Constants
+import com.jairaj.janglegmail.motioneye.utils.Constants.DATA_IS_DRIVE_ADDED
 import com.jairaj.janglegmail.motioneye.utils.Constants.EDIT
 import com.jairaj.janglegmail.motioneye.utils.Constants.LABEL
 import com.jairaj.janglegmail.motioneye.utils.Constants.ServerMode
@@ -824,6 +824,7 @@ class MainActivity : AppCompatActivity() {
             val handler = object : Handler(Looper.getMainLooper()) {
                 override fun handleMessage(msg: Message) {
                     if (camDeviceList.size == 1 && autoOpenPref) {
+                        val label = camDeviceList.elementAt(0).label
                         val url = camDeviceList.elementAt(0).urlPort
                         val mode = if (TextUtils.isEmpty(
                                 // FIXME: Fix this blunder
@@ -832,7 +833,7 @@ class MainActivity : AppCompatActivity() {
                                 )
                             )
                         ) Constants.MODE_CAMERA else Constants.MODE_DRIVE
-                        goToWebMotionEye(url, mode)
+                        goToWebMotionEye(label, url, mode)
                     }
                 }
             }
@@ -852,10 +853,11 @@ class MainActivity : AppCompatActivity() {
         return checkCallingOrSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
     }
 
-    internal fun goToWebMotionEye(urlPort: String?, @ServerMode mode: Int) {
+    internal fun goToWebMotionEye(label: String, urlPort: String?, @ServerMode mode: Int) {
         Log.d(logTAG, "In goToWebMotionEye(...)")
 
         val bundle = Bundle()
+        bundle.putString(Constants.KEY_LABEL, label)
         bundle.putString(Constants.KEY_URL_PORT, urlPort)
         bundle.putInt(Constants.KEY_MODE, mode)
 
@@ -1016,26 +1018,31 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == Constants.DEVICE_ADDITION_CANCELLED_RESULT_CODE)
                 return@post
 
+            val isDriveAdded = result.data?.extras?.getBoolean(
+                DATA_IS_DRIVE_ADDED, false
+            ) ?: false
+
             val flagIsFirstDevice: Boolean = isFirstTimeDevice(this)
 
-            if (flagIsFirstDevice && isFirstTimeDriveV == Constants.FirstTimeDriveType.DriveNotAddedYet)
+            var flagIsFirstDrive = false
+            if (isDriveAdded) {
+                flagIsFirstDrive = isFirstTimeDrive(this)
+            }
+
+            Log.d(logTAG, "flagIsFirstDevice = $flagIsFirstDevice")
+            Log.d(logTAG, "flagIsFirstDrive = $flagIsFirstDrive")
+
+            if (flagIsFirstDevice && !flagIsFirstDrive)
                 displayMainActivityTutorial(
                     this,
                     Constants.DisplayTutorialMode.FirstTimeDeviceAdded
                 )
-            else if (!flagIsFirstDevice && isFirstTimeDriveV == Constants.FirstTimeDriveType.FirstTime) {
-//                    for ((index, _) in device_list_rv.children.withIndex()) {
-//                        (device_list_rv.adapter as CamDeviceRVAdapter).handlePreviewView(
-//                                (device_list_rv.findViewHolderForAdapterPosition(index)
-//                                        as CamDeviceRVAdapter.MyViewHolder), camDeviceList[index],
-//                                checkAll = false, forceCollapse = true)
-//                    }
-
+            else if (!flagIsFirstDevice && flagIsFirstDrive) {
                 displayMainActivityTutorial(
                     this,
                     Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive
                 )
-            } else if (flagIsFirstDevice && isFirstTimeDriveV == Constants.FirstTimeDriveType.FirstTime)
+            } else if (flagIsFirstDevice && flagIsFirstDrive)
                 displayMainActivityTutorial(
                     this,
                     Constants.DisplayTutorialMode.FirstTimeForDeviceAdditionAsWellAsDrive
