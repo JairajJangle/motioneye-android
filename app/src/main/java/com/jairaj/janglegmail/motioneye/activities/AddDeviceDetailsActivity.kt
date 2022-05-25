@@ -694,8 +694,6 @@ import com.jairaj.janglegmail.motioneye.utils.Constants.EDIT
 import com.jairaj.janglegmail.motioneye.utils.Constants.LABEL
 import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
 
-//import com.google.android.gms.ads.AdView;
-//import com.google.android.gms.ads.MobileAds;
 class AddDeviceDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddDeviceDetailBinding
 
@@ -706,11 +704,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
     private var editUrl = ""
     private var editDriveLink = ""
 
-    //private AdView mAdView;
     private var canProceed = false
-
-    //AdRequest adRequest;
-    //AdListener adListener;
     private lateinit var previousScreen: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -727,7 +721,6 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             editMode = bundle.getInt(EDIT)
             editLabel = bundle.getString(LABEL)
         }
-        //MobileAds.initialize(this, "ca-app-pub-7081069887552324~4679468464");
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         val saveButton: TextView = findViewById(R.id.text_save)
 
@@ -738,7 +731,6 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
         previousScreen = Intent(baseContext, MainActivity::class.java)
 
-        //display_ad();
         setSupportActionBar(toolbar)
 
         if (editMode == Constants.EDIT_MODE_EXIST_DEV) {
@@ -802,7 +794,9 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                 }
             }
             canProceed = true
-        } else if (!(URLUtil.isValidUrl(urlInputString) || urlInputString.startsWith("rtsp://"))) {
+        } else if (!(URLUtil.isValidUrl(urlInputString)
+                    || urlInputString.startsWith("rtsp://"))
+        ) {
             if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
                 baseContext,
                 R.string.warning_invalid_url,
@@ -848,106 +842,13 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        Toast.makeText(this@AddDeviceDetailsActivity, "Cancelled", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this@AddDeviceDetailsActivity,
+            "Cancelled",
+            Toast.LENGTH_SHORT
+        )
+            .show()
+
         finish()
     }
-
-    /*public void display_tutorial(int call_number)
-    {
-//        / * call_number usage
-//         * 1 = First Time App Opened
-//         * 2 = First Time Device added
-//         * 3 = Not First Time for Device addition but First Time for Drive
-//         * 4 = First Time for device addition as well as drive
-//
-
-        if(call_number == 1)
-        {
-            new MaterialTapTargetPrompt.Builder(add_device_detail.this)
-                    .setTarget(R.id.dummy_show_case_button)
-                    .setFocalColour(Color.argb(0, 0, 0, 0))
-                    .setPrimaryText(R.string.tut_title_device_list)
-                    .setSecondaryText(R.string.tut_sub_device_list)
-                    .setBackgroundColour(Color.argb(255, 30, 90, 136))
-                    .setPromptBackground(new RectanglePromptBackground())
-                    .setPromptFocal(new RectanglePromptFocal())
-                    .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
-                    {
-                        @Override
-                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
-                        {
-                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
-                            {
-                                //display_ad();
-                            }
-                            if (state == MaterialTapTargetPrompt.STATE_DISMISSED)
-                            {
-                                //display_ad();
-                            }
-                        }
-                    })
-                    .show();
-        }
-
-        if(call_number == 2)
-        {
-            new MaterialTapTargetPrompt.Builder(add_device_detail.this)
-                    .setTarget(R.id.fab)
-                    .setPrimaryText(R.string.tut_title_add_button)
-                    .setSecondaryText(R.string.tut_sub_add_button)
-                    .setBackgroundColour(Color.argb(255, 30, 90, 136))
-                    .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
-                    {
-                        @Override
-                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
-                        {
-                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
-                            {
-                                //display_ad();
-                                // User has pressed the prompt target
-                            }
-                            if(state == MaterialTapTargetPrompt.STATE_DISMISSED)
-                            {
-                                //display_ad();
-                            }
-                        }
-                    })
-                    .show();
-        }
-    }*/
-    /*public void display_ad()
-    {
-        mAdView = findViewById(R.id.adView);
-        adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-        adListener = new AdListener();
-
-
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                mAdView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
-            public void onAdClosed() {
-                mAdView.setVisibility(View.GONE);
-            }
-        });
-    }*/
 }
