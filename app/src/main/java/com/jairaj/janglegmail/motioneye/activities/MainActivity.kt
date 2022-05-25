@@ -692,7 +692,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
@@ -705,7 +704,6 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.children
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityMainBinding
 import com.jairaj.janglegmail.motioneye.dataclass.CamDevice
