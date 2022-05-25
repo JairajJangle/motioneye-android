@@ -708,12 +708,6 @@ object Constants {
         FirstTimeForDeviceAdditionAsWellAsDrive
     }
 
-    enum class FirstTimeDriveType {
-        DriveNotAddedYet,
-        FirstTime,
-        NotFirstTime
-    }
-
     //Enum for selecting Legal document to show as only 1 activity is used for it
     internal enum class LegalDocType {
         PRIVACY_POLICY, TNC

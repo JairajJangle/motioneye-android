@@ -718,16 +718,15 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
         holder.labelText.text = camDevice.label
         holder.urlPortText.text = camDevice.urlPort
 
-        if (camDevice.driveLink == "")
+        if (camDevice.driveLink == "") {
             holder.driveButton.visibility = View.GONE
-        else {
+        } else {
             holder.driveButton.visibility = View.VISIBLE
-
-            MainActivity.instance.isFirstTimeDriveV =
-                if (AppUtils.isFirstTimeDrive(MainActivity.instance))
-                    Constants.FirstTimeDriveType.FirstTime
-                else
-                    Constants.FirstTimeDriveType.NotFirstTime
+            MainActivity.instance.tutorialTargetDriveIcon = holder.driveButton
+            Log.i(
+                "CDRA",
+                "tutorialTargetDriveIcon = ${MainActivity.instance.tutorialTargetDriveIcon}"
+            )
         }
 
         handlePreviewView(holder, camDevice, true)
@@ -755,7 +754,11 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
         }
 
         holder.driveButton.setOnClickListener {
-            MainActivity.instance.goToWebMotionEye(camDevice.label, camDevice.driveLink, Constants.MODE_DRIVE)
+            MainActivity.instance.goToWebMotionEye(
+                camDevice.label,
+                camDevice.driveLink,
+                Constants.MODE_DRIVE
+            )
         }
     }
 
@@ -773,7 +776,7 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
     }
 
     private fun MainActivity.camViewClickListener(camDevice: CamDevice, view: View) {
-        if (!isListViewInCheckedState) {
+        if (!isListViewCheckboxEnabled) {
             goToWebMotionEye(camDevice.label, camDevice.urlPort, Constants.MODE_CAMERA)
             return
         }
@@ -782,7 +785,7 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
     }
 
     private fun MainActivity.camViewAddOnLongClickListener(position: Int) {
-        if (!isListViewInCheckedState) {
+        if (!isListViewCheckboxEnabled) {
             for ((index, deviceView) in binding.deviceListRv.children.withIndex()) {
                 val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
                 checkbox.visibility = View.VISIBLE
@@ -804,7 +807,7 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
     private fun MainActivity.onPreviewClick(view: View, camDevice: CamDevice) {
         Log.d(logTAG, "onPreviewClick called")
 
-        if (!isListViewInCheckedState) {
+        if (!isListViewCheckboxEnabled) {
             val label = camDevice.label
             val urlPort = camDevice.urlPort
             goToWebMotionEye(label, urlPort, Constants.MODE_CAMERA)
@@ -840,7 +843,7 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
 
         var visibilityState = false
         if (checkAll)
-            visibilityState = MainActivity.instance.myDb.prevStatFromLabel(label) != "0"
+            visibilityState = MainActivity.instance.dataBaseHelper.prevStatFromLabel(label) != "0"
         else {
             if (holder.previewView.visibility == View.GONE)
                 visibilityState = true
@@ -883,16 +886,24 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
                     }
                 }
             }
-            val isUpdate = MainActivity.instance.myDb.updatePrevStat(label, "1")
+            val isUpdate = MainActivity.instance.dataBaseHelper.updatePrevStat(label, "1")
 
             if (!isUpdate)
-                Toast.makeText(MainActivity.instance, R.string.error_try_delete, Toast.LENGTH_LONG)
+                Toast.makeText(
+                    MainActivity.instance,
+                    R.string.error_try_delete,
+                    Toast.LENGTH_LONG
+                )
                     .show()
         } else {
-            val isUpdate = MainActivity.instance.myDb.updatePrevStat(label, "0")
+            val isUpdate = MainActivity.instance.dataBaseHelper.updatePrevStat(label, "0")
 
             if (!isUpdate)
-                Toast.makeText(MainActivity.instance, R.string.error_try_delete, Toast.LENGTH_LONG)
+                Toast.makeText(
+                    MainActivity.instance,
+                    R.string.error_try_delete,
+                    Toast.LENGTH_LONG
+                )
                     .show()
 
             (holder.previewView.parent as ConstraintLayout).setPadding(0, 0, 0, 0)
