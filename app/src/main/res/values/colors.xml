@@ -17,6 +17,8 @@
     <color name="text_light_gray">#C8C8C8</color>
     <color name="text_dark_grey">#666666</color>
 
+    <color name="divider_dark_grey">#222222</color>
+
     <color name="listview_bg">#212121</color>
     <color name="listview_answer_bg">#313131</color>
 

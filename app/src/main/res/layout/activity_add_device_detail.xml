@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,196 +21,204 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-            <androidx.cardview.widget.CardView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="0dp"
-                app:cardBackgroundColor="@color/black_overlay"
-                app:cardCornerRadius="10dp">
+                android:padding="10dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/circle_bg"
+                    android:contentDescription="@string/imageview_for_url_icon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/url_add_g" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/circle_bg"
+                    android:contentDescription="@string/imageview_for_port_icon"
+                    app:layout_constraintEnd_toStartOf="@+id/textInputLayout2"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
+                    app:srcCompat="@drawable/network" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:adjustViewBounds="false"
+                    android:background="@drawable/circle_bg"
+                    android:contentDescription="@string/imageview_for_label_icon"
+                    app:layout_constraintEnd_toStartOf="@+id/textInputLayout"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+                    app:srcCompat="@drawable/label" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/circle_bg"
+                    android:contentDescription="@string/drive_icon"
+                    app:layout_constraintEnd_toStartOf="@+id/textInputLayout4"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+                    app:srcCompat="@drawable/white_g_drive" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp">
+                    android:hint="@string/label"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
+                    tools:layout_editor_absoluteX="10dp">
 
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="24dp"
-                        android:background="@drawable/circle_bg"
-                        android:contentDescription="@string/imageview_for_url_icon"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/url_add_g" />
+                        android:text="asdasdad"
 
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/circle_bg"
-                        android:contentDescription="@string/imageview_for_port_icon"
-                        app:layout_constraintEnd_toStartOf="@+id/textInputLayout2"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
-                        app:srcCompat="@drawable/network" />
+                        android:textCursorDrawable="@null"
+                        android:textColor="@color/white"
+                        android:cursorVisible="true"/>
 
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="8dp"
-                        android:adjustViewBounds="false"
-                        android:background="@drawable/circle_bg"
-                        android:contentDescription="@string/imageview_for_label_icon"
-                        app:layout_constraintEnd_toStartOf="@+id/textInputLayout"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
-                        app:srcCompat="@drawable/label" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    <ImageView
-                        android:id="@+id/imageView6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="24dp"
-                        android:background="@drawable/circle_bg"
-                        android:contentDescription="@string/drive_icon"
-                        app:layout_constraintEnd_toStartOf="@+id/textInputLayout4"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-                        app:srcCompat="@drawable/white_g_drive" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/inputlayout_for_url"
+                    android:labelFor="@+id/url_input"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.500"
+                    app:layout_constraintStart_toEndOf="@+id/imageView2"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textInputLayout3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:contentDescription="@string/inputlayout_for_url"
-                        android:labelFor="@+id/url_input"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="15dp"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/url_input"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:hint="@string/device_url"
+                        android:inputType="textUri|textWebEditText"
+                        android:nextFocusForward="@+id/port_input"
+                        android:singleLine="true"
+                        android:visibility="visible" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/inputlayout_for_port"
+                    android:labelFor="@+id/port_input"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="15dp"
+                    android:textColorHint="@android:color/darker_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/imageView2"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/port_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/text_light_gray"
+                        android:hint="@string/http_for_local_access"
+                        android:inputType="number"
+                        android:nextFocusForward="@+id/label_input"
+                        android:singleLine="true"
+                        android:textColor="@android:color/background_light"
                         android:textColorHint="@android:color/darker_gray"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.500"
-                        app:layout_constraintStart_toEndOf="@+id/imageView2"
-                        app:layout_constraintTop_toTopOf="parent">
+                        android:visibility="visible" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/url_input"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:backgroundTint="@color/text_light_gray"
-                            android:hint="@string/device_url"
-                            android:inputType="textUri|textWebEditText"
-                            android:nextFocusForward="@+id/port_input"
-                            android:singleLine="true"
-                            android:textColor="@android:color/background_light"
-                            android:textColorHint="@android:color/darker_gray"
-                            android:visibility="visible" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/inputlayout_for_label"
+                    android:labelFor="@+id/label_input"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="15dp"
+                    android:textColorHint="@android:color/darker_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView2"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textInputLayout2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="8dp"
-                        android:contentDescription="@string/inputlayout_for_port"
-                        android:labelFor="@+id/port_input"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="15dp"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/label_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:backgroundTint="@color/text_light_gray"
+                        android:hint="@string/device_label"
+                        android:inputType="textUri|textWebEditText"
+                        android:nextFocusForward="@+id/drive_input"
+                        android:singleLine="true"
+                        android:textColor="@android:color/background_light"
                         android:textColorHint="@android:color/darker_gray"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toEndOf="@+id/imageView2"
-                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+                        android:visibility="visible" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/port_input"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/text_light_gray"
-                            android:hint="@string/http_for_local_access"
-                            android:inputType="number"
-                            android:nextFocusForward="@+id/label_input"
-                            android:singleLine="true"
-                            android:textColor="@android:color/background_light"
-                            android:textColorHint="@android:color/darker_gray"
-                            android:visibility="visible" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:labelFor="@+id/label_input"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="15dp"
+                    android:textColorHint="@android:color/darker_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView2"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textInputLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="8dp"
-                        android:contentDescription="@string/inputlayout_for_label"
-                        android:labelFor="@+id/label_input"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="15dp"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/drive_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:backgroundTint="@color/text_light_gray"
+                        android:hint="@string/optional_drive_link_linked_to_motioneye"
+                        android:inputType="textUri|textWebEditText"
+                        android:singleLine="true"
+                        android:textColor="@android:color/background_light"
                         android:textColorHint="@android:color/darker_gray"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/imageView2"
-                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+                        android:visibility="visible" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/label_input"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:backgroundTint="@color/text_light_gray"
-                            android:hint="@string/device_label"
-                            android:inputType="textUri|textWebEditText"
-                            android:nextFocusForward="@+id/drive_input"
-                            android:singleLine="true"
-                            android:textColor="@android:color/background_light"
-                            android:textColorHint="@android:color/darker_gray"
-                            android:visibility="visible" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textInputLayout4"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:labelFor="@+id/label_input"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="15dp"
-                        android:textColorHint="@android:color/darker_gray"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/imageView2"
-                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/drive_input"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:backgroundTint="@color/text_light_gray"
-                            android:hint="@string/optional_drive_link_linked_to_motioneye"
-                            android:inputType="textUri|textWebEditText"
-                            android:singleLine="true"
-                            android:textColor="@android:color/background_light"
-                            android:textColorHint="@android:color/darker_gray"
-                            android:visibility="visible" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
 
