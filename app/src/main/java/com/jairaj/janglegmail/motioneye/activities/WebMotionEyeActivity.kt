@@ -877,12 +877,16 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
             override fun onPageFinished(view: WebView, url: String) {
                 handleOnPageFinished()
 
-                // Enable force zoom by injecting custom meta
-                // Source: https://stackoverflow.com/questions/27236676/why-does-pinch-to-zoom-not-work-in-my-android-webview
-                val javascript =
-                    "javascript:document.getElementsByName('viewport')[0].setAttribute('content', 'initial-scale=1.0,maximum-scale=10.0');"
-                view.loadUrl(javascript)
-                //                swipe.setRefreshing(false);
+                val username = "user";
+                val password = "pass";
+
+                // TODO: Auth POC for UI
+                view.loadUrl("javascript: (function() {" +
+                        "document.getElementById('usernameEntry').value= '$username';" +
+                        "document.getElementById('passwordEntry').value= '$password';" +
+                        "document.getElementById('rememberCheck').click();" +
+                        "document.querySelector('div.button.dialog.mouse-effect.default').click();\n" +
+                    "}) ();" );
             }
 
             override fun onReceivedError(
@@ -899,7 +903,11 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
                 view: WebView,
                 handler: HttpAuthHandler, host: String, realm: String
             ) {
-                handler.proceed("admin", "1234")
+                val username = "user";
+                val password = "pass";
+
+                // TODO: Auth POC for streaming
+                handler.proceed(username, password)
             }
         }
 
