@@ -35,6 +35,8 @@ s
         <item name="hintTextColor">@color/motioneye_blue</item>
         <item name="android:textColorHint">@android:color/darker_gray</item>
         <item name="boxStrokeColor">@color/motioneye_blue</item>
+        <item name="boxCornerRadiusTopStart">6dp</item>
+        <item name="boxCornerRadiusTopEnd">6dp</item>
     </style>
 
     <style name="FABStyle" parent="">

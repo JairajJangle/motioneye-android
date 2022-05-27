@@ -722,7 +722,8 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             editLabel = bundle.getString(LABEL)
         }
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        val saveButton: TextView = findViewById(R.id.text_save)
+        val saveButton: TextView = findViewById(R.id.button_save)
+        val cancelButton: TextView = findViewById(R.id.button_cancel)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -750,6 +751,9 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             } //0 to add entries
             //1 to make changes on editing
             //2 to cancel edit
+        }
+        cancelButton.setOnClickListener {
+            onBackPressed()
         }
     }
 
