@@ -711,6 +711,7 @@ import com.jairaj.janglegmail.motioneye.utils.Constants.downloadFolderName
 import com.jairaj.janglegmail.motioneye.utils.CustomDialogClass
 import java.io.File
 
+
 class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.OnRefreshListener
     () {
     private val logTAG = WebMotionEyeActivity::class.java.name
@@ -874,6 +875,7 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
                 return true
             }
 
+            // Inject Javascript to load credentials and press Login Button
             override fun onPageFinished(view: WebView, url: String) {
                 handleOnPageFinished()
 
@@ -881,12 +883,37 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
                 val password = "pass";
 
                 // TODO: Auth POC for UI
-                view.loadUrl("javascript: (function() {" +
-                        "document.getElementById('usernameEntry').value= '$username';" +
-                        "document.getElementById('passwordEntry').value= '$password';" +
-                        "document.getElementById('rememberCheck').click();" +
-                        "document.querySelector('div.button.dialog.mouse-effect.default').click();\n" +
-                    "}) ();" );
+                view.loadUrl(
+                    "javascript: (function() {" +
+                            // 1. Set username and password
+                            "   document.getElementById('usernameEntry').value= '$username';" +
+                            "   document.getElementById('passwordEntry').value= '$password';" +
+
+                            // 2. Toggle ON remember me switch
+                            "   document.getElementById('rememberCheck').click();" +
+
+                            // 3. Click on Login Button
+                            "   document.querySelector(" +
+                            "               'div.button.dialog.mouse-effect.default'" +
+                            "   ).click();\n" +
+
+                            "}) ();"
+                );
+            }
+
+            // Inject Javascript to allow force zoom on motionEye UI
+            override fun onLoadResource(view: WebView, url: String?) {
+                view.loadUrl(
+                    "javascript:document.getElementsByName(\"viewport\")[0]" +
+                            "               .setAttribute(" +
+                            "                   \"content\", " +
+                            "                   \"width=device-width, " +
+                            "                   initial-scale=1.0, " +
+                            "                   maximum-scale=5.0, " +
+                            "                   user-scalable=yes" +
+                            "               \");"
+                )
+                super.onLoadResource(view, url)
             }
 
             override fun onReceivedError(
@@ -947,9 +974,11 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
                 )
                 val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                 dm.enqueue(request)
-                Toast.makeText(baseContext, "Downloading to Downloads/motionEye", Toast.LENGTH_LONG).show()
-            }else{
-                Toast.makeText(baseContext, "Storage Permission not granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(baseContext, "Downloading to Downloads/motionEye", Toast.LENGTH_LONG)
+                    .show()
+            } else {
+                Toast.makeText(baseContext, "Storage Permission not granted", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
