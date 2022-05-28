@@ -30,7 +30,7 @@
             android:name=".activities.AddDeviceDetailsActivity"
             android:label="Add motionEye Server"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.LoadingScreenActivity"
             android:exported="true">

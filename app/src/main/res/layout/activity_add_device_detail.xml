@@ -48,7 +48,7 @@
             android:id="@+id/add_details_sv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:paddingHorizontal="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
@@ -64,6 +64,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Device URL with http:// or https://"
                     android:labelFor="@+id/url_input"
+                    android:layout_marginTop="5dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.500"
                     app:layout_constraintStart_toStartOf="parent"
