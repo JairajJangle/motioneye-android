@@ -21,6 +21,7 @@
     <string name="tut_title_add_button">Füge dein erstes Gerät hinzu</string>
     <string name="tut_sub_add_button">Tippe auf den + Knopf um zu starten \nDieser Knopf unterstützt Drag and Drop.</string>
     <string name="toast_added">Hinzugefügt</string>
+    <string name="warning_duplicate_label">motionEye Server mit diesem Label ist bereits vorhanden!</string>
     <string name="warning_invalid_url">Ungültige URL!</string>
     <string name="warning_empty_url">Leere URL!</string>
     <string name="warning_empty_label">Leere Bezeichnung!</string>

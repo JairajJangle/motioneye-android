@@ -21,6 +21,7 @@
     <string name="tut_title_add_button">Ajoutez votre premier appareil</string>
     <string name="tut_sub_add_button">Appuyez sur le bouton + pour commencer \nCe bouton peut être glissé/déposé</string>
     <string name="toast_added">Ajouté</string>
+    <string name="warning_duplicate_label">Le serveur motionEye avec ce label est déjà présent !</string>
     <string name="warning_invalid_url">URL invalide !</string>
     <string name="warning_empty_url">URL vide !</string>
     <string name="warning_empty_label">Alias vide !</string>

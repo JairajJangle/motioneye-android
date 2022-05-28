@@ -21,6 +21,7 @@
     <string name="tut_title_add_button">Add your first device</string>
     <string name="tut_sub_add_button">Tap the + button to get started \nThis button can be dragged and dropped</string>
     <string name="toast_added">Added</string>
+    <string name="warning_duplicate_label">motionEye server with this Label is already present!</string>
     <string name="warning_invalid_url">Invalid URL!</string>
     <string name="warning_empty_url">Empty URL!</string>
     <string name="warning_empty_label">Empty Label!</string>

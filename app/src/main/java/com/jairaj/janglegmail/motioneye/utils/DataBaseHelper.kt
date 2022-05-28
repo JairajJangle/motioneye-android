@@ -686,6 +686,8 @@ import android.util.Log
 
 class DataBaseHelper internal constructor(context: Context?) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+    private val logTAG = DataBaseHelper::class.java.name
+
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             "create table " + TABLE_NAME
@@ -746,13 +748,39 @@ class DataBaseHelper internal constructor(context: Context?) :
         } catch (Exp: Exception) {
             // Something went wrong. Missing the database? The table?
             Log.d(
-                "existsColumnInTable",
+                logTAG,
                 "When checking whether a column exists in the table, an error occurred: " + Exp.message
             )
             false
         } finally {
             mCursor?.close()
         }
+    }
+
+    fun hasLabel(label: String): Boolean {
+        val db = writableDatabase
+        val selectString = "SELECT * FROM $TABLE_NAME WHERE $COL_2 =?"
+
+        // Add the String you are searching by here.
+        // Put it in an array to avoid an unrecognized token error
+        val cursor = db.rawQuery(selectString, arrayOf(label))
+        var hasObject = false
+        if (cursor.moveToFirst()) {
+            hasObject = true
+
+            // region if you had multiple records to check for, use this region.
+            var count = 0
+            while (cursor.moveToNext()) {
+                count++
+            }
+            // here, count is records found
+            Log.d(logTAG, String.format("%d records found", count))
+
+            // endregion
+        }
+        cursor.close() // Don't forget to close your cursor
+        db.close() //AND your Database!
+        return hasObject
     }
 
     val allData: Cursor

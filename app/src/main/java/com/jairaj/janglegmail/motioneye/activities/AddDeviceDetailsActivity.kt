@@ -777,6 +777,13 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
 
         // If all mandatory entries are valid
         if (isAllValidEntries) {
+            if(databaseHelper.hasLabel(labelInputString)){
+                binding.labelInput.error = getString(R.string.warning_duplicate_label)
+
+                canProceed = false
+                return
+            }
+
             previousScreen.putExtra("IS_DRIVE_ADDED", isValidDriveURL)
 
             when (editMode) {
