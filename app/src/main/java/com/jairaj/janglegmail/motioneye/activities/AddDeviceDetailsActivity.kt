@@ -681,10 +681,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
-import android.widget.TextView
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityAddDeviceDetailBinding
 import com.jairaj.janglegmail.motioneye.utils.Constants
@@ -749,6 +749,16 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             //1 to make changes on editing
             //2 to cancel edit
         }
+
+        // On pressing Keyboard Done button on password input field
+        binding.passwordInput.setOnEditorActionListener(
+            OnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    binding.buttonSave.performClick()
+                    return@OnEditorActionListener true
+                }
+                false
+            })
     }
 
     private fun saveToFile() {
