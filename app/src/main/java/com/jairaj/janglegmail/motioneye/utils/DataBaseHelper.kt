@@ -758,7 +758,7 @@ class DataBaseHelper internal constructor(context: Context?) :
     }
 
     fun hasLabel(label: String): Boolean {
-        val db = writableDatabase
+        val db = this.writableDatabase
         val selectString = "SELECT * FROM $TABLE_NAME WHERE $COL_2 =?"
 
         // Add the String you are searching by here.
@@ -803,6 +803,7 @@ class DataBaseHelper internal constructor(context: Context?) :
             url
         } finally {
             cursor?.close()
+            db?.close()
         }
     }
 
@@ -820,6 +821,7 @@ class DataBaseHelper internal constructor(context: Context?) :
             port ?: ""
         } finally {
             cursor?.close()
+            db?.close()
         }
     }
 
@@ -844,6 +846,7 @@ class DataBaseHelper internal constructor(context: Context?) :
             }
         } finally {
             cursor?.close()
+            db?.close()
         }
     }
 
@@ -861,6 +864,7 @@ class DataBaseHelper internal constructor(context: Context?) :
             prev ?: ""
         } finally {
             cursor?.close()
+            db?.close()
         }
     }
 
