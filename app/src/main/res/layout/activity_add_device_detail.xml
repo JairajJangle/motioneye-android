@@ -21,39 +21,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:contentInsetStartWithNavigation="0dp"
+                app:titleMarginStart="0dp"
                 android:background="@color/motioneye_dark_grey"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp">
-
                     <Button
                         android:id="@+id/button_save"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
+                        android:layout_marginRight="10dp"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/motioneye_blue"
                         android:text="SAVE"
+                        android:layout_gravity="right"
                         android:textColor="@color/white"
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:textSize="16sp"/>
 
-            </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
             android:id="@+id/add_details_sv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
