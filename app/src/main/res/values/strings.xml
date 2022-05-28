@@ -2,9 +2,15 @@
     <string name="app_name">Motion Eye</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_add_device_detail">add_device_detail</string>
+
     <string name="device_label">Device Label</string>
     <string name="device_url">Device URL with http:// or https://</string>
     <string name="http_for_local_access">(Optional) Port (usually 8765)</string>
+    <string name="username_hint">Username (Optional)</string>
+    <string name="password_hint">Password (Optional)</string>
+    <string name="save_btn_txt">SAVE</string>
+    <string name="credential_fact">Good to know: the motionEye app stores your credentials in an encrypted format in your phone. \n\nOnly your phone can access and decrypt the credentials.\n\n</string>
+
     <string name="title_activity_web_motion_eye">web_motion_eye</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>

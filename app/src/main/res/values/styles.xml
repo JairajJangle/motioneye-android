@@ -37,6 +37,12 @@
         <item name="boxStrokeColor">@color/motioneye_blue</item>
         <item name="boxCornerRadiusTopStart">6dp</item>
         <item name="boxCornerRadiusTopEnd">6dp</item>
+        <item name="helperTextTextColor">@color/motioneye_blue</item>
+        <item name="helperTextTextAppearance">@style/HelperTextFont</item>
+    </style>
+
+    <style name="HelperTextFont">
+        <item name="android:fontFamily">"@font/mavenpro_variable"</item>
     </style>
 
     <style name="FABStyle" parent="">
