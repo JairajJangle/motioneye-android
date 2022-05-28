@@ -777,7 +777,13 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
 
         // If all mandatory entries are valid
         if (isAllValidEntries) {
-            if(databaseHelper.hasLabel(labelInputString)){
+            val isLabelAlreadyPresent = databaseHelper.hasLabel(labelInputString)
+
+            // For EDIT_MODE_NEW_DEV, this condition will anyway be true as editLabel = ""
+            val isLabelChanged = editLabel != labelInputString
+
+            // Prevent user from adding an already existing label
+            if(isLabelAlreadyPresent && isLabelChanged){
                 binding.labelInput.error = getString(R.string.warning_duplicate_label)
 
                 canProceed = false
