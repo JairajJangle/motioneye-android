@@ -701,10 +701,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
 
     private lateinit var databaseHelper: DataBaseHelper
     private var editMode = 0
-    private var editLabel: String? = ""
-    private var editPort = ""
-    private var editUrl = ""
-    private var editDriveLink = ""
+    private var prevLabel: String = ""
 
     private var canProceed = false
     private lateinit var previousScreen: Intent
@@ -721,7 +718,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         //Extract the data…
         if (bundle != null) {
             editMode = bundle.getInt(EDIT)
-            editLabel = bundle.getString(LABEL)
+            prevLabel = bundle.getString(LABEL) ?: ""
         }
 
         setSupportActionBar(binding.toolbar)
@@ -732,13 +729,24 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         previousScreen = Intent(baseContext, MainActivity::class.java)
 
         if (editMode == Constants.EDIT_MODE_EXIST_DEV) {
-            editUrl = databaseHelper.urlFromLabel(editLabel!!)
-            editPort = databaseHelper.portFromLabel(editLabel!!)
-            editDriveLink = databaseHelper.driveFromLabel(editLabel!!)
+            val editUrl = databaseHelper.urlFromLabel(prevLabel)
+            val editPort = databaseHelper.portFromLabel(prevLabel)
+            val editDriveLink = databaseHelper.driveFromLabel(prevLabel)
+            val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(prevLabel)
+
             binding.urlInput.setText(editUrl)
             binding.portInput.setText(editPort)
-            binding.labelInput.setText(editLabel)
+            binding.labelInput.setText(prevLabel)
             binding.driveInput.setText(editDriveLink)
+
+            if (encryptedCredJSONStr.isEmpty()) {
+                binding.usernameInput.setText("")
+                binding.passwordInput.setText("")
+            } else {
+                val usernamePasswordPair = databaseHelper.getDecryptedCred(encryptedCredJSONStr)
+                binding.usernameInput.setText(usernamePasswordPair.first)
+                binding.passwordInput.setText(usernamePasswordPair.second)
+            }
         }
         binding.buttonSave.setOnClickListener {
             saveToFile()
@@ -766,6 +774,8 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         val portInputString: String = binding.portInput.text.toString()
         val labelInputString: String = binding.labelInput.text.toString()
         val driveLinkInputString: String = binding.driveInput.text.toString()
+        val usernameInputString: String = binding.usernameInput.text.toString()
+        val passwordInputString: String = binding.passwordInput.text.toString()
 
         val isValidDriveURL = Patterns.WEB_URL.matcher(driveLinkInputString).matches()
         val isValidCameraServerURL = Patterns.WEB_URL.matcher(urlInputString).matches()
@@ -779,11 +789,11 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         if (isAllValidEntries) {
             val isLabelAlreadyPresent = databaseHelper.hasLabel(labelInputString)
 
-            // For EDIT_MODE_NEW_DEV, this condition will anyway be true as editLabel = ""
-            val isLabelChanged = editLabel != labelInputString
+            // For EDIT_MODE_NEW_DEV, this condition will anyway be true as prevLabel = ""
+            val isLabelChanged = prevLabel != labelInputString
 
             // Prevent user from adding an already existing label
-            if(isLabelAlreadyPresent && isLabelChanged){
+            if (isLabelAlreadyPresent && isLabelChanged) {
                 binding.labelInput.error = getString(R.string.warning_duplicate_label)
 
                 canProceed = false
@@ -792,24 +802,35 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
 
             previousScreen.putExtra("IS_DRIVE_ADDED", isValidDriveURL)
 
+            val encryptedCredJSONStr =
+                databaseHelper.getEncryptedCredJSONStr(usernameInputString, passwordInputString)
+
             when (editMode) {
                 Constants.EDIT_MODE_NEW_DEV -> {
                     val isInserted = databaseHelper.insertData(
                         labelInputString, urlInputString, portInputString,
-                        driveLinkInputString, "1"
+                        driveLinkInputString, "1",
+                        encryptedCredJSONStr
                     )
-                    if (isInserted) Toast.makeText(
-                        baseContext, R.string.toast_added,
-                        Toast.LENGTH_SHORT
-                    ).show() else Toast.makeText(
-                        baseContext, R.string.error_try_again,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    if (isInserted) {
+                        Toast.makeText(
+                            baseContext, R.string.toast_added,
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+
+                    } else {
+                        Toast.makeText(
+                            baseContext, R.string.error_try_again,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
                 Constants.EDIT_MODE_EXIST_DEV -> {
                     val isUpdate = databaseHelper.updateData(
-                        editLabel!!, labelInputString, urlInputString,
-                        portInputString, driveLinkInputString
+                        prevLabel, labelInputString, urlInputString,
+                        portInputString, driveLinkInputString,
+                        encryptedCredJSONStr
                     )
                     if (!isUpdate) Toast.makeText(
                         this@AddDeviceDetailsActivity,

@@ -698,6 +698,8 @@ object Constants {
     const val DEVICE_ADDITION_CANCELLED_RESULT_CODE = 2
     const val DEVICE_ADDITION_DONE_RESULT_CODE = 0
 
+    const val KEYSTORE_ALIAS = "com.jairaj.janglegmail.motioneye"
+
     // Inside Download directory
     const val downloadFolderName = "motionEye"
 

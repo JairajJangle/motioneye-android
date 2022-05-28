@@ -675,421 +675,72 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.jairaj.janglegmail.motioneye.activities
+package com.jairaj.janglegmail.motioneye.utils
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.app.DownloadManager
-import android.app.ProgressDialog
-import android.content.Context
-import android.content.DialogInterface
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
-import android.os.Looper
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
 import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.webkit.*
-import android.widget.ProgressBar
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.preference.PreferenceManager
-import com.jairaj.janglegmail.motioneye.R
-import com.jairaj.janglegmail.motioneye.databinding.ActivityWebMotionEyeBinding
-import com.jairaj.janglegmail.motioneye.utils.AppUtils
-import com.jairaj.janglegmail.motioneye.utils.AppUtils.handleHttpBasicAuthentication
-import com.jairaj.janglegmail.motioneye.utils.AppUtils.handleMotionEyeUILogin
-import com.jairaj.janglegmail.motioneye.utils.Constants
-import com.jairaj.janglegmail.motioneye.utils.Constants.downloadFolderName
-import com.jairaj.janglegmail.motioneye.utils.CustomDialogClass
-import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
-import java.io.File
+import com.jairaj.janglegmail.motioneye.utils.Constants.KEYSTORE_ALIAS
+import java.security.KeyStore
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
+import javax.crypto.spec.IvParameterSpec
 
+class EncryptedDataHandler {
+    private val logTAG = EncryptedDataHandler::class.java.name
 
-class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.OnRefreshListener
-    () {
-    private val logTAG = WebMotionEyeActivity::class.java.name
-    private lateinit var binding: ActivityWebMotionEyeBinding
+    init {
+        val isKeyEmpty = (getKey() ?: "").toString().isEmpty()
+        if (isKeyEmpty) {
+            Log.i(logTAG, "Key is empty, generating new key")
 
-    private lateinit var databaseHelper: DataBaseHelper
+            val keyGenerator =
+                KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+            val keyGenParameterSpec = KeyGenParameterSpec.Builder(
+                KEYSTORE_ALIAS,
+                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+            )
+                .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                .build()
 
-    private var progressBar: ProgressDialog? = null
-    private lateinit var cancelButton: AlertDialog
-
-    private var fullScreenPref = true
-    private val mHideHandler = Handler(Looper.getMainLooper())
-    private var mHandler = Handler(Looper.getMainLooper())
-    private var label: String = ""
-    private var urlPort: String = ""
-    internal var mode = -1
-    //private SwipeRefreshLayout swipe;
-
-    private val mHidePart2Runnable = Runnable {
-        // Delayed removal of status and navigation bar
-        if (fullScreenPref) {
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-            WindowInsetsControllerCompat(window, binding.fullscreenContent).let { controller ->
-                controller.hide(WindowInsetsCompat.Type.systemBars())
-                controller.systemBarsBehavior =
-                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
+            keyGenerator.init(keyGenParameterSpec)
+            keyGenerator.generateKey()
         } else {
-            WindowCompat.setDecorFitsSystemWindows(window, true)
-            WindowInsetsControllerCompat(
-                window,
-                binding.fullscreenContent
-            ).show(WindowInsetsCompat.Type.systemBars())
+            Log.i(logTAG, "Key is not empty, using old key")
         }
     }
 
-    //    private View mControlsView;
-    private val mShowPart2Runnable = Runnable {
-        // Delayed display of UI elements
-        val actionBar = supportActionBar
-        actionBar?.show()
-        //            mControlsView.setVisibility(View.VISIBLE);
+    private fun getKey(): SecretKey? {
+        val keystore = KeyStore.getInstance("AndroidKeyStore")
+        keystore.load(null)
+
+        val secretKeyEntry =
+            keystore?.getEntry(KEYSTORE_ALIAS, null) as KeyStore.SecretKeyEntry?
+        return secretKeyEntry?.secretKey
     }
 
-    private val mHideRunnable = Runnable { hide() }
+    fun getEncryptedData(data: String): Pair<ByteArray, ByteArray> {
+        val cipher = Cipher.getInstance("AES/CBC/NoPadding")
 
-    //    @Override
-    //    public void onRefresh()
-    //    {
-    //        if(mContentView.getScrollY() == 0)
-    //        {
-    //            swipe.setRefreshing(true);
-    //            ReLoadWebView(url_port);
-    //        }
-    //        else
-    //        {
-    //            swipe.setRefreshing(false);
-    //        }
-    //    }
+        var temp = data
+        while (temp.toByteArray().size % 16 != 0)
+            temp += "\u0020"
 
-    //    private void ReLoadWebView(String currentURL)
-    //    {
-    //        mContentView.loadUrl(currentURL);
-    //    }
+        cipher.init(Cipher.ENCRYPT_MODE, getKey())
 
-    //permission is automatically granted on sdk<23 upon installation
-    private val isStoragePermissionGranted: Boolean
-        get() {
-            return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.v(TAG, "Permission is granted")
-                true
-            } else {
-                Log.v(TAG, "Permission is revoked")
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    1
-                )
-                false
-            }
-        }
+        val ivBytes = cipher.iv
+        val encryptedBytes = cipher.doFinal(temp.toByteArray(Charsets.UTF_8))
 
-    @SuppressLint("SetJavaScriptEnabled")
-    override fun onCreate(savedInstanceState: Bundle?) {
-
-        super.onCreate(savedInstanceState)
-        binding = ActivityWebMotionEyeBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-
-        databaseHelper = DataBaseHelper(this)
-
-        val bundle = intent.extras
-        //Extract the data…
-        if (bundle != null) {
-            label = bundle.getString(Constants.KEY_LABEL) ?: ""
-            urlPort = bundle.getString(Constants.KEY_URL_PORT) ?: "about:blank"
-            mode = bundle.getInt(Constants.KEY_MODE)
-        }
-
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-
-        fullScreenPref = prefs.getBoolean(getString(R.string.key_fullscreen), true)
-
-        //        mControlsView = findViewById(R.id.fullscreen_content_controls);
-        binding.fullscreenContent.settings.javaScriptEnabled = true
-        binding.fullscreenContent.settings.javaScriptCanOpenWindowsAutomatically = true
-
-        binding.fullscreenContent.settings.domStorageEnabled = true
-
-        binding.fullscreenContent.settings.builtInZoomControls = true
-        binding.fullscreenContent.settings.setSupportZoom(true)
-        binding.fullscreenContent.settings.displayZoomControls =
-            true // disable the default zoom controls on the page
-
-        //        swipe = findViewById(R.id.swipe);
-        //        swipe.setOnRefreshListener(this);
-
-        CookieManager.getInstance().setAcceptCookie(true)
-
-        progressBar = when (mode) {
-            Constants.MODE_CAMERA -> ProgressDialog.show(
-                this@WebMotionEyeActivity,
-                getString(R.string.connecting_mE), getString(R.string.loading)
-            )
-            Constants.MODE_DRIVE -> ProgressDialog.show(
-                this@WebMotionEyeActivity,
-                getString(R.string.connecting_gD), getString(R.string.loading)
-            )
-            else -> ProgressDialog.show(
-                this@WebMotionEyeActivity,
-                getString(R.string.connecting_uM), getString(R.string.loading)
-            )
-        }
-
-        val progressbar = progressBar!!.findViewById<ProgressBar>(android.R.id.progress)
-        progressbar.indeterminateDrawable
-            .setColorFilter(
-                resources.getColor(R.color.motioneye_blue),
-                android.graphics.PorterDuff.Mode.SRC_IN
-            )
-
-        progressBar!!.setCancelable(true)
-
-        cancelButton = AlertDialog.Builder(this).create()
-
-        val window = cancelButton.window
-        window?.setGravity(Gravity.BOTTOM)
-
-        cancelButton.setMessage(":'( Taking too long to load?")
-
-        cancelButton.setButton(
-            DialogInterface.BUTTON_NEGATIVE,
-            "Click to Dismiss"
-        ) { _, _ -> progressBar!!.dismiss() }
-
-        progressBar!!.setOnCancelListener {
-            if (progressBar != null)
-                progressBar!!.dismiss()
-            mHandler.removeMessages(0)
-            finish()
-        }
-
-        binding.fullscreenContent.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                view.loadUrl(url)
-                return true
-            }
-
-            // Inject Javascript to load credentials and press Login Button
-            override fun onPageFinished(view: WebView, url: String) {
-                handleMotionEyeUILogin(databaseHelper, label, view)
-                handleOnPageFinished()
-            }
-
-            // Inject Javascript to allow force zoom on motionEye UI
-            override fun onLoadResource(view: WebView, url: String?) {
-                view.loadUrl(
-                    "javascript:document.getElementsByName(\"viewport\")[0]" +
-                            "               .setAttribute(" +
-                            "                   \"content\", " +
-                            "                   \"width=device-width, " +
-                            "                   initial-scale=1.0, " +
-                            "                   maximum-scale=5.0, " +
-                            "                   user-scalable=yes" +
-                            "               \");"
-                )
-                super.onLoadResource(view, url)
-            }
-
-            override fun onReceivedError(
-                view: WebView,
-                errorCode: Int,
-                description: String,
-                failingUrl: String
-            ) {
-                super.onReceivedError(view, errorCode, description, failingUrl)
-                showWebPageErrorDialog()
-            }
-
-            override fun onReceivedHttpAuthRequest(
-                view: WebView,
-                handler: HttpAuthHandler, host: String, realm: String
-            ) {
-                handleHttpBasicAuthentication(databaseHelper, label, handler)
-            }
-        }
-
-        val liveStream = AppUtils.checkWhetherStream(urlPort)
-        binding.fullscreenContent.webChromeClient = object : WebChromeClient() {
-            override fun onProgressChanged(view: WebView, progress: Int) {
-                if (liveStream && progress >= 30)
-                    handleOnPageFinished()
-            }
-        }
-
-        binding.fullscreenContent.loadUrl(urlPort)
-
-        binding.fullscreenContent.setDownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
-            val request = DownloadManager.Request(Uri.parse(url))
-
-            if (isStoragePermissionGranted) {
-                request.setMimeType(mimeType)
-                //------------------------COOKIE!!------------------------
-                val cookies = CookieManager.getInstance().getCookie(url)
-                request.addRequestHeader("cookie", cookies)
-                //------------------------COOKIE!!------------------------
-                request.addRequestHeader("User-Agent", userAgent)
-                request.setDescription("Downloading file...")
-
-                var fileName = URLUtil.guessFileName(url, contentDisposition, mimeType)
-                fileName = "${label}_${fileName.replace(";+$".toRegex(), "")}"
-
-                Log.d(logTAG, "Downloading filename = $fileName")
-
-                request.setTitle(fileName)
-                request.allowScanningByMediaScanner()
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                request.setDestinationInExternalPublicDir(
-                    Environment.DIRECTORY_DOWNLOADS,
-                    File.separator + downloadFolderName + File.separator + fileName
-                )
-                val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-                dm.enqueue(request)
-                Toast.makeText(baseContext, "Downloading to Downloads/motionEye", Toast.LENGTH_LONG)
-                    .show()
-            } else {
-                Toast.makeText(baseContext, "Storage Permission not granted", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
-
-        mHandler.postDelayed({
-            if (progressBar != null)
-                if (progressBar!!.isShowing)
-                    cancelButton.show()
-        }, 15000L)
+        return Pair(ivBytes, encryptedBytes)
     }
 
-    //To prevent crashes on some devices WebView needs to be safely destroyed
-    override fun onDestroy() {
-        binding.fullscreenContent.visibility = View.GONE
+    fun getDecryptedData(ivBytes: ByteArray, data: ByteArray): String {
+        val cipher = Cipher.getInstance("AES/CBC/NoPadding")
+        val spec = IvParameterSpec(ivBytes)
 
-        binding.fullscreenContent.loadUrl("about:blank")
-        if (binding.fullscreenContent.parent != null) {
-            (binding.fullscreenContent.parent as ViewGroup).removeView(binding.fullscreenContent)
-            binding.fullscreenContent.destroy()
-        }
-
-        super.onDestroy()
-    }
-
-    internal fun handleOnPageFinished() {
-        if (progressBar != null) {
-            if (progressBar!!.isShowing)
-                progressBar!!.dismiss()
-        }
-
-        if (cancelButton.isShowing)
-            cancelButton.dismiss()
-    }
-
-    internal fun showWebPageErrorDialog() {
-        val cdd = CustomDialogClass(this@WebMotionEyeActivity)
-        cdd.dialogType(Constants.DialogType.WEB_PAGE_ERROR_DIALOG)
-        cdd.setCancelable(false)
-        cdd.show()
-
-        //        cdd.negative.setOnClickListener(new View.OnClickListener()
-        //        {
-        //            public void onClick(View view)
-        //            {
-        //                Intent i = new Intent(web_motion_eye.this, Help_FAQ.class);
-        //                finish();  //Kill the activity from which you will go to next activity
-        //                startActivity(i);
-        //            }
-        //        });
-
-        //        new AlertDialog.Builder(web_motion_eye.this)
-        //                .setTitle(page_error_title)
-        //                .setMessage("Please help us fix the issue by letting us know by sending a feedback")
-        //
-        //                .setPositiveButton("Send Feedback", new DialogInterface.OnClickListener() {
-        //                    public void onClick(DialogInterface dialog, int which)
-        //                    {
-        //                        Utils.sendFeedback(web_motion_eye.this);
-        //                    }
-        //
-        //                })
-        //
-        //                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-        //                    public void onClick(DialogInterface dialog, int which)
-        //                    {
-        //                    }
-        //                })
-        //                .setNegativeButton("Check Help and FAQ", new DialogInterface.OnClickListener()
-        //                {
-        //                    public void onClick(DialogInterface dialog, int which)
-        //                    {
-        //                        Intent i = new Intent(web_motion_eye.this, Help_FAQ.class);
-        //                        finish();  //Kill the activity from which you will go to next activity
-        //                        startActivity(i);
-        //                    }
-        //                })
-        //                .setCancelable(false)
-        //                .setIcon(android.R.drawable.ic_dialog_alert)
-        //                .show();
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-        delayedHide(100)
-    }
-
-    private fun hide() {
-        // Hide UI first
-        val actionBar = supportActionBar
-        actionBar?.hide()
-        //        mControlsView.setVisibility(View.GONE);
-
-        // Schedule a runnable to remove the status and navigation bar after a delay
-        mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
-    }
-
-    @SuppressLint("InlinedApi")
-    private/*
-     * Schedules a call to hide() in delay milliseconds, canceling any
-     * previously scheduled calls.
-     */ fun delayedHide(delayMillis: Int) {
-        mHideHandler.removeCallbacks(mHideRunnable)
-        mHideHandler.postDelayed(mHideRunnable, delayMillis.toLong())
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0])
-            Toast.makeText(baseContext, "Storage permission granted", Toast.LENGTH_SHORT).show()
-            //resume tasks needing this permission
-        } else
-            Toast.makeText(baseContext, "Storage permission denied", Toast.LENGTH_SHORT).show()
-    }
-
-    companion object {
-        private const val TAG = "WebMotionEyeActivity"
-
-        private const val UI_ANIMATION_DELAY = 300
+        cipher.init(Cipher.DECRYPT_MODE, getKey(), spec)
+        return cipher.doFinal(data).toString(Charsets.UTF_8).trim()
     }
 }

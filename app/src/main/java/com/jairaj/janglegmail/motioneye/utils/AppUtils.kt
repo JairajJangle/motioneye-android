@@ -691,6 +691,8 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.ViewTreeObserver
+import android.webkit.HttpAuthHandler
+import android.webkit.WebView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.jairaj.janglegmail.motioneye.R
@@ -840,6 +842,61 @@ object AppUtils {
             }
         }
         viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
+    }
+
+    fun handleMotionEyeUILogin(
+        databaseHelper: DataBaseHelper,
+        label: String,
+        view: WebView
+    ) {
+        val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(label)
+
+        var username = ""
+        var password = ""
+        if (encryptedCredJSONStr.isNotEmpty()) {
+            val usernamePasswordPair = databaseHelper.getDecryptedCred(encryptedCredJSONStr)
+            username = usernamePasswordPair.first
+            password = usernamePasswordPair.second
+        }
+
+        var jsToInject = "javascript: (function() {"
+
+        if (username.isNotEmpty())
+            jsToInject += "     document.getElementById('usernameEntry').value= '$username';"
+
+        if (password.isNotEmpty())
+            jsToInject += "     document.getElementById('passwordEntry').value= '$password';"
+        jsToInject += "         document.getElementById('rememberCheck').click();"
+
+        if (username.isNotEmpty() && password.isNotEmpty()) {
+            jsToInject += "     document.querySelector(" +
+                    "               'div.button.dialog.mouse-effect.default'" +
+                    "           ).click();\n"
+        }
+
+        jsToInject += "   }) ();"
+
+        view.loadUrl(jsToInject)
+    }
+
+    fun handleHttpBasicAuthentication(
+        databaseHelper: DataBaseHelper,
+        label: String,
+        handler: HttpAuthHandler
+    ) {
+        val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(label)
+
+        var username = ""
+        var password = ""
+        if (encryptedCredJSONStr.isNotEmpty()) {
+            val usernamePasswordPair = databaseHelper.getDecryptedCred(encryptedCredJSONStr)
+            username = usernamePasswordPair.first
+            password = usernamePasswordPair.second
+        }
+
+        if (username.isNotEmpty() && password.isNotEmpty()) {
+            handler.proceed(username, password)
+        }
     }
 
     fun displayMainActivityTutorial(

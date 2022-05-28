@@ -1,10 +1,10 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/motioneye_dark_grey</item>
-        <item name="fontFamily">@font/mavenpro_variable</item>
+        <item name="android:fontFamily">@font/mavenpro_variable</item>
         <item name="colorPrimaryDark">@color/motioneye_darker_grey</item>
         <item name="colorAccent">@color/motioneye_blue</item>
         <item name="android:colorBackground">@color/motioneye_grey</item>
@@ -20,7 +20,7 @@
         <item name="colorSurface">#FFFFFF</item>
         <item name="colorOnSurface">#212121</item>
         <item name="colorOnBackground">#212121</item>
-s
+        s
         <item name="materialButtonStyle">@style/AppButton</item>
         <item name="textInputStyle">@style/AppTextField</item>
     </style>
@@ -48,6 +48,7 @@ s
         <item name="android:background">@color/motioneye_dark_grey</item>
         <item name="colorAccent">@color/motioneye_blue</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/mavenpro_variable</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -90,6 +91,7 @@ s
     <style name="AlertDialogCustom" parent="Theme.MaterialComponents.Dialog.Alert">
         <item name="android:textColor">@color/motioneye_blue</item>
         <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:fontFamily">@font/mavenpro_variable</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:background">@color/motioneye_darkerish_grey</item>
         <item name="android:backgroundDimAmount">0.3</item>

@@ -682,6 +682,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.HttpAuthHandler
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -884,6 +885,51 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
                             holder.progressBar.visibility = View.VISIBLE
                         }
                     }
+                }
+            }
+
+            var basicAuthTryCounter = 0
+
+            holder.previewView.webViewClient = object : WebViewClient() {
+                // TODO: Hide header and footer in streaming preview
+//                override fun onLoadResource(view: WebView?, url: String?) {
+//                    view?.loadUrl(
+//                        "javascript:(function() { " +
+//                                "document.getElementsByClassName('header')[0].style.position='absolute'; " +
+//                                "document.getElementsByClassName('header')[0].style.top=-9999px; " +
+//                                "document.getElementsByClassName('header')[0].style.left=-9999px; " +
+//                                "})()"
+//                    )
+//                    super.onLoadResource(view, url)
+//                }
+
+                // Inject Javascript to load credentials and press Login Button
+                override fun onPageFinished(view: WebView, url: String) {
+                    AppUtils.handleMotionEyeUILogin(
+                        MainActivity.instance.dataBaseHelper,
+                        label,
+                        view
+                    )
+                }
+
+                override fun onReceivedHttpAuthRequest(
+                    view: WebView,
+                    handler: HttpAuthHandler, host: String, realm: String
+                ) {
+                    if (basicAuthTryCounter > 2) {
+                        Toast.makeText(
+                            MainActivity.instance,
+                            "Incorrect Username/Password for $label",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return
+                    }
+                    AppUtils.handleHttpBasicAuthentication(
+                        MainActivity.instance.dataBaseHelper,
+                        label,
+                        handler
+                    )
+                    basicAuthTryCounter++
                 }
             }
             val isUpdate = MainActivity.instance.dataBaseHelper.updatePrevStat(label, "1")
