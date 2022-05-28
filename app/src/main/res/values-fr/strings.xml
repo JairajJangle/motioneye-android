@@ -349,11 +349,11 @@
         <item>R: Vérifiez si vous avez correctement mentionné http:// ou https:// avant l\'url et le numéro de port
         par défaut, le numéro de port de motionEye est 8765, vous pouvez également saisir le numéro de port 8081 pour la diffusion en streaming uniquement</item>
 
-        <item>Q: Je ne parviens pas à saisir le nom d\'utilisateur et le mot de passe de ma caméra motionEye</item>
-        <item>A: Veuillez appuyer sur votre flux de caméra protégé par mot de passe pour l\'ouvrir en mode plein écran,
-            remplissez le nom d\'utilisateur et le mot de passe et cochez l\'option Se souvenir de moi.
-            Si cette option pour saisir le mot de passe n\'apparaît pas, cliquez sur l\'icône d\'administration en haut à gauche
-            coin pour entrer le nom d\'utilisateur et le mot de passe</item>
+        <item>Q: L\'application affiche un toast \"Nom d\'utilisateur/mot de passe incorrect\" lors de
+            l\'ouverture de mon serveur de streaming motionEye</item>
+        <item>A: Par défaut, le port de diffusion (8081) avec authentification de base n\'accepte pas \"admin\"
+            comme nom d\'utilisateur. Essayez de définir le nom d\'utilisateur sur n\'importe quel autre utilisateur
+            (par exemple : \"user\")</item>
 
         <!-- 2 -->
         <item>Q: L\'application crash fréquemment / je ne peux pas voir le flux de la caméra</item>

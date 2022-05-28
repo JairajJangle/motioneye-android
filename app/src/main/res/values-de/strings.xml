@@ -344,30 +344,28 @@
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">
-        <item>Q: App verbindet sich nicht mit der Netzwerkkamera</item>
+        <item>F: App verbindet sich nicht mit der Netzwerkkamera</item>
         <item>A: Überprüfe, dass sich http:// oder https:// vor der URL befindet und der Port verwendet wird.
         (motionEye Standardeinstellung: 8765 oder 8081 um nur zu streamen)</item>
 
-        <item>Q: Ich kann keinen Benutzernamen und kein Passwort für meine motionEye-Kamera eingeben</item>
-        <item>A: Tippen Sie auf Ihren passwortgeschützten Kamerastream, um ihn im Vollbildmodus zu öffnen.
-            Geben Sie den Benutzernamen und das Passwort ein und aktivieren Sie die Option "Angemeldet bleiben".
-            Wenn diese Option zur Eingabe des Kennworts nicht angezeigt wird, klicken Sie oben links auf das Administrationssymbol
-            Ecke, um den Benutzernamen und das Passwort einzugeben</item>
+        <item>F: Die App zeigt beim Öffnen meines motionEye-Streaming-Servers den Toast \"Falscher Benutzername/Passwort\“ an</item>
+        <item>A: Standardmäßig akzeptiert der Streaming-Port (8081) mit Basisauthentifizierung \"admin\“
+            nicht als Benutzernamen. Versuchen Sie, den Benutzernamen auf einen anderen Benutzer festzulegen (z. B. \"user\")</item>
 
-        <item>Q: App hängt sich oft auf / Ich kann den Kamerastream nicht anschauen</item>
+        <item>F: App hängt sich oft auf / Ich kann den Kamerastream nicht anschauen</item>
         <item>A: Check whether the Android System WebView app in your device is up to date, check this link to update the app:
             https://play.google.com/store/apps/details?id=com.google.android.webview&amp;hl</item>
 
-        <item>Q: motionEye links cannot be opened as global links/port forwarded</item>
+        <item>F: motionEye links cannot be opened as global links/port forwarded</item>
         <item>A: To access global links, first enable port forwarding in the WiFi router to which motionEye device
             is connected, for step by step guide checkout this link:
             https://github.com/ccrisan/motioneyeos/issues/58</item>
 
-        <item>Q: My WiFi router does not support Port forwarding but I want to access my camera globally</item>
+        <item>F: My WiFi router does not support Port forwarding but I want to access my camera globally</item>
         <item>A: Check out https://www.dataplicity.com/ they have an awesome method to make your motionEye device
         available globally without actual port forwarding</item>
 
-        <item>Q: I am facing an unmentioned problem</item>
+        <item>F: I am facing an unmentioned problem</item>
         <item>A: Please consider contacting us on our feedback mail in the About section before rating the app, we will fix the issue as soon as possible</item>
     </string-array>
 </resources>

@@ -348,11 +348,9 @@
         <item>A: Check whether you have correctly mentioned http:// or https:// before the url and the port number
         by default the port number of motionEye is 8765, you may also enter port number 8081 for streaming only</item>
 
-        <item>Q: I am not able to enter Username and Password for my motionEye camera</item>
-        <item>A: Please tap on your Password Protected camera stream to open it in full screen mode,
-            fill in the Username and Password and tick the Remember Me option.
-            If this option to enter password does not appears, click on the admin icon on the top left
-            corner to enter the Username and Password</item>
+        <item>Q: The app displays \"Incorrect Username/Password\" toast while opening my motionEye streaming server</item>
+        <item>A: By default the streaming port(8081) with basic authentication does not accept
+            \"admin\" as the username. Try setting the username to any other user (For example: \"user\")</item>
 
         <item>Q: App crashes frequently / I cannot view the camera stream</item>
         <item>A: Check whether the Android System WebView app in your device is up to date, check this link to update the app:
