@@ -679,8 +679,8 @@ package com.jairaj.janglegmail.motioneye.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
-import android.webkit.URLUtil
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -694,10 +694,12 @@ import com.jairaj.janglegmail.motioneye.utils.Constants.EDIT
 import com.jairaj.janglegmail.motioneye.utils.Constants.LABEL
 import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
 
+//TODO: Check RTSP support
+
 class AddDeviceDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddDeviceDetailBinding
 
-    private lateinit var myDb: DataBaseHelper
+    private lateinit var databaseHelper: DataBaseHelper
     private var editMode = 0
     private var editLabel: String? = ""
     private var editPort = ""
@@ -713,7 +715,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        myDb = DataBaseHelper(this)
+        databaseHelper = DataBaseHelper(this)
 
         val bundle = intent.extras
         //Extract the data…
@@ -721,29 +723,24 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             editMode = bundle.getInt(EDIT)
             editLabel = bundle.getString(LABEL)
         }
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        val saveButton: TextView = findViewById(R.id.button_save)
-        val cancelButton: TextView = findViewById(R.id.button_cancel)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         window.decorView.importantForAutofill =
             View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
         previousScreen = Intent(baseContext, MainActivity::class.java)
 
-        setSupportActionBar(toolbar)
-
         if (editMode == Constants.EDIT_MODE_EXIST_DEV) {
-            editUrl = myDb.urlFromLabel(editLabel!!)
-            editPort = myDb.portFromLabel(editLabel!!)
-            editDriveLink = myDb.driveFromLabel(editLabel!!)
+            editUrl = databaseHelper.urlFromLabel(editLabel!!)
+            editPort = databaseHelper.portFromLabel(editLabel!!)
+            editDriveLink = databaseHelper.driveFromLabel(editLabel!!)
             binding.urlInput.setText(editUrl)
             binding.portInput.setText(editPort)
             binding.labelInput.setText(editLabel)
             binding.driveInput.setText(editDriveLink)
         }
-        saveButton.setOnClickListener {
+        binding.buttonSave.setOnClickListener {
             saveToFile()
             if (canProceed) {
                 setResult(DEVICE_ADDITION_DONE_RESULT_CODE, previousScreen)
@@ -751,9 +748,6 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             } //0 to add entries
             //1 to make changes on editing
             //2 to cancel edit
-        }
-        cancelButton.setOnClickListener {
-            onBackPressed()
         }
     }
 
@@ -763,18 +757,21 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         val labelInputString: String = binding.labelInput.text.toString()
         val driveLinkInputString: String = binding.driveInput.text.toString()
 
-        val isValidDriveURL = URLUtil.isValidUrl(driveLinkInputString)
+        val isValidDriveURL = Patterns.WEB_URL.matcher(driveLinkInputString).matches()
+        val isValidCameraServerURL = Patterns.WEB_URL.matcher(urlInputString).matches()
+        val isAllValidEntries = (
+                isValidCameraServerURL
+                        && labelInputString != ""
+                        && (isValidDriveURL || driveLinkInputString == "")
+                )
 
-        //TODO: Check RTSP support
-        if ((URLUtil.isValidUrl(urlInputString) || urlInputString.startsWith("rtsp://"))
-            && labelInputString != ""
-            && (isValidDriveURL || driveLinkInputString == "")
-        ) {
+        // If all mandatory entries are valid
+        if (isAllValidEntries) {
             previousScreen.putExtra("IS_DRIVE_ADDED", isValidDriveURL)
 
             when (editMode) {
                 Constants.EDIT_MODE_NEW_DEV -> {
-                    val isInserted = myDb.insertData(
+                    val isInserted = databaseHelper.insertData(
                         labelInputString, urlInputString, portInputString,
                         driveLinkInputString, "1"
                     )
@@ -787,7 +784,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                     ).show()
                 }
                 Constants.EDIT_MODE_EXIST_DEV -> {
-                    val isUpdate = myDb.updateData(
+                    val isUpdate = databaseHelper.updateData(
                         editLabel!!, labelInputString, urlInputString,
                         portInputString, driveLinkInputString
                     )
@@ -798,34 +795,33 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                 }
             }
             canProceed = true
-        } else if (!(URLUtil.isValidUrl(urlInputString)
-                    || urlInputString.startsWith("rtsp://"))
-        ) {
-            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
-                baseContext,
-                R.string.warning_invalid_url,
-                Toast.LENGTH_SHORT
-            ).show()
+        }
+        // Invalid Camera URL Error
+        else if (!isValidCameraServerURL) {
+            if (editMode != Constants.EDIT_CANCELLED)
+                binding.urlInput.error = getString(R.string.warning_invalid_url)
+
             canProceed = false
-        } else if (urlInputString == "") {
-            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
-                baseContext,
-                R.string.warning_empty_url,
-                Toast.LENGTH_SHORT
-            ).show()
+        }
+        // Empty Camera URL Error
+        else if (urlInputString == "") {
+            if (editMode != Constants.EDIT_CANCELLED)
+                binding.urlInput.error = getString(R.string.warning_empty_url)
+
             canProceed = false
-        } else if (labelInputString == "") {
-            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
-                baseContext,
-                R.string.warning_empty_label,
-                Toast.LENGTH_SHORT
-            ).show()
+        }
+        // Empty Label Error
+        else if (labelInputString == "") {
+            if (editMode != Constants.EDIT_CANCELLED)
+                binding.labelInput.error = getString(R.string.warning_empty_label)
+
             canProceed = false
-        } else if (!URLUtil.isValidUrl(driveLinkInputString)) {
-            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
-                baseContext, R.string.invalid_drive_warning,
-                Toast.LENGTH_SHORT
-            ).show()
+        }
+        // Invalid Cloud Storage URL Error
+        else if (!isValidDriveURL) {
+            if (editMode != Constants.EDIT_CANCELLED)
+                binding.driveInput.error = getString(R.string.invalid_drive_warning)
+
             canProceed = false
         }
     }

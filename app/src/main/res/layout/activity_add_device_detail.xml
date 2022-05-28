@@ -28,6 +28,24 @@
                 android:background="@color/motioneye_dark_grey"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp">
+
+                    <Button
+                        android:id="@+id/button_save"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/motioneye_blue"
+                        android:text="SAVE"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -35,7 +53,6 @@
             android:id="@+id/add_details_sv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/button_save"
             android:layout_marginBottom="20dp"
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -248,34 +265,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-
-        <Button
-            android:id="@+id/button_cancel"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@color/motioneye_blue"
-            android:text="CANCEL"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/button_save"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_details_sv" />
-
-        <Button
-            android:id="@+id/button_save"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@color/motioneye_blue"
-            android:text="SAVE"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/button_cancel"
-            app:layout_constraintTop_toBottomOf="@id/add_details_sv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

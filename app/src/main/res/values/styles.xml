@@ -79,9 +79,10 @@ s
 
     <style name="PreferenceScreen" parent="Theme.MaterialComponents">
         <item name="android:textColor">@color/white</item>
+        <item name="fontFamily">@font/mavenpro_variable</item>
         <item name="android:textColorSecondary">@color/text_light_gray</item>
         <item name="android:divider">@color/divider_dark_grey</item>
-        <item name="android:windowBackground">@color/motioneye_dark_grey</item>
+        <item name="android:windowBackground">@color/motioneye_grey</item>
         <item name="android:colorAccent">@color/motioneye_blue</item>
         <item name="android:colorControlActivated">@color/motioneye_blue</item>
     </style>
