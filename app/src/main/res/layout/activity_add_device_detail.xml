@@ -81,7 +81,6 @@
                         android:layout_height="65dp"
                         android:cursorVisible="true"
 
-                        android:hint="@string/device_url"
                         android:inputType="textUri|textWebEditText"
                         android:nextFocusForward="@+id/port_input"
 
