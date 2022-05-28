@@ -678,8 +678,10 @@
 package com.jairaj.janglegmail.motioneye.activities
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
+import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView.OnEditorActionListener
@@ -687,6 +689,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityAddDeviceDetailBinding
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.showKeyboard
 import com.jairaj.janglegmail.motioneye.utils.Constants
 import com.jairaj.janglegmail.motioneye.utils.Constants.DEVICE_ADDITION_CANCELLED_RESULT_CODE
 import com.jairaj.janglegmail.motioneye.utils.Constants.DEVICE_ADDITION_DONE_RESULT_CODE
@@ -767,6 +770,8 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                 }
                 false
             })
+
+        binding.urlInput.showKeyboard()
     }
 
     private fun saveToFile() {
@@ -797,6 +802,10 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                 binding.labelInput.error = getString(R.string.warning_duplicate_label)
 
                 canProceed = false
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    binding.buttonSave.performHapticFeedback(HapticFeedbackConstants.REJECT)
+                }
+
                 return
             }
 
@@ -867,6 +876,13 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                 binding.driveInput.error = getString(R.string.invalid_drive_warning)
 
             canProceed = false
+        }
+        if(editMode != Constants.EDIT_CANCELLED){
+            if(!canProceed){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    binding.buttonSave.performHapticFeedback(HapticFeedbackConstants.REJECT)
+                }
+            }
         }
     }
 

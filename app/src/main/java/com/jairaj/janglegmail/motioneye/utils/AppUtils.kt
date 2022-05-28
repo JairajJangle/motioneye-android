@@ -690,13 +690,16 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
 import android.webkit.HttpAuthHandler
 import android.webkit.WebView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.activities.MainActivity
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.showKeyboard
 import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_DEVICE_ADDED_BEFORE
 import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_DRIVE_ADDED_BEFORE
 import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_IS_APP_OPENED_BEFORE
@@ -990,4 +993,18 @@ object AppUtils {
             }
         }
     }
+
+    fun View.showKeyboard() {
+        this.requestFocus()
+        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        Handler(Looper.getMainLooper()).postDelayed({
+            inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+        }, 500)
+    }
+
+    fun View.hideKeyboard() {
+        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+    }
+
 }

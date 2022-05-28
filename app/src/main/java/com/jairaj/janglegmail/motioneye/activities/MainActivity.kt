@@ -683,12 +683,10 @@ import android.content.pm.PackageManager
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
+import android.os.*
 import android.text.TextUtils
 import android.util.Log
+import android.view.HapticFeedbackConstants
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -799,6 +797,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.fab.setOnClickListener {
             gotoAddDeviceDetail(Constants.EDIT_MODE_NEW_DEV)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                binding.fab.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+            }
         }
 
         //Handler to handle data fetching from SQL in BG
@@ -1069,6 +1070,10 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
 
             R.id.delete -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    binding.toolbar.performHapticFeedback(HapticFeedbackConstants.REJECT)
+                }
+
                 if (itemCheckedCountInDeviceList > 0 && isListViewCheckboxEnabled) {
 
                     for (deviceView in binding.deviceListRv.children) {

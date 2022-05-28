@@ -679,6 +679,7 @@ package com.jairaj.janglegmail.motioneye.views_and_adapters
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -752,6 +753,7 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
 
         holder.expandButton.setOnClickListener {
             handlePreviewView(holder, camDevice, false)
+            holder.expandButton.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
         }
 
         holder.driveButton.setOnClickListener {
