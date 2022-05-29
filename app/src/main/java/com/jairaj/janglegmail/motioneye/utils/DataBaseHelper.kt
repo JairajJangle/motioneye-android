@@ -683,13 +683,25 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import org.json.JSONObject
+import java.util.*
 
 class DataBaseHelper internal constructor(context: Context?) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+    private val logTAG = DataBaseHelper::class.java.name
+
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             "create table " + TABLE_NAME
-                    + "(ID INTEGER PRIMARY KEY AUTOINCREMENT,LABEL TEXT,URL TEXT,PORT TEXT,DRIVE TEXT,PREV TEXT)"
+                    + "(" +
+                    "$ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "$LABEL TEXT," +
+                    "$URL TEXT," +
+                    "$PORT TEXT," +
+                    "$DRIVE TEXT," +
+                    "$PREVIEW TEXT" +
+                    "$CRED TEXT" +
+                    ")"
         )
     }
 
@@ -697,7 +709,8 @@ class DataBaseHelper internal constructor(context: Context?) :
         db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(db)
         if (newVersion > oldVersion) {
-            db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $COL_6 TEXT")
+            db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $PREVIEW TEXT")
+            db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $CRED TEXT")
         }
     }
 
@@ -706,9 +719,19 @@ class DataBaseHelper internal constructor(context: Context?) :
         if (!existsColumnInTable(
                 db,
                 TABLE_NAME,
-                COL_6
+                PREVIEW
             )
-        ) db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $COL_6 TEXT  DEFAULT 0")
+        ) {
+            db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $PREVIEW TEXT  DEFAULT 0")
+        }
+        if (!existsColumnInTable(
+                db,
+                TABLE_NAME,
+                CRED
+            )
+        ) {
+            db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $CRED TEXT  DEFAULT ''")
+        }
     }
 
     fun insertData(
@@ -716,16 +739,20 @@ class DataBaseHelper internal constructor(context: Context?) :
         url: String?,
         port: String?,
         drive: String?,
-        prev: String?
+        prev: String?,
+
+        // Get Cred Encrypted JSON Str from getEncryptedCredJSONStr(...)
+        credEncryptedJSONStr: String?
     ): Boolean {
         insertNewColumn()
         val db = this.writableDatabase
         val contentValues = ContentValues()
-        contentValues.put(COL_2, label)
-        contentValues.put(COL_3, url)
-        contentValues.put(COL_4, port)
-        contentValues.put(COL_5, drive)
-        contentValues.put(COL_6, prev)
+        contentValues.put(LABEL, label)
+        contentValues.put(URL, url)
+        contentValues.put(PORT, port)
+        contentValues.put(DRIVE, drive)
+        contentValues.put(PREVIEW, prev)
+        contentValues.put(CRED, credEncryptedJSONStr)
         val result = db.insert(TABLE_NAME, null, contentValues)
         return result != -1L
     }
@@ -746,7 +773,7 @@ class DataBaseHelper internal constructor(context: Context?) :
         } catch (Exp: Exception) {
             // Something went wrong. Missing the database? The table?
             Log.d(
-                "existsColumnInTable",
+                logTAG,
                 "When checking whether a column exists in the table, an error occurred: " + Exp.message
             )
             false
@@ -755,60 +782,94 @@ class DataBaseHelper internal constructor(context: Context?) :
         }
     }
 
+    fun hasLabel(label: String): Boolean {
+        val db = this.writableDatabase
+        val selectString = "SELECT * FROM $TABLE_NAME WHERE $LABEL =?"
+
+        // Add the String you are searching by here.
+        // Put it in an array to avoid an unrecognized token error
+        val cursor = db.rawQuery(selectString, arrayOf(label))
+        var hasObject = false
+        if (cursor.moveToFirst()) {
+            hasObject = true
+
+            // region if you had multiple records to check for, use this region.
+            var count = 0
+            while (cursor.moveToNext()) {
+                count++
+            }
+            // here, count is records found
+            Log.d(logTAG, String.format("%d records found", count))
+
+            // endregion
+        }
+        cursor.close() // Don't forget to close your cursor
+        db.close() //AND your Database!
+        return hasObject
+    }
+
     val allData: Cursor
         get() {
             val db = this.writableDatabase
             return db.rawQuery("select * from $TABLE_NAME", null)
         }
 
-    fun urlFromLabel(sch_label: String): String {
+    fun urlFromLabel(searchedLabel: String): String {
         val db = this.writableDatabase
         var cursor: Cursor? = null
         var url = ""
         return try {
             cursor =
-                db.rawQuery("select URL from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+                db.rawQuery(
+                    "select $URL from $TABLE_NAME where $LABEL=?",
+                    arrayOf(searchedLabel + "")
+                )
             if (cursor.count > 0) {
                 cursor.moveToFirst()
-                url = cursor.getString(cursor.getColumnIndexOrThrow("URL"))
+                url = cursor.getString(cursor.getColumnIndexOrThrow(URL))
             }
             url
         } finally {
             cursor?.close()
+            db?.close()
         }
     }
 
-    fun portFromLabel(sch_label: String): String {
+    fun portFromLabel(searchedLabel: String): String {
         val db = this.writableDatabase
         var cursor: Cursor? = null
         var port: String? = ""
         return try {
             cursor =
-                db.rawQuery("select PORT from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+                db.rawQuery(
+                    "select $PORT from $TABLE_NAME where $LABEL=?",
+                    arrayOf(searchedLabel + "")
+                )
             if (cursor.count > 0) {
                 cursor.moveToFirst()
-                port = cursor.getString(cursor.getColumnIndexOrThrow("PORT"))
+                port = cursor.getString(cursor.getColumnIndexOrThrow(PORT))
             }
             port ?: ""
         } finally {
             cursor?.close()
+            db?.close()
         }
     }
 
-    fun driveFromLabel(sch_label: String): String {
+    fun driveFromLabel(searchedLabel: String): String {
         val db = this.writableDatabase
         var cursor: Cursor? = null
         var driveLink: String? = ""
         return try {
             cursor = db.rawQuery("select * from $TABLE_NAME", null)
-            if (cursor.getColumnIndex("DRIVE") != -1) {
+            if (cursor.getColumnIndex(DRIVE) != -1) {
                 cursor = db.rawQuery(
-                    "select DRIVE from $TABLE_NAME where LABEL=?",
-                    arrayOf(sch_label + "")
+                    "select $DRIVE from $TABLE_NAME where $LABEL=?",
+                    arrayOf(searchedLabel + "")
                 )
                 if (cursor.count > 0) {
                     cursor.moveToFirst()
-                    driveLink = cursor.getString(cursor.getColumnIndexOrThrow("DRIVE"))
+                    driveLink = cursor.getString(cursor.getColumnIndexOrThrow(DRIVE))
                 }
                 driveLink ?: ""
             } else {
@@ -816,65 +877,167 @@ class DataBaseHelper internal constructor(context: Context?) :
             }
         } finally {
             cursor?.close()
+            db?.close()
         }
     }
 
-    fun prevStatFromLabel(sch_label: String): String {
+    fun prevStatFromLabel(searchedLabel: String): String {
         val db = this.writableDatabase
         var cursor: Cursor? = null
         var prev: String? = ""
         return try {
             cursor =
-                db.rawQuery("select PREV from $TABLE_NAME where LABEL=?", arrayOf(sch_label + ""))
+                db.rawQuery(
+                    "select $PREVIEW from $TABLE_NAME where $LABEL=?",
+                    arrayOf(searchedLabel + "")
+                )
             if (cursor.count > 0) {
                 cursor.moveToFirst()
-                prev = cursor.getString(cursor.getColumnIndexOrThrow("PREV"))
+                prev = cursor.getString(cursor.getColumnIndexOrThrow(PREVIEW))
             }
             prev ?: ""
         } finally {
             cursor?.close()
+            db?.close()
+        }
+    }
+
+    fun credJSONFromLabel(searchedlabel: String): String {
+        val db = this.writableDatabase
+        var cursor: Cursor? = null
+        var cred = ""
+        return try {
+            cursor =
+                db.rawQuery(
+                    "select $CRED from $TABLE_NAME where $LABEL=?",
+                    arrayOf(searchedlabel + "")
+                )
+            if (cursor.count > 0) {
+                cursor.moveToFirst()
+                cred = cursor.getString(cursor.getColumnIndexOrThrow(CRED))
+            }
+            cred
+        } finally {
+            cursor?.close()
+            db?.close()
+        }
+    }
+
+    fun getEncryptedCredJSONStr(username: String, password: String): String {
+        val encryptedDataHandler = EncryptedDataHandler();
+        val encryptedUsername = encryptedDataHandler.getEncryptedData(username)
+        val encryptedPassword = encryptedDataHandler.getEncryptedData(password)
+
+        return "{" +
+
+                // Username ByteArray Pair
+                "   \"user\": {" +
+                "       \"1\": \"${
+                    Base64.getEncoder().encodeToString(encryptedUsername.first)
+                }\"," +
+                "       \"2\": \"${
+                    Base64.getEncoder().encodeToString(encryptedUsername.second)
+                }\"" +
+                "   }," +
+
+                // Password ByteArray Pair
+                "   \"pass\": {" +
+                "       \"1\": \"${
+                    Base64.getEncoder().encodeToString(encryptedPassword.first)
+                }\"," +
+                "       \"2\": \"${
+                    Base64.getEncoder().encodeToString(encryptedPassword.second)
+                }\"" +
+                "   }" +
+
+                "}"
+    }
+
+    fun getDecryptedCred(encryptedCredJSONStr: String): Pair<String, String> {
+        if (encryptedCredJSONStr.isEmpty()) {
+            // TODO: Set username and password as blank
+            Log.i("TAG", "Stored JSON is empty, keeping username and password as blank")
+            return Pair("", "")
+        } else {
+            val encryptedDataHandler = EncryptedDataHandler();
+            val storedJSON = JSONObject(encryptedCredJSONStr)
+
+            val extractedUserNamePair =
+                Pair(
+                    Base64.getDecoder()
+                        .decode(storedJSON.getJSONObject("user").get("1").toString()),
+                    Base64.getDecoder()
+                        .decode(storedJSON.getJSONObject("user").get("2").toString()),
+                );
+
+            val extractedPasswordPair =
+                Pair(
+                    Base64.getDecoder()
+                        .decode(storedJSON.getJSONObject("pass").get("1").toString()),
+                    Base64.getDecoder()
+                        .decode(storedJSON.getJSONObject("pass").get("2").toString()),
+                );
+
+            val decryptedUserName =
+                encryptedDataHandler.getDecryptedData(
+                    extractedUserNamePair.first,
+                    extractedUserNamePair.second
+                )
+            val decryptedPassword =
+                encryptedDataHandler.getDecryptedData(
+                    extractedPasswordPair.first,
+                    extractedPasswordPair.second
+                )
+
+            return Pair(decryptedUserName, decryptedPassword)
         }
     }
 
     fun updateData(
-        key_label: String,
-        label: String?,
+        old_label: String,
+        new_label: String?,
         url: String?,
         port: String?,
-        drive: String?
+        drive: String?,
+
+        // Get Cred Encrypted JSON Str from getEncryptedCredJSONStr(...)
+        credEncryptedJSONStr: String?
     ): Boolean {
         val db = this.writableDatabase
         val contentValues = ContentValues()
-        contentValues.put(COL_2, label)
-        contentValues.put(COL_3, url)
-        contentValues.put(COL_4, port)
-        contentValues.put(COL_5, drive)
-        db.update(TABLE_NAME, contentValues, "LABEL = ?", arrayOf(key_label))
+        contentValues.put(LABEL, new_label)
+        contentValues.put(URL, url)
+        contentValues.put(PORT, port)
+        contentValues.put(DRIVE, drive)
+        contentValues.put(CRED, credEncryptedJSONStr)
+        db.update(TABLE_NAME, contentValues, "$LABEL = ?", arrayOf(old_label))
         return true
     }
 
     fun updatePrevStat(key_label: String, prev_stat: String?): Boolean {
         val db = this.writableDatabase
         val contentValues = ContentValues()
-        contentValues.put(COL_6, prev_stat)
-        db.update(TABLE_NAME, contentValues, "LABEL = ?", arrayOf(key_label))
+        contentValues.put(PREVIEW, prev_stat)
+        db.update(TABLE_NAME, contentValues, "$LABEL = ?", arrayOf(key_label))
         return true
     }
 
     fun deleteData(id: String): Int {
         val db = this.writableDatabase
-        return db.delete(TABLE_NAME, "LABEL = ?", arrayOf(id))
+        return db.delete(TABLE_NAME, "$LABEL = ?", arrayOf(id))
     }
 
     companion object {
         private const val DATABASE_NAME = "Devices.db"
         private const val TABLE_NAME = "device_detail_table"
 
-        //private static final String COL_1 = "ID";
-        private const val COL_2 = "LABEL"
-        private const val COL_3 = "URL"
-        private const val COL_4 = "PORT"
-        private const val COL_5 = "DRIVE"
-        private const val COL_6 = "PREV"
+        // Column names in sequence 
+        private const val ID = "ID";
+        private const val LABEL = "LABEL"
+        private const val URL = "URL"
+        private const val PORT = "PORT"
+        private const val DRIVE = "DRIVE"
+        private const val PREVIEW = "PREV"
+        private const val CRED = "CRED"
     }
 }

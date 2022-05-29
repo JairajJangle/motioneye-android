@@ -2,13 +2,19 @@
     <string name="app_name">Motion Eye</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_add_device_detail">add_device_detail</string>
+
     <string name="device_label">Device Label</string>
     <string name="device_url">Device URL with http:// or https://</string>
     <string name="http_for_local_access">(Optional) Port (usually 8765)</string>
+    <string name="username_hint">Username (Optional)</string>
+    <string name="password_hint">Password (Optional)</string>
+    <string name="save_btn_txt">SAVE</string>
+    <string name="credential_fact">Good to know: the motionEye app stores your credentials in an encrypted format in your phone. \n\nOnly your phone can access and decrypt the credentials.</string>
+
     <string name="title_activity_web_motion_eye">web_motion_eye</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="Camera_List">Camera List</string>
+    <string name="motioneye_servers">motionEye Servers</string>
     <string name="add_camera_title">Add Camera</string>
     <string name="action_about">About</string>
     <string name="tut_sub_device_list">Tap once to view full-screen, Hold to reveal edit and delete options\n\n
@@ -21,6 +27,7 @@
     <string name="tut_title_add_button">Add your first device</string>
     <string name="tut_sub_add_button">Tap the + button to get started \nThis button can be dragged and dropped</string>
     <string name="toast_added">Added</string>
+    <string name="warning_duplicate_label">motionEye server with this Label is already present!</string>
     <string name="warning_invalid_url">Invalid URL!</string>
     <string name="warning_empty_url">Empty URL!</string>
     <string name="warning_empty_label">Empty Label!</string>
@@ -33,7 +40,7 @@
     <string name="email_icon">EMAIL_ICON</string>
     <string name="cancelled_toast">Cancelled</string>
     <string name="connecting_mE">Connecting motionEye</string>
-    <string name="connecting_gD">Connecting Google Drive</string>
+    <string name="connecting_cloud_storage">Connecting to Cloud Storage</string>
     <string name="loading">Loading…</string>
     <string name="steps_to_install_motioneye">Steps to install motionEye</string>
     <string name="imageview_for_url_icon">This is image of url icon</string>
@@ -51,11 +58,11 @@
     <string name="error_try_again">Error, try again</string>
     <string name="error_try_delete">Error Editing, try deleting the device and add again</string>
     <string name="ok_do_not_show_again">OK, do not show again.</string>
-    <string name="optional_drive_link_linked_to_motioneye">(Optional) Drive link linked to motionEye</string>
-    <string name="tut_title_drive_icon">This is the Drive icon</string>
-    <string name="tut_sub_drive_icon">Click to access motionEye drive folder to view videos and photos triggered by motion detection</string>
-    <string name="invalid_drive_warning">Invalid Google drive link!</string>
-    <string name="be_a_developer">Be a Developer</string>
+    <string name="hint_cloud_storage_url">(Optional) Cloud Storage URL</string>
+    <string name="tut_title_cloud_storage_icon">This is the Cloud Storage icon</string>
+    <string name="tut_sub_cloud_storage_icon">Click to access Cloud Storage linked to motionEye to view videos and photos triggered by motion detection</string>
+    <string name="invalid_cloud_storage_url_warning">Invalid Cloud Storage URL!</string>
+    <string name="be_a_contributor">Be a Contributor</string>
     <string name="button_for_cloud_drive">Button for Cloud Drive</string>
     <string name="button_to_collapse_and_expand_stream_preview">Button to collapse and expand stream preview</string>
     <string name="checkbox_to_select_specific_network_camera">Checkbox to select specific network camera</string>
@@ -70,6 +77,9 @@
     <string name="github_icon">GITHUB_ICON</string>
     <string name="are_you_enjoying">Are you enjoying the app?</string>
     <string name="cancel">Cancel</string>
+
+    <string name="delete_confirm_title">Confirm delete?</string>
+    <string name="delete_confirm_message">Are you sure you want to delete this server from the app</string>
 
     <!--Setting Screen related strings below-->
     <string name="summary_support">Got any queries? We are happy to help!</string>
@@ -341,11 +351,9 @@
         <item>A: Check whether you have correctly mentioned http:// or https:// before the url and the port number
         by default the port number of motionEye is 8765, you may also enter port number 8081 for streaming only</item>
 
-        <item>Q: I am not able to enter Username and Password for my motionEye camera</item>
-        <item>A: Please tap on your Password Protected camera stream to open it in full screen mode,
-            fill in the Username and Password and tick the Remember Me option.
-            If this option to enter password does not appears, click on the admin icon on the top left
-            corner to enter the Username and Password</item>
+        <item>Q: The app displays \"Incorrect Username/Password\" toast while opening my motionEye streaming server</item>
+        <item>A: By default the streaming port(8081) with basic authentication does not accept
+            \"admin\" as the username. Try setting the username to any other user (For example: \"user\")</item>
 
         <item>Q: App crashes frequently / I cannot view the camera stream</item>
         <item>A: Check whether the Android System WebView app in your device is up to date, check this link to update the app:

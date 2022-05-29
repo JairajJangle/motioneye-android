@@ -678,7 +678,6 @@ package com.jairaj.janglegmail.motioneye.utils
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.Window
@@ -687,94 +686,76 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.jairaj.janglegmail.motioneye.R
-import com.jairaj.janglegmail.motioneye.activities.HelpFAQActivity
-import com.jairaj.janglegmail.motioneye.utils.AppUtils.sendFeedback
-import com.jairaj.janglegmail.motioneye.utils.AppUtils.showRateDialog
-import com.jairaj.janglegmail.motioneye.utils.Constants.DialogType
 
-internal class CustomDialogClass //    public void onClick(View v)
-//    {
-//        switch (v.getId())
-//        {
-//            case R.id.button1:
-//                c.finish();
-//                break;
-//            case R.id.button2:
-//                dismiss();
-//                break;
-//            default:
-//                break;
-//        }
-//        dismiss();
-//    }
-    (var c: Activity) : Dialog(c) //        implements android.view.View.OnClickListener
-{
-    var d: Dialog? = null
-    private var type: DialogType? = null
-    fun dialogType(type: DialogType?) {
-        this.type = type
-    }
+internal class CustomDialogClass constructor(
+    private val activity: Activity,
+
+    private val dialogIconResId: Int?,
+    private val dialogTitleText: String?,
+    private val dialogMessageText: String?,
+
+    private val btnPositiveText: String?,
+    private val btnPositiveOnClick: (() -> Unit)?,
+
+    private val btnNegativeText: String?,
+    private val btnNegativeOnClick: (() -> Unit)?,
+
+    private val btnNeutralText: String?,
+    private val btnNeutralOnClick: (() -> Unit)?,
+) : Dialog(activity) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.custom_dialog)
         window?.setDimAmount(0.3f)
-        val positive = findViewById<Button>(R.id.button2)
-        val negative = findViewById<Button>(R.id.button1)
-        val neutral = findViewById<Button>(R.id.button3)
+        val btnPositiveResponse = findViewById<Button>(R.id.button_positive)
+        val btnNegativeResponse = findViewById<Button>(R.id.button_negative)
+        val btnNeutralResponse = findViewById<Button>(R.id.button_neutral)
         val dialogTitle = findViewById<TextView>(R.id.alertTitle)
         val dialogMessage = findViewById<TextView>(R.id.message)
         val dialogIcon = findViewById<ImageView>(R.id.icon)
         val titlePanel = findViewById<LinearLayout>(R.id.topPanel)
-        when (type) {
-            DialogType.RATE_DIALOG -> {
-                positive.text = c.getString(R.string.yes)
-                negative.text = c.getString(R.string.no)
-                neutral.visibility = View.GONE
-                dialogTitle.text = ""
-                titlePanel.visibility = View.GONE
-                dialogMessage.setText(R.string.are_you_enjoying)
-                negative.setOnClickListener {
-                    dismiss()
-                    sendFeedback(context)
-                }
-                positive.setOnClickListener {
-                    dismiss()
-                    showRateDialog(context, true)
-                }
-            }
-            DialogType.WEB_PAGE_ERROR_DIALOG -> {
-                dialogTitle.setText(R.string.uh_oh)
-                dialogIcon.setImageResource(android.R.drawable.ic_dialog_alert)
+        val messagePanel = findViewById<LinearLayout>(R.id.contentPanel)
 
-//                positive.setText("Send Feedback");
-//                negative.setText("Check Help and FAQ");
-//                neutral.setText("Cancel");
-                neutral.text = c.getString(R.string.send_feedback)
-                positive.text = c.getString(R.string.check_help_faq)
-                negative.text = c.getString(R.string.cancel)
-                dialogMessage.text = c.getString(R.string.page_error_dialog_message)
-                neutral.setOnClickListener {
-                    dismiss()
-                    sendFeedback(context)
-                    c.finish()
-                }
-                positive.setOnClickListener {
-                    dismiss()
-                    val i = Intent(c, HelpFAQActivity::class.java)
-                    c.finish()
-                    c.startActivity(i)
-                }
-                negative.setOnClickListener { if (isShowing) dismiss() }
-            }
-            else -> {
-            }
+        if (dialogIconResId != null) {
+            dialogIcon.setImageResource(dialogIconResId)
         }
 
-//        positive.setOnClickListener(this);
-//        negative.setOnClickListener(this);
-//        neutral.setOnClickListener(this);
-    } //    @Override
+        if (!dialogTitleText.isNullOrEmpty()) {
+            dialogTitle.text = dialogTitleText
+        } else {
+            titlePanel.visibility = View.GONE
+        }
+
+        if (!dialogMessageText.isNullOrEmpty()) {
+            dialogMessage.text = dialogMessageText
+        } else {
+            messagePanel.visibility = View.GONE
+        }
+
+        setButtonParams(btnPositiveResponse, btnPositiveText, btnPositiveOnClick)
+        setButtonParams(btnNegativeResponse, btnNegativeText, btnNegativeOnClick)
+        setButtonParams(btnNeutralResponse, btnNeutralText, btnNeutralOnClick)
+    }
+
+    private fun setButtonParams(
+        button: Button,
+        text: String?,
+        onClickAction: (() -> Unit)?
+    ) {
+        if (!text.isNullOrEmpty()) {
+            button.text = text
+
+            button.setOnClickListener {
+                dismiss()
+                if (onClickAction != null) {
+                    onClickAction()
+                }
+            }
+        } else {
+            button.visibility = View.GONE
+        }
+    }
 
 }

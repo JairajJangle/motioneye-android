@@ -675,290 +675,72 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.jairaj.janglegmail.motioneye.views_and_adapters
+package com.jairaj.janglegmail.motioneye.utils
 
-import android.annotation.SuppressLint
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
 import android.util.Log
-import android.view.HapticFeedbackConstants
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.webkit.HttpAuthHandler
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.children
-import androidx.recyclerview.widget.RecyclerView
-import com.jairaj.janglegmail.motioneye.R
-import com.jairaj.janglegmail.motioneye.activities.MainActivity
-import com.jairaj.janglegmail.motioneye.dataclass.CamDevice
-import com.jairaj.janglegmail.motioneye.utils.AppUtils
-import com.jairaj.janglegmail.motioneye.utils.Constants
-import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter.MyViewHolder
+import com.jairaj.janglegmail.motioneye.utils.Constants.KEYSTORE_ALIAS
+import java.security.KeyStore
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
+import javax.crypto.spec.IvParameterSpec
 
-class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<CamDevice>) :
-    RecyclerView.Adapter<MyViewHolder>() {
+class EncryptedDataHandler {
+    private val logTAG = EncryptedDataHandler::class.java.name
 
+    init {
+        val isKeyEmpty = (getKey() ?: "").toString().isEmpty()
+        if (isKeyEmpty) {
+            Log.i(logTAG, "Key is empty, generating new key")
 
-    inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val labelText: TextView = view.findViewById(R.id.title_label_text)
-        val urlPortText: TextView = view.findViewById(R.id.subtitle_url_port_text)
-        val previewView: WebView = view.findViewById(R.id.preview_webview)
-        val prevTouch: View = view.findViewById(R.id.prev_touch_overlay)
-        val expandButton: ImageView = view.findViewById(R.id.expand_button)
-        val progressBar: ProgressBar = view.findViewById(R.id.preview_progressBar)
-
-        val driveButton: ImageButton = view.findViewById(R.id.button_drive)
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        println("Bind [$holder] - Pos [$position]")
-        val camDevice = camDeviceList[position]
-        holder.labelText.text = camDevice.label
-        holder.urlPortText.text = camDevice.urlPort
-
-        if (camDevice.driveLink == "") {
-            holder.driveButton.visibility = View.GONE
-        } else {
-            holder.driveButton.visibility = View.VISIBLE
-            MainActivity.instance.tutorialTargetDriveIcon = holder.driveButton
-            Log.i(
-                "CDRA",
-                "tutorialTargetDriveIcon = ${MainActivity.instance.tutorialTargetDriveIcon}"
+            val keyGenerator =
+                KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+            val keyGenParameterSpec = KeyGenParameterSpec.Builder(
+                KEYSTORE_ALIAS,
+                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
             )
-        }
+                .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                .build()
 
-        handlePreviewView(holder, camDevice, true)
-
-        holder.itemView.setOnClickListener {
-            MainActivity.instance.camViewClickListener(camDevice, holder.itemView)
-        }
-
-        holder.itemView.setOnLongClickListener {
-            MainActivity.instance.camViewAddOnLongClickListener(position)
-            true
-        }
-
-        holder.prevTouch.setOnClickListener {
-            MainActivity.instance.onPreviewClick(holder.itemView, camDevice)
-        }
-
-        holder.prevTouch.setOnLongClickListener {
-            MainActivity.instance.camViewAddOnLongClickListener(position)
-            true
-        }
-
-        holder.expandButton.setOnClickListener {
-            handlePreviewView(holder, camDevice, false)
-            holder.expandButton.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
-        }
-
-        holder.driveButton.setOnClickListener {
-            MainActivity.instance.goToWebMotionEye(
-                camDevice.label,
-                camDevice.driveLink,
-                Constants.MODE_DRIVE
-            )
-        }
-    }
-
-    override fun getItemCount(): Int {
-        Log.d("RV", "Item size [" + camDeviceList.size + "]")
-        return camDeviceList.size
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(
-            R.layout.custom_list_item,
-            parent, false
-        )
-        return MyViewHolder(v)
-    }
-
-    private fun MainActivity.camViewClickListener(camDevice: CamDevice, view: View) {
-        if (!isListViewCheckboxEnabled) {
-            goToWebMotionEye(camDevice.label, camDevice.urlPort, Constants.MODE_CAMERA)
-            return
-        }
-        // else
-        handleListCheckedState(view)
-    }
-
-    private fun MainActivity.camViewAddOnLongClickListener(position: Int) {
-        if (!isListViewCheckboxEnabled) {
-            for ((index, deviceView) in binding.deviceListRv.children.withIndex()) {
-                val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
-                checkbox.visibility = View.VISIBLE
-
-                if (index == position)
-                    checkbox.isChecked = true
-            }
-            toggleActionbarElements()
+            keyGenerator.init(keyGenParameterSpec)
+            keyGenerator.generateKey()
         } else {
-            for ((index, deviceView) in binding.deviceListRv.children.withIndex()) {
-                val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
-                checkbox.visibility = View.GONE
-                if (index == position) checkbox.isChecked = false
-            }
-            toggleActionbarElements()
+            Log.i(logTAG, "Key is not empty, using old key")
         }
     }
 
-    private fun MainActivity.onPreviewClick(view: View, camDevice: CamDevice) {
-        Log.d(logTAG, "onPreviewClick called")
+    private fun getKey(): SecretKey? {
+        val keystore = KeyStore.getInstance("AndroidKeyStore")
+        keystore.load(null)
 
-        if (!isListViewCheckboxEnabled) {
-            val label = camDevice.label
-            val urlPort = camDevice.urlPort
-            goToWebMotionEye(label, urlPort, Constants.MODE_CAMERA)
-
-            return
-        }
-
-        handleListCheckedState(view)
+        val secretKeyEntry =
+            keystore?.getEntry(KEYSTORE_ALIAS, null) as KeyStore.SecretKeyEntry?
+        return secretKeyEntry?.secretKey
     }
 
-    private fun MainActivity.handleListCheckedState(view: View) {
-        val checkBox: CheckBox = view.findViewById(R.id.checkBox)
+    fun getEncryptedData(data: String): Pair<ByteArray, ByteArray> {
+        val cipher = Cipher.getInstance("AES/CBC/NoPadding")
 
-        checkBox.isChecked = !checkBox.isChecked
+        var temp = data
+        while (temp.toByteArray().size % 16 != 0)
+            temp += "\u0020"
 
-        val numberOfCheckedItems = itemCheckedCountInDeviceList
+        cipher.init(Cipher.ENCRYPT_MODE, getKey())
 
-        if (numberOfCheckedItems == 0) {
-            for (deviceView in binding.deviceListRv.children) {
-                val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
-                checkbox.visibility = View.GONE
-            }
-            toggleActionbarElements()
-        }
+        val ivBytes = cipher.iv
+        val encryptedBytes = cipher.doFinal(temp.toByteArray(Charsets.UTF_8))
+
+        return Pair(ivBytes, encryptedBytes)
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    internal fun handlePreviewView(
-        holder: MyViewHolder, camDevice: CamDevice, checkAll: Boolean,
-        forceCollapse: Boolean = false
-    ) {
-        val label = camDevice.label
+    fun getDecryptedData(ivBytes: ByteArray, data: ByteArray): String {
+        val cipher = Cipher.getInstance("AES/CBC/NoPadding")
+        val spec = IvParameterSpec(ivBytes)
 
-        var visibilityState = false
-        if (checkAll)
-            visibilityState = MainActivity.instance.dataBaseHelper.prevStatFromLabel(label) != "0"
-        else {
-            if (holder.previewView.visibility == View.GONE)
-                visibilityState = true
-        }
-
-        if (forceCollapse) {
-            Log.d(MainActivity.instance.logTAG, "Force Collapse = True")
-            visibilityState = false
-        }
-
-        if (visibilityState) {
-            holder.expandButton.setImageResource(R.drawable.collapse_button)
-
-            holder.previewView.visibility = View.VISIBLE
-            (holder.previewView.parent as ConstraintLayout).setPadding(
-                0,
-                0,
-                0,
-                Constants.PREVIEW_PADDING
-            )
-
-            holder.previewView.settings.javaScriptEnabled = true
-            holder.previewView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
-            holder.previewView.webViewClient = WebViewClient()
-            holder.previewView.settings.javaScriptCanOpenWindowsAutomatically = true
-            holder.previewView.settings.useWideViewPort = true
-            holder.previewView.settings.loadWithOverviewMode = true
-            holder.previewView.loadUrl(camDevice.urlPort)
-
-            val liveStream = AppUtils.checkWhetherStream(camDevice.urlPort)
-            holder.previewView.webChromeClient = object : WebChromeClient() {
-                override fun onProgressChanged(view: WebView, progress: Int) {
-                    if (view.url != "about:blank") {
-                        holder.progressBar.progress = progress
-                        if (progress == 100 || progress >= 30 && liveStream) {
-                            holder.progressBar.visibility = View.GONE
-                        } else {
-                            holder.progressBar.visibility = View.VISIBLE
-                        }
-                    }
-                }
-            }
-
-            var basicAuthTryCounter = 0
-
-            holder.previewView.webViewClient = object : WebViewClient() {
-                // TODO: Hide header and footer in streaming preview
-//                override fun onLoadResource(view: WebView?, url: String?) {
-//                    view?.loadUrl(
-//                        "javascript:(function() { " +
-//                                "document.getElementsByClassName('header')[0].style.position='absolute'; " +
-//                                "document.getElementsByClassName('header')[0].style.top=-9999px; " +
-//                                "document.getElementsByClassName('header')[0].style.left=-9999px; " +
-//                                "})()"
-//                    )
-//                    super.onLoadResource(view, url)
-//                }
-
-                // Inject Javascript to load credentials and press Login Button
-                override fun onPageFinished(view: WebView, url: String) {
-                    AppUtils.handleMotionEyeUILogin(
-                        MainActivity.instance.dataBaseHelper,
-                        label,
-                        view
-                    )
-                }
-
-                override fun onReceivedHttpAuthRequest(
-                    view: WebView,
-                    handler: HttpAuthHandler, host: String, realm: String
-                ) {
-                    if (basicAuthTryCounter > 2) {
-                        Toast.makeText(
-                            MainActivity.instance,
-                            "Incorrect Username/Password for $label",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return
-                    }
-                    AppUtils.handleHttpBasicAuthentication(
-                        MainActivity.instance.dataBaseHelper,
-                        label,
-                        handler
-                    )
-                    basicAuthTryCounter++
-                }
-            }
-            val isUpdate = MainActivity.instance.dataBaseHelper.updatePrevStat(label, "1")
-
-            if (!isUpdate)
-                Toast.makeText(
-                    MainActivity.instance,
-                    R.string.error_try_delete,
-                    Toast.LENGTH_LONG
-                )
-                    .show()
-        } else {
-            val isUpdate = MainActivity.instance.dataBaseHelper.updatePrevStat(label, "0")
-
-            if (!isUpdate)
-                Toast.makeText(
-                    MainActivity.instance,
-                    R.string.error_try_delete,
-                    Toast.LENGTH_LONG
-                )
-                    .show()
-
-            (holder.previewView.parent as ConstraintLayout).setPadding(0, 0, 0, 0)
-            holder.expandButton.setImageResource(R.drawable.expand_down)
-            holder.previewView.loadUrl("about:blank")
-            holder.previewView.visibility = View.GONE
-            holder.progressBar.visibility = View.GONE
-        }
+        cipher.init(Cipher.DECRYPT_MODE, getKey(), spec)
+        return cipher.doFinal(data).toString(Charsets.UTF_8).trim()
     }
 }

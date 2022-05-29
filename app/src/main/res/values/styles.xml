@@ -1,14 +1,48 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/motioneye_dark_grey</item>
-        <item name="fontFamily">@font/mavenpro_variable</item>
+        <item name="android:fontFamily">@font/mavenpro_variable</item>
         <item name="colorPrimaryDark">@color/motioneye_darker_grey</item>
         <item name="colorAccent">@color/motioneye_blue</item>
         <item name="android:colorBackground">@color/motioneye_grey</item>
         <item name="android:navigationBarColor">@color/transparent</item>
+
+        <item name="colorPrimaryVariant">#000000</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#2962FF</item>
+        <item name="colorSecondaryVariant">#0039CB</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorError">#F44336</item>
+        <item name="colorOnError">#FFFFFF</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#212121</item>
+        <item name="colorOnBackground">#212121</item>
+        s
+        <item name="materialButtonStyle">@style/AppButton</item>
+        <item name="textInputStyle">@style/AppTextField</item>
+    </style>
+
+    <style name="AppButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/motioneye_blue</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AppTextField" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/motioneye_dark_grey</item>
+        <item name="hintTextColor">@color/motioneye_blue</item>
+        <item name="android:textColorHint">@android:color/darker_gray</item>
+        <item name="boxStrokeColor">@color/motioneye_blue</item>
+        <item name="boxCornerRadiusTopStart">6dp</item>
+        <item name="boxCornerRadiusTopEnd">6dp</item>
+        <item name="helperTextTextColor">@color/motioneye_blue</item>
+        <item name="helperTextTextAppearance">@style/HelperTextFont</item>
+    </style>
+
+    <style name="HelperTextFont">
+        <item name="android:fontFamily">"@font/mavenpro_variable"</item>
     </style>
 
     <style name="FABStyle" parent="">
@@ -16,10 +50,11 @@
         <item name="cornerSize">16dp</item>
     </style>
 
-    <style name="CustomDialog" parent="@android:style/Theme.DeviceDefault.Dialog.Alert" tools:targetApi="lollipop_mr1">
+    <style name="CustomDialog" parent="@android:style/Theme.DeviceDefault.Dialog.Alert">
         <item name="android:background">@color/motioneye_dark_grey</item>
         <item name="colorAccent">@color/motioneye_blue</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/mavenpro_variable</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -27,16 +62,16 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="DarkPopUpStyle" parent="AppTheme">
+    <style name="DarkPopUpStyle" parent="Theme.MaterialComponents">
         <item name="android:colorBackground">@color/motioneye_grey</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"></style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"></style>
+    <style name="AppTheme.PopupOverlay" parent="Theme.MaterialComponents.Light" />
 
-    <style name="FullscreenTheme" parent="AppTheme.NoActionBar">
+    <style name="FullscreenTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:alertDialogTheme">@style/CustomDialog</item>
         <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
         <item name="android:windowActionBarOverlay">true</item>
@@ -45,26 +80,30 @@
         <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
     </style>
 
-    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+    <style name="FullscreenActionBarStyle" parent="Widget.Material3.ActionBar.Solid">
         <item name="android:colorBackground">@color/black_overlay</item>
     </style>
 
-    <style name="PreferenceScreen" parent="AppTheme">
+    <style name="PreferenceScreen" parent="Theme.MaterialComponents">
         <item name="android:textColor">@color/white</item>
+        <item name="fontFamily">@font/mavenpro_variable</item>
         <item name="android:textColorSecondary">@color/text_light_gray</item>
-        <item name="android:listDivider">@color/text_dark_grey</item>
+        <item name="android:divider">@color/divider_dark_grey</item>
         <item name="android:windowBackground">@color/motioneye_grey</item>
+        <item name="android:colorAccent">@color/motioneye_blue</item>
+        <item name="android:colorControlActivated">@color/motioneye_blue</item>
     </style>
 
-    <style name="AlertDialogCustom" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+    <style name="AlertDialogCustom" parent="Theme.MaterialComponents.Dialog.Alert">
         <item name="android:textColor">@color/motioneye_blue</item>
         <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:fontFamily">@font/mavenpro_variable</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:background">@color/motioneye_darkerish_grey</item>
         <item name="android:backgroundDimAmount">0.3</item>
     </style>
 
-    <style name="ProgressBarStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="ProgressBarStyle" parent="Theme.MaterialComponents.Dialog.Alert">
         <item name="android:color">@color/motioneye_blue</item>
     </style>
 

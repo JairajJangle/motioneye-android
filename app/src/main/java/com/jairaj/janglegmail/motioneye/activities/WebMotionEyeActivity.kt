@@ -684,6 +684,7 @@ import android.app.DownloadManager
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -706,15 +707,21 @@ import androidx.preference.PreferenceManager
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityWebMotionEyeBinding
 import com.jairaj.janglegmail.motioneye.utils.AppUtils
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.handleHttpBasicAuthentication
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.handleMotionEyeUILogin
 import com.jairaj.janglegmail.motioneye.utils.Constants
 import com.jairaj.janglegmail.motioneye.utils.Constants.downloadFolderName
 import com.jairaj.janglegmail.motioneye.utils.CustomDialogClass
+import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
 import java.io.File
 
-class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.OnRefreshListener
+
+class WebMotionEyeActivity : AppCompatActivity
     () {
     private val logTAG = WebMotionEyeActivity::class.java.name
     private lateinit var binding: ActivityWebMotionEyeBinding
+
+    private lateinit var databaseHelper: DataBaseHelper
 
     private var progressBar: ProgressDialog? = null
     private lateinit var cancelButton: AlertDialog
@@ -725,7 +732,6 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
     private var label: String = ""
     private var urlPort: String = ""
     internal var mode = -1
-    //private SwipeRefreshLayout swipe;
 
     private val mHidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
@@ -745,34 +751,13 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
         }
     }
 
-    //    private View mControlsView;
     private val mShowPart2Runnable = Runnable {
         // Delayed display of UI elements
         val actionBar = supportActionBar
         actionBar?.show()
-        //            mControlsView.setVisibility(View.VISIBLE);
     }
 
     private val mHideRunnable = Runnable { hide() }
-
-    //    @Override
-    //    public void onRefresh()
-    //    {
-    //        if(mContentView.getScrollY() == 0)
-    //        {
-    //            swipe.setRefreshing(true);
-    //            ReLoadWebView(url_port);
-    //        }
-    //        else
-    //        {
-    //            swipe.setRefreshing(false);
-    //        }
-    //    }
-
-    //    private void ReLoadWebView(String currentURL)
-    //    {
-    //        mContentView.loadUrl(currentURL);
-    //    }
 
     //permission is automatically granted on sdk<23 upon installation
     private val isStoragePermissionGranted: Boolean
@@ -799,6 +784,8 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
         val view = binding.root
         setContentView(view)
 
+        databaseHelper = DataBaseHelper(this)
+
         val bundle = intent.extras
         //Extract the data…
         if (bundle != null) {
@@ -811,17 +798,14 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
 
         fullScreenPref = prefs.getBoolean(getString(R.string.key_fullscreen), true)
 
-        //        mControlsView = findViewById(R.id.fullscreen_content_controls);
         binding.fullscreenContent.settings.javaScriptEnabled = true
         binding.fullscreenContent.settings.javaScriptCanOpenWindowsAutomatically = true
 
+        binding.fullscreenContent.settings.domStorageEnabled = true
+
         binding.fullscreenContent.settings.builtInZoomControls = true
         binding.fullscreenContent.settings.setSupportZoom(true)
-        binding.fullscreenContent.settings.displayZoomControls =
-            true // disable the default zoom controls on the page
-
-        //        swipe = findViewById(R.id.swipe);
-        //        swipe.setOnRefreshListener(this);
+        binding.fullscreenContent.settings.displayZoomControls = true
 
         CookieManager.getInstance().setAcceptCookie(true)
 
@@ -832,7 +816,7 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
             )
             Constants.MODE_DRIVE -> ProgressDialog.show(
                 this@WebMotionEyeActivity,
-                getString(R.string.connecting_gD), getString(R.string.loading)
+                getString(R.string.connecting_cloud_storage), getString(R.string.loading)
             )
             else -> ProgressDialog.show(
                 this@WebMotionEyeActivity,
@@ -874,15 +858,25 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
                 return true
             }
 
+            // Inject Javascript to load credentials and press Login Button
             override fun onPageFinished(view: WebView, url: String) {
+                handleMotionEyeUILogin(databaseHelper, label, view)
                 handleOnPageFinished()
+            }
 
-                // Enable force zoom by injecting custom meta
-                // Source: https://stackoverflow.com/questions/27236676/why-does-pinch-to-zoom-not-work-in-my-android-webview
-                val javascript =
-                    "javascript:document.getElementsByName('viewport')[0].setAttribute('content', 'initial-scale=1.0,maximum-scale=10.0');"
-                view.loadUrl(javascript)
-                //                swipe.setRefreshing(false);
+            // Inject Javascript to allow force zoom on motionEye UI
+            override fun onLoadResource(view: WebView, url: String?) {
+                view.loadUrl(
+                    "javascript:document.getElementsByName(\"viewport\")[0]" +
+                            "               .setAttribute(" +
+                            "                   \"content\", " +
+                            "                   \"width=device-width, " +
+                            "                   initial-scale=1.0, " +
+                            "                   maximum-scale=5.0, " +
+                            "                   user-scalable=yes" +
+                            "               \");"
+                )
+                super.onLoadResource(view, url)
             }
 
             override fun onReceivedError(
@@ -899,7 +893,7 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
                 view: WebView,
                 handler: HttpAuthHandler, host: String, realm: String
             ) {
-                handler.proceed("admin", "1234")
+                handleHttpBasicAuthentication(databaseHelper, label, handler)
             }
         }
 
@@ -939,9 +933,11 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
                 )
                 val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                 dm.enqueue(request)
-                Toast.makeText(baseContext, "Downloading to Downloads/motionEye", Toast.LENGTH_LONG).show()
-            }else{
-                Toast.makeText(baseContext, "Storage Permission not granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(baseContext, "Downloading to Downloads/motionEye", Toast.LENGTH_LONG)
+                    .show()
+            } else {
+                Toast.makeText(baseContext, "Storage Permission not granted", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -976,50 +972,36 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
     }
 
     internal fun showWebPageErrorDialog() {
-        val cdd = CustomDialogClass(this@WebMotionEyeActivity)
-        cdd.dialogType(Constants.DialogType.WEB_PAGE_ERROR_DIALOG)
+        fun onCheckHelpFAQPress() {
+            val intent = Intent(this, HelpFAQActivity::class.java)
+            this.finish()
+            this.startActivity(intent)
+        }
+
+        fun onSubmitFeedback() {
+            AppUtils.sendFeedback(this)
+            this.finish()
+        }
+
+        val cdd =
+            CustomDialogClass(
+                this@WebMotionEyeActivity,
+
+                android.R.drawable.ic_dialog_alert,
+                getString(R.string.uh_oh),
+                getString(R.string.page_error_dialog_message),
+
+                getString(R.string.check_help_faq),
+                ::onCheckHelpFAQPress,
+
+                getString(R.string.cancel),
+                null,
+
+                getString(R.string.send_feedback),
+                ::onSubmitFeedback
+            )
         cdd.setCancelable(false)
         cdd.show()
-
-        //        cdd.negative.setOnClickListener(new View.OnClickListener()
-        //        {
-        //            public void onClick(View view)
-        //            {
-        //                Intent i = new Intent(web_motion_eye.this, Help_FAQ.class);
-        //                finish();  //Kill the activity from which you will go to next activity
-        //                startActivity(i);
-        //            }
-        //        });
-
-        //        new AlertDialog.Builder(web_motion_eye.this)
-        //                .setTitle(page_error_title)
-        //                .setMessage("Please help us fix the issue by letting us know by sending a feedback")
-        //
-        //                .setPositiveButton("Send Feedback", new DialogInterface.OnClickListener() {
-        //                    public void onClick(DialogInterface dialog, int which)
-        //                    {
-        //                        Utils.sendFeedback(web_motion_eye.this);
-        //                    }
-        //
-        //                })
-        //
-        //                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-        //                    public void onClick(DialogInterface dialog, int which)
-        //                    {
-        //                    }
-        //                })
-        //                .setNegativeButton("Check Help and FAQ", new DialogInterface.OnClickListener()
-        //                {
-        //                    public void onClick(DialogInterface dialog, int which)
-        //                    {
-        //                        Intent i = new Intent(web_motion_eye.this, Help_FAQ.class);
-        //                        finish();  //Kill the activity from which you will go to next activity
-        //                        startActivity(i);
-        //                    }
-        //                })
-        //                .setCancelable(false)
-        //                .setIcon(android.R.drawable.ic_dialog_alert)
-        //                .show();
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

@@ -2,13 +2,19 @@
     <string name="app_name">Motion Eye</string>
     <string name="action_settings">Paramètres</string>
     <string name="title_activity_add_device_detail">add_device_detail</string>
+
     <string name="device_label">Alias de l\'appareil</string>
     <string name="device_url">URL de l\'appareil avec http:// or https://</string>
     <string name="http_for_local_access">(Optionnel) Port (généralement 8765)</string>
+    <string name="username_hint">Nom d\'utilisateur (facultatif)</string>
+    <string name="password_hint">Mot de passe (facultatif)</string>
+    <string name="save_btn_txt">ENREGISTRER</string>
+    <string name="credential_fact">Bon à savoir : l\'application motionEye stocke vos informations d\'identification dans un format crypté dans votre téléphone. \n\nSeul votre téléphone peut accéder aux informations d\'identification et les déchiffrer.</string>
+
     <string name="title_activity_web_motion_eye">web_motion_eye</string>
     <string name="dummy_button">Bouton factice</string>
     <string name="dummy_content">CONTENU\nFACTICE</string>
-    <string name="Camera_List">Liste de caméras</string>
+    <string name="motioneye_servers">Serveurs motionEye</string>
     <string name="add_camera_title">Ajouter une caméra</string>
     <string name="action_about">À propos</string>
     <string name="tut_sub_device_list">Appuyez une fois pour afficher en plein écran, maintenez enfoncé pour afficher les options de modification et de suppression\n\n
@@ -21,6 +27,7 @@
     <string name="tut_title_add_button">Ajoutez votre premier appareil</string>
     <string name="tut_sub_add_button">Appuyez sur le bouton + pour commencer \nCe bouton peut être glissé/déposé</string>
     <string name="toast_added">Ajouté</string>
+    <string name="warning_duplicate_label">Le serveur motionEye avec ce label est déjà présent !</string>
     <string name="warning_invalid_url">URL invalide !</string>
     <string name="warning_empty_url">URL vide !</string>
     <string name="warning_empty_label">Alias vide !</string>
@@ -33,7 +40,7 @@
     <string name="email_icon">EMAIL_ICON</string>
     <string name="cancelled_toast">Annulé</string>
     <string name="connecting_mE">Connection à motionEye</string>
-    <string name="connecting_gD">Connection à Google Drive</string>
+    <string name="connecting_cloud_storage">Connexion au stockage en nuage</string>
     <string name="loading">Chargement…</string>
     <string name="steps_to_install_motioneye">Étapes pour installer motionEye</string>
     <string name="imageview_for_url_icon">C\'est l\'image de l\'icône de l\'URL</string>
@@ -51,11 +58,11 @@
     <string name="error_try_again">Erreur, essayez à nouveau</string>
     <string name="error_try_delete">Erreur lors de l\'édition, essayez de supprimer l\'appareil à nouveau</string>
     <string name="ok_do_not_show_again">OK, ne plus me montrer.</string>
-    <string name="optional_drive_link_linked_to_motioneye">(Optionnel) Lien Drive lié à motionEye</string>
-    <string name="tut_title_drive_icon">C\'est l\'icône de Google Drive</string>
-    <string name="tut_sub_drive_icon">Cliquez pour accéder au dossier motionEye contenant les images et vidéos déclenchées par la détection de mouvement</string>
-    <string name="invalid_drive_warning">Lien Google Drive invalide !</string>
-    <string name="be_a_developer">Être développeur</string>
+    <string name="hint_cloud_storage_url">(Facultatif) URL de stockage dans le cloud</string>
+    <string name="tut_title_cloud_storage_icon">Voici l\'icône Cloud Storage</string>
+    <string name="tut_sub_cloud_storage_icon">Cliquez pour accéder à Cloud Storage lié à motionEye pour afficher des vidéos et des photos déclenchées par la détection de mouvement</string>
+    <string name="invalid_cloud_storage_url_warning">URL de stockage Cloud non valide !</string>
+    <string name="be_a_contributor">Être contributeur</string>
     <string name="button_for_cloud_drive">Bouton pour Google Drive</string>
     <string name="button_to_collapse_and_expand_stream_preview">Bouton permettant de masquer et d\'afficher l\'aperçu du flux</string>
     <string name="checkbox_to_select_specific_network_camera">Case à cocher pour sélectionner une caméra réseau spécifique</string>
@@ -70,6 +77,9 @@
     <string name="github_icon">GITHUB_ICON</string>
     <string name="are_you_enjoying">Appréciez-vous l\'application ?</string>
     <string name="cancel">Annuler</string>
+
+    <string name="delete_confirm_title">Confirmation de la suppression?</string>
+    <string name="delete_confirm_message">Voulez-vous vraiment supprimer ce serveur de l\'application ?</string>
 
     <!--Setting Screen related strings below-->
     <string name="summary_support">Une demande ? Nous sommes heureux de vous aider !</string>
@@ -342,11 +352,11 @@
         <item>R: Vérifiez si vous avez correctement mentionné http:// ou https:// avant l\'url et le numéro de port
         par défaut, le numéro de port de motionEye est 8765, vous pouvez également saisir le numéro de port 8081 pour la diffusion en streaming uniquement</item>
 
-        <item>Q: Je ne parviens pas à saisir le nom d\'utilisateur et le mot de passe de ma caméra motionEye</item>
-        <item>A: Veuillez appuyer sur votre flux de caméra protégé par mot de passe pour l\'ouvrir en mode plein écran,
-            remplissez le nom d\'utilisateur et le mot de passe et cochez l\'option Se souvenir de moi.
-            Si cette option pour saisir le mot de passe n\'apparaît pas, cliquez sur l\'icône d\'administration en haut à gauche
-            coin pour entrer le nom d\'utilisateur et le mot de passe</item>
+        <item>Q: L\'application affiche un toast \"Nom d\'utilisateur/mot de passe incorrect\" lors de
+            l\'ouverture de mon serveur de streaming motionEye</item>
+        <item>A: Par défaut, le port de diffusion (8081) avec authentification de base n\'accepte pas \"admin\"
+            comme nom d\'utilisateur. Essayez de définir le nom d\'utilisateur sur n\'importe quel autre utilisateur
+            (par exemple : \"user\")</item>
 
         <!-- 2 -->
         <item>Q: L\'application crash fréquemment / je ne peux pas voir le flux de la caméra</item>

@@ -676,8 +676,10 @@
  */
 package com.jairaj.janglegmail.motioneye.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
@@ -700,6 +702,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     class MainPreferenceFragment : PreferenceFragmentCompat() {
+        private val logTAG = MainPreferenceFragment::class.java.name
+
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             addPreferencesFromResource(R.xml.prefs_settings)
@@ -745,7 +749,10 @@ class SettingsActivity : AppCompatActivity() {
             // rate me click listener
             val rateMePref = findPreference<Preference>(getString(R.string.key_rate_me))
             rateMePref?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                askToRate(activity)
+                if (activity != null)
+                    askToRate(activity as Context)
+                else
+                    Log.e(logTAG, "Settings Activity context is null!")
                 true
             }
         }
