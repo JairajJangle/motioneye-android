@@ -716,6 +716,7 @@ import com.jairaj.janglegmail.motioneye.utils.Constants.DATA_IS_DRIVE_ADDED
 import com.jairaj.janglegmail.motioneye.utils.Constants.EDIT
 import com.jairaj.janglegmail.motioneye.utils.Constants.LABEL
 import com.jairaj.janglegmail.motioneye.utils.Constants.ServerMode
+import com.jairaj.janglegmail.motioneye.utils.CustomDialogClass
 import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
 import com.jairaj.janglegmail.motioneye.utils.TextDrawable
 import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter
@@ -1015,7 +1016,10 @@ class MainActivity : AppCompatActivity() {
         fetchData()
 
         binding.deviceListRv.post {
-            if (result.resultCode == Constants.DEVICE_ADDITION_CANCELLED_RESULT_CODE)
+            if (
+                result.resultCode == Constants.DEVICE_ADDITION_CANCELLED_RESULT_CODE
+                || result.resultCode != Constants.DEVICE_ADDITION_DONE_RESULT_CODE
+            )
                 return@post
 
             val isDriveAdded = result.data?.extras?.getBoolean(
@@ -1070,25 +1074,47 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
 
             R.id.delete -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    binding.toolbar.performHapticFeedback(HapticFeedbackConstants.REJECT)
-                }
 
-                if (itemCheckedCountInDeviceList > 0 && isListViewCheckboxEnabled) {
-
-                    for (deviceView in binding.deviceListRv.children) {
-                        val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
-                        if (checkbox.isChecked) {
-                            val delLabel =
-                                (deviceView.findViewById<View>(R.id.title_label_text) as TextView).text.toString()
-                            deleteData(delLabel)
-                            checkbox.isChecked = false
-                        }
+                fun deleteServerEntry() {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        binding.toolbar.performHapticFeedback(HapticFeedbackConstants.REJECT)
                     }
 
-                    fetchData()
-                    toggleActionbarElements()
+                    if (itemCheckedCountInDeviceList > 0 && isListViewCheckboxEnabled) {
+
+                        for (deviceView in binding.deviceListRv.children) {
+                            val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
+                            if (checkbox.isChecked) {
+                                val delLabel =
+                                    (deviceView.findViewById<View>(R.id.title_label_text) as TextView).text.toString()
+                                deleteData(delLabel)
+                                checkbox.isChecked = false
+                            }
+                        }
+
+                        fetchData()
+                        toggleActionbarElements()
+                    }
                 }
+
+                val cdd = CustomDialogClass(
+                    this@MainActivity,
+                    null,
+
+                    getString(R.string.delete_confirm_title),
+                    getString(R.string.delete_confirm_message),
+
+                    getString(R.string.yes),
+                    ::deleteServerEntry,
+
+                    getString(R.string.no),
+                    null,
+
+                    null,
+                    null,
+                )
+                cdd.setCancelable(true)
+                cdd.show()
             }
 
             R.id.edit -> {
