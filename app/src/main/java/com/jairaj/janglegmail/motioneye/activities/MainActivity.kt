@@ -798,7 +798,7 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             gotoAddDeviceDetail(Constants.EDIT_MODE_NEW_DEV)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                binding.fab.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                binding.fab.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
             }
         }
 
