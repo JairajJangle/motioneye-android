@@ -691,6 +691,7 @@ import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityAddDeviceDetailBinding
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.showKeyboard
 import com.jairaj.janglegmail.motioneye.utils.Constants
+import com.jairaj.janglegmail.motioneye.utils.Constants.DATA_IS_DRIVE_ADDED
 import com.jairaj.janglegmail.motioneye.utils.Constants.DEVICE_ADDITION_CANCELLED_RESULT_CODE
 import com.jairaj.janglegmail.motioneye.utils.Constants.DEVICE_ADDITION_DONE_RESULT_CODE
 import com.jairaj.janglegmail.motioneye.utils.Constants.EDIT
@@ -790,13 +791,13 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         val usernameInputString: String = binding.usernameInput.text.toString()
         val passwordInputString: String = binding.passwordInput.text.toString()
 
-        val isValidDriveURL = Patterns.WEB_URL.matcher(driveLinkInputString).matches() || driveLinkInputString.isEmpty()
+        val isValidDriveURL = Patterns.WEB_URL.matcher(driveLinkInputString)
+            .matches() || driveLinkInputString.isEmpty()
         val isValidCameraServerURL = Patterns.WEB_URL.matcher(urlInputString).matches()
-        val isAllValidEntries = (
-                isValidCameraServerURL
-                        && labelInputString != ""
-                        && isValidDriveURL
-                )
+        val isAllValidEntries =
+            labelInputString.isNotBlank()
+                    && isValidCameraServerURL
+                    && isValidDriveURL
 
         // If all mandatory entries are valid
         if (isAllValidEntries) {
@@ -817,7 +818,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                 return
             }
 
-            previousScreen.putExtra("IS_DRIVE_ADDED", isValidDriveURL)
+            previousScreen.putExtra(DATA_IS_DRIVE_ADDED, isValidDriveURL)
 
             val encryptedCredJSONStr =
                 databaseHelper.getEncryptedCredJSONStr(usernameInputString, passwordInputString)
@@ -872,7 +873,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             canProceed = false
         }
         // Empty Label Error
-        if (labelInputString == "") {
+        if (labelInputString.isBlank()) {
             if (editMode != Constants.EDIT_CANCELLED)
                 binding.labelInput.error = getString(R.string.warning_empty_label)
 
@@ -899,24 +900,13 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             baseContext, R.string.cancelled_toast,
             Toast.LENGTH_SHORT
         ).show()
-        previousScreen = Intent(baseContext, MainActivity::class.java)
-        previousScreen.putExtra("Code", 0)
-        editMode = Constants.EDIT_CANCELLED
-        saveToFile()
-        setResult(DEVICE_ADDITION_CANCELLED_RESULT_CODE, previousScreen)
 
         onBackPressed()
         return true
     }
 
     override fun onBackPressed() {
-        Toast.makeText(
-            this@AddDeviceDetailsActivity,
-            "Cancelled",
-            Toast.LENGTH_SHORT
-        )
-            .show()
-
+        setResult(DEVICE_ADDITION_CANCELLED_RESULT_CODE, previousScreen)
         finish()
     }
 }
