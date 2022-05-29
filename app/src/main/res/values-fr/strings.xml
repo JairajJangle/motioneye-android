@@ -62,7 +62,7 @@
     <string name="tut_title_cloud_storage_icon">Voici l\'icône Cloud Storage</string>
     <string name="tut_sub_cloud_storage_icon">Cliquez pour accéder à Cloud Storage lié à motionEye pour afficher des vidéos et des photos déclenchées par la détection de mouvement</string>
     <string name="invalid_cloud_storage_url_warning">URL de stockage Cloud non valide !</string>
-    <string name="be_a_developer">Être développeur</string>
+    <string name="be_a_contributor">Être contributeur</string>
     <string name="button_for_cloud_drive">Bouton pour Google Drive</string>
     <string name="button_to_collapse_and_expand_stream_preview">Bouton permettant de masquer et d\'afficher l\'aperçu du flux</string>
     <string name="checkbox_to_select_specific_network_camera">Case à cocher pour sélectionner une caméra réseau spécifique</string>

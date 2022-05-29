@@ -798,7 +798,6 @@ class WebMotionEyeActivity : AppCompatActivity
 
         fullScreenPref = prefs.getBoolean(getString(R.string.key_fullscreen), true)
 
-        //        mControlsView = findViewById(R.id.fullscreen_content_controls);
         binding.fullscreenContent.settings.javaScriptEnabled = true
         binding.fullscreenContent.settings.javaScriptCanOpenWindowsAutomatically = true
 
@@ -806,11 +805,7 @@ class WebMotionEyeActivity : AppCompatActivity
 
         binding.fullscreenContent.settings.builtInZoomControls = true
         binding.fullscreenContent.settings.setSupportZoom(true)
-        binding.fullscreenContent.settings.displayZoomControls =
-            true // disable the default zoom controls on the page
-
-        //        swipe = findViewById(R.id.swipe);
-        //        swipe.setOnRefreshListener(this);
+        binding.fullscreenContent.settings.displayZoomControls = true
 
         CookieManager.getInstance().setAcceptCookie(true)
 
