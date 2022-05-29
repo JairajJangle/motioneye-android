@@ -9,7 +9,7 @@
     <string name="username_hint">Benutzername (Optional)</string>
     <string name="password_hint">Passwort (Optional)</string>
     <string name="save_btn_txt">SPAREN</string>
-    <string name="credential_fact">Gut zu wissen: Die motionEye-App speichert Ihre Zugangsdaten in einem verschlüsselten Format auf Ihrem Telefon. \n\nNur Ihr Telefon kann auf die Anmeldeinformationen zugreifen und sie entschlüsseln.\n\n</string>
+    <string name="credential_fact">Gut zu wissen: Die motionEye-App speichert Ihre Zugangsdaten in einem verschlüsselten Format auf Ihrem Telefon. \n\nNur Ihr Telefon kann auf die Anmeldeinformationen zugreifen und sie entschlüsseln.</string>
 
     <string name="title_activity_web_motion_eye">web_motion_eye</string>
     <string name="dummy_button">Dummy Button</string>

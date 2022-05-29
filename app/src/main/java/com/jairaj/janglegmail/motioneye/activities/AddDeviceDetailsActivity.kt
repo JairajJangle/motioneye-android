@@ -771,6 +771,14 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                 false
             })
 
+        binding.passwordInput.setOnFocusChangeListener { _, b ->
+            if (b) {
+                binding.addDetailsSv.post(Runnable {
+                    binding.addDetailsSv.scrollTo(0, binding.addDetailsSv.bottom);
+                })
+            }
+        }
+
         binding.urlInput.showKeyboard()
     }
 
@@ -850,35 +858,35 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             canProceed = true
         }
         // Invalid Camera URL Error
-        else if (!isValidCameraServerURL) {
+        if (!isValidCameraServerURL) {
             if (editMode != Constants.EDIT_CANCELLED)
                 binding.urlInput.error = getString(R.string.warning_invalid_url)
 
             canProceed = false
         }
         // Empty Camera URL Error
-        else if (urlInputString == "") {
+        if (urlInputString == "") {
             if (editMode != Constants.EDIT_CANCELLED)
                 binding.urlInput.error = getString(R.string.warning_empty_url)
 
             canProceed = false
         }
         // Empty Label Error
-        else if (labelInputString == "") {
+        if (labelInputString == "") {
             if (editMode != Constants.EDIT_CANCELLED)
                 binding.labelInput.error = getString(R.string.warning_empty_label)
 
             canProceed = false
         }
         // Invalid Cloud Storage URL Error
-        else if (!isValidDriveURL) {
+        if (!isValidDriveURL) {
             if (editMode != Constants.EDIT_CANCELLED)
                 binding.driveInput.error = getString(R.string.invalid_drive_warning)
 
             canProceed = false
         }
-        if(editMode != Constants.EDIT_CANCELLED){
-            if(!canProceed){
+        if (editMode != Constants.EDIT_CANCELLED) {
+            if (!canProceed) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     binding.buttonSave.performHapticFeedback(HapticFeedbackConstants.REJECT)
                 }

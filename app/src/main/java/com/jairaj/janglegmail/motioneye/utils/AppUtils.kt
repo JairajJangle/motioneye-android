@@ -999,7 +999,7 @@ object AppUtils {
         val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         Handler(Looper.getMainLooper()).postDelayed({
             inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
-        }, 500)
+        }, 1000)
     }
 
     fun View.hideKeyboard() {

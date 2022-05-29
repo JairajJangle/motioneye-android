@@ -9,7 +9,7 @@
     <string name="username_hint">Username (Optional)</string>
     <string name="password_hint">Password (Optional)</string>
     <string name="save_btn_txt">SAVE</string>
-    <string name="credential_fact">Good to know: the motionEye app stores your credentials in an encrypted format in your phone. \n\nOnly your phone can access and decrypt the credentials.\n\n</string>
+    <string name="credential_fact">Good to know: the motionEye app stores your credentials in an encrypted format in your phone. \n\nOnly your phone can access and decrypt the credentials.</string>
 
     <string name="title_activity_web_motion_eye">web_motion_eye</string>
     <string name="dummy_button">Dummy Button</string>

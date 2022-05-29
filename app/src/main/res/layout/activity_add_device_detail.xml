@@ -25,29 +25,31 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:contentInsetStartWithNavigation="0dp"
-                app:titleMarginStart="0dp"
                 android:background="@color/motioneye_dark_grey"
-                app:popupTheme="@style/AppTheme.PopupOverlay">
+                app:contentInsetStartWithNavigation="0dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:titleMarginStart="0dp">
 
-                    <Button
-                        android:id="@+id/button_save"
-                        android:layout_width="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/motioneye_blue"
-                        android:text="@string/save_btn_txt"
-                        android:layout_gravity="end"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"/>
+                <Button
+                    android:id="@+id/button_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="10dp"
+                    android:backgroundTint="@color/motioneye_blue"
+                    android:text="@string/save_btn_txt"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
+        <!-- FIXME: Scrollview not scrolling in adjustPan mode-->
         <ScrollView
             android:id="@+id/add_details_sv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:paddingHorizontal="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,9 +64,9 @@
                     android:id="@+id/textInputLayout3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:hint="@string/device_url"
                     android:labelFor="@+id/url_input"
-                    android:layout_marginTop="6dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.500"
                     app:layout_constraintStart_toStartOf="parent"
@@ -230,9 +232,10 @@
                     android:layout_marginTop="6dp"
                     android:hint="@string/password_hint"
                     android:labelFor="@+id/password_input"
+                    android:paddingBottom="8dp"
                     app:endIconMode="password_toggle"
-                    app:helperText="@string/credential_fact"
 
+                    app:helperText="@string/credential_fact"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
 

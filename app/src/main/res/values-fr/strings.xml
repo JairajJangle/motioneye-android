@@ -9,7 +9,7 @@
     <string name="username_hint">Nom d\'utilisateur (facultatif)</string>
     <string name="password_hint">Mot de passe (facultatif)</string>
     <string name="save_btn_txt">ENREGISTRER</string>
-    <string name="credential_fact">Bon à savoir : l\'application motionEye stocke vos informations d\'identification dans un format crypté dans votre téléphone. \n\nSeul votre téléphone peut accéder aux informations d\'identification et les déchiffrer.\n\n</string>
+    <string name="credential_fact">Bon à savoir : l\'application motionEye stocke vos informations d\'identification dans un format crypté dans votre téléphone. \n\nSeul votre téléphone peut accéder aux informations d\'identification et les déchiffrer.</string>
 
     <string name="title_activity_web_motion_eye">web_motion_eye</string>
     <string name="dummy_button">Bouton factice</string>
