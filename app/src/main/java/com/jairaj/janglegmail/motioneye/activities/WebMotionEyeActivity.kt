@@ -842,7 +842,7 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
             )
             Constants.MODE_DRIVE -> ProgressDialog.show(
                 this@WebMotionEyeActivity,
-                getString(R.string.connecting_gD), getString(R.string.loading)
+                getString(R.string.connecting_cloud_storage), getString(R.string.loading)
             )
             else -> ProgressDialog.show(
                 this@WebMotionEyeActivity,

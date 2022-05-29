@@ -40,7 +40,7 @@
     <string name="email_icon">EMAIL_ICON</string>
     <string name="cancelled_toast">Cancelled</string>
     <string name="connecting_mE">Connecting motionEye</string>
-    <string name="connecting_gD">Connecting Google Drive</string>
+    <string name="connecting_cloud_storage">Connecting to Cloud Storage</string>
     <string name="loading">Loading…</string>
     <string name="steps_to_install_motioneye">Steps to install motionEye</string>
     <string name="imageview_for_url_icon">This is image of url icon</string>
@@ -58,10 +58,10 @@
     <string name="error_try_again">Error, try again</string>
     <string name="error_try_delete">Error Editing, try deleting the device and add again</string>
     <string name="ok_do_not_show_again">OK, do not show again.</string>
-    <string name="optional_drive_link_linked_to_motioneye">(Optional) Drive link linked to motionEye</string>
-    <string name="tut_title_drive_icon">This is the Drive icon</string>
-    <string name="tut_sub_drive_icon">Click to access motionEye drive folder to view videos and photos triggered by motion detection</string>
-    <string name="invalid_drive_warning">Invalid Google drive link!</string>
+    <string name="hint_cloud_storage_url">(Optional) Cloud Storage URL</string>
+    <string name="tut_title_cloud_storage_icon">This is the Cloud Storage icon</string>
+    <string name="tut_sub_cloud_storage_icon">Click to access Cloud Storage linked to motionEye to view videos and photos triggered by motion detection</string>
+    <string name="invalid_cloud_storage_url_warning">Invalid Cloud Storage URL!</string>
     <string name="be_a_developer">Be a Developer</string>
     <string name="button_for_cloud_drive">Button for Cloud Drive</string>
     <string name="button_to_collapse_and_expand_stream_preview">Button to collapse and expand stream preview</string>

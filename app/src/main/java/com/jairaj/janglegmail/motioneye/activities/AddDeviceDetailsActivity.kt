@@ -881,7 +881,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         // Invalid Cloud Storage URL Error
         if (!isValidDriveURL) {
             if (editMode != Constants.EDIT_CANCELLED)
-                binding.driveInput.error = getString(R.string.invalid_drive_warning)
+                binding.driveInput.error = getString(R.string.invalid_cloud_storage_url_warning)
 
             canProceed = false
         }

@@ -970,8 +970,8 @@ object AppUtils {
                 Log.i(logTAG, "Displaying Tutorial for Drive Button")
                 val builder = MaterialTapTargetPrompt.Builder(mainActivity)
                     .setTarget(mainActivity.tutorialTargetDriveIcon)
-                    .setPrimaryText(R.string.tut_title_drive_icon)
-                    .setSecondaryText(R.string.tut_sub_drive_icon)
+                    .setPrimaryText(R.string.tut_title_cloud_storage_icon)
+                    .setSecondaryText(R.string.tut_sub_cloud_storage_icon)
                     .setBackgroundColour(Color.argb(255, 30, 90, 136))
                     .setPromptStateChangeListener { _, _ ->
                     }

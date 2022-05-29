@@ -40,7 +40,7 @@
     <string name="email_icon">EMAIL_ICON</string>
     <string name="cancelled_toast">Abgebrochen</string>
     <string name="connecting_mE">motionEye verbinden </string>
-    <string name="connecting_gD">Google Drive verbinden</string>
+    <string name="connecting_cloud_storage">Verbinden mit Cloud-Speicher</string>
     <string name="loading">Lädt…</string>
     <string name="steps_to_install_motioneye">Schritte, um motionEye zu installieren</string>
     <string name="imageview_for_url_icon">This is image of url icon</string>
@@ -58,10 +58,10 @@
     <string name="error_try_again">Fehler, noch einmal versuchen</string>
     <string name="error_try_delete">Fehler beim Bearbeiten, versuche, das Gerät zu löschen und neu hinzuzufügen</string>
     <string name="ok_do_not_show_again">OK, nicht noch einmal zeigen.</string>
-    <string name="optional_drive_link_linked_to_motioneye">(Optional) mit motionEye verknüpfter Drive-Link</string>
-    <string name="tut_title_drive_icon">This is the Drive icon</string>
-    <string name="tut_sub_drive_icon">Click to access motionEye drive folder to view videos and photos triggered by motion detection</string>
-    <string name="invalid_drive_warning">Invalid Google drive link!</string>
+    <string name="hint_cloud_storage_url">(Optional) Cloud-Speicher-URL</string>
+    <string name="tut_title_cloud_storage_icon">Dies ist das Cloud Storage-Symbol</string>
+    <string name="tut_sub_cloud_storage_icon">Klicken Sie hier, um auf den mit motionEye verknüpften Cloud-Speicher zuzugreifen und Videos und Fotos anzuzeigen, die durch die Bewegungserkennung ausgelöst werden</string>
+    <string name="invalid_cloud_storage_url_warning">Ungültige Cloud Storage-URL!</string>
     <string name="be_a_developer">Be a Developer</string>
     <string name="button_for_cloud_drive">Button for Cloud Drive</string>
     <string name="button_to_collapse_and_expand_stream_preview">Button to collapse and expand stream preview</string>
