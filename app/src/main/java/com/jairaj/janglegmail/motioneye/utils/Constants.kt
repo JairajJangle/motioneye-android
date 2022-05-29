@@ -698,6 +698,8 @@ object Constants {
     const val DEVICE_ADDITION_CANCELLED_RESULT_CODE = 2
     const val DEVICE_ADDITION_DONE_RESULT_CODE = 0
 
+    const val KEYSTORE_ALIAS = "com.jairaj.janglegmail.motioneye"
+
     // Inside Download directory
     const val downloadFolderName = "motionEye"
 
@@ -708,12 +710,6 @@ object Constants {
         FirstTimeForDeviceAdditionAsWellAsDrive
     }
 
-    enum class FirstTimeDriveType {
-        DriveNotAddedYet,
-        FirstTime,
-        NotFirstTime
-    }
-
     //Enum for selecting Legal document to show as only 1 activity is used for it
     internal enum class LegalDocType {
         PRIVACY_POLICY, TNC
@@ -721,7 +717,7 @@ object Constants {
 
     //Enum for selecting Custom Dialog Box type
     internal enum class DialogType {
-        RATE_DIALOG, WEB_PAGE_ERROR_DIALOG,
+        RATE_DIALOG, WEB_PAGE_ERROR_DIALOG, DELETE_CONFIRMATION
     }
 
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)

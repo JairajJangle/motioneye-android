@@ -708,8 +708,6 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun init() {
-        binding.aboutToolbar.title = "About"
-
         window.navigationBarColor = getColor(R.color.motioneye_dark_grey)
 
         binding.sendFeedb.setOnClickListener(this)

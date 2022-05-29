@@ -690,7 +690,13 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
+import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
+import android.webkit.HttpAuthHandler
+import android.webkit.WebView
 import androidx.core.content.res.ResourcesCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.activities.MainActivity
 import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_DEVICE_ADDED_BEFORE
@@ -759,11 +765,34 @@ object AppUtils {
         return url_port.contains("8081")
     }
 
-    fun askToRate(context: Context?) {
+    fun askToRate(context: Context) {
         Log.d(logTAG, "askToRate called")
 
-        val customDialogClass = CustomDialogClass(context as Activity)
-        customDialogClass.dialogType(Constants.DialogType.RATE_DIALOG)
+        fun requestAppRating() {
+            showRateDialog(context, true)
+        }
+
+        fun requestFeedback() {
+            sendFeedback(context)
+        }
+
+        val customDialogClass =
+            CustomDialogClass(
+                context as Activity,
+
+                null,
+                null,
+                context.getString(R.string.are_you_enjoying),
+
+                context.getString(R.string.yes),
+                ::requestAppRating,
+
+                context.getString(R.string.no),
+                ::requestFeedback,
+
+                null,
+                null
+            )
         customDialogClass.show()
     }
 
@@ -830,9 +859,75 @@ object AppUtils {
         return !ranBefore
     }
 
+    fun RecyclerView.runWhenReady(action: () -> Unit) {
+        val globalLayoutListener = object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                action()
+                viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        }
+        viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
+    }
+
+    fun handleMotionEyeUILogin(
+        databaseHelper: DataBaseHelper,
+        label: String,
+        view: WebView
+    ) {
+        val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(label)
+
+        var username = ""
+        var password = ""
+        if (encryptedCredJSONStr.isNotEmpty()) {
+            val usernamePasswordPair = databaseHelper.getDecryptedCred(encryptedCredJSONStr)
+            username = usernamePasswordPair.first
+            password = usernamePasswordPair.second
+        }
+
+        var jsToInject = "javascript: (function() {"
+
+        if (username.isNotEmpty())
+            jsToInject += "     document.getElementById('usernameEntry').value= '$username';"
+
+        if (password.isNotEmpty())
+            jsToInject += "     document.getElementById('passwordEntry').value= '$password';"
+        jsToInject += "         document.getElementById('rememberCheck').click();"
+
+        if (username.isNotEmpty() && password.isNotEmpty()) {
+            jsToInject += "     document.querySelector(" +
+                    "               'div.button.dialog.mouse-effect.default'" +
+                    "           ).click();\n"
+        }
+
+        jsToInject += "   }) ();"
+
+        view.loadUrl(jsToInject)
+    }
+
+    fun handleHttpBasicAuthentication(
+        databaseHelper: DataBaseHelper,
+        label: String,
+        handler: HttpAuthHandler
+    ) {
+        val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(label)
+
+        var username = ""
+        var password = ""
+        if (encryptedCredJSONStr.isNotEmpty()) {
+            val usernamePasswordPair = databaseHelper.getDecryptedCred(encryptedCredJSONStr)
+            username = usernamePasswordPair.first
+            password = usernamePasswordPair.second
+        }
+
+        if (username.isNotEmpty() && password.isNotEmpty()) {
+            handler.proceed(username, password)
+        }
+    }
+
     fun displayMainActivityTutorial(
         mainActivity: MainActivity,
-        mode: Constants.DisplayTutorialMode
+        mode: Constants.DisplayTutorialMode,
+        isNextDriveTutorial: Boolean = false
     ) {
         val font = ResourcesCompat.getFont(mainActivity, R.font.mavenpro_variable)
         /* call_number usage
@@ -873,23 +968,17 @@ object AppUtils {
                     .setPromptBackground(RectanglePromptBackground())
                     .setPromptFocal(RectanglePromptFocal())
                     .setPromptStateChangeListener { _, state ->
-                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                displayMainActivityTutorial(
-                                    mainActivity,
-                                    Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive
-                                )
-                            }, 800)
-                            //display_ad();
-                        }
-                        if (state == MaterialTapTargetPrompt.STATE_DISMISSED) {
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                displayMainActivityTutorial(
-                                    mainActivity,
-                                    Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive
-                                )
-                            }, 1000)
-                            //display_ad();
+                        if (isNextDriveTutorial) {
+                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED
+                                || state == MaterialTapTargetPrompt.STATE_DISMISSED
+                            ) {
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    displayMainActivityTutorial(
+                                        mainActivity,
+                                        Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive
+                                    )
+                                }, 100)
+                            }
                         }
                     }
                     .setPrimaryTextTypeface(font, Typeface.NORMAL)
@@ -897,32 +986,49 @@ object AppUtils {
                     .show()
             }
             Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive -> {
-                MaterialTapTargetPrompt.Builder(mainActivity)
-                    .setTarget(mainActivity.targetForDriveIcon)
-                    .setPrimaryText(R.string.tut_title_drive_icon)
-                    .setSecondaryText(R.string.tut_sub_drive_icon)
+
+                if (mainActivity.tutorialTargetDriveIcon == null) return
+
+                Log.i(logTAG, "Displaying Tutorial for Drive Button")
+                val builder = MaterialTapTargetPrompt.Builder(mainActivity)
+                    .setTarget(mainActivity.tutorialTargetDriveIcon)
+                    .setPrimaryText(R.string.tut_title_cloud_storage_icon)
+                    .setSecondaryText(R.string.tut_sub_cloud_storage_icon)
                     .setBackgroundColour(Color.argb(255, 30, 90, 136))
-                    .setPromptStateChangeListener { _, _ -> /*
-                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
-                            {
-                                //display_ad();
-                            }
-                            if (state == MaterialTapTargetPrompt.STATE_DISMISSED)
-                            {
-                                //display_ad();
-                            }
-                            */
+                    .setPromptStateChangeListener { _, _ ->
                     }
                     .setPrimaryTextTypeface(font, Typeface.NORMAL)
                     .setSecondaryTextTypeface(font, Typeface.NORMAL)
-                    .show()
+
+                Handler(Looper.getMainLooper()).postDelayed(
+                    {
+                        builder.show()
+                    }, 1000
+                )
             }
             Constants.DisplayTutorialMode.FirstTimeForDeviceAdditionAsWellAsDrive -> {
                 displayMainActivityTutorial(
                     mainActivity,
-                    Constants.DisplayTutorialMode.FirstTimeDeviceAdded
+                    Constants.DisplayTutorialMode.FirstTimeDeviceAdded,
+                    true
                 )
             }
         }
     }
+
+    fun View.showKeyboard() {
+        this.requestFocus()
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        Handler(Looper.getMainLooper()).postDelayed({
+            inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+        }, 1000)
+    }
+
+    fun View.hideKeyboard() {
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+    }
+
 }

@@ -23,18 +23,17 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MainActivity"
-            android:label="Camera List"
+            android:label="@string/motioneye_servers"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".activities.AddDeviceDetailsActivity"
-            android:label="Add Device"
+            android:label="Add motionEye Server"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity
             android:name=".activities.LoadingScreenActivity"
-            android:exported="true"
-            android:label="Motion Eye">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -44,8 +43,7 @@
         </activity>
         <activity
             android:name=".activities.LoadingScreenTvActivity"
-            android:exported="true"
-            android:label="Motion Eye">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

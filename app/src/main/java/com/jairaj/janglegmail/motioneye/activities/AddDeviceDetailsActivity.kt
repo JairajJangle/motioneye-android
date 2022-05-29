@@ -678,15 +678,18 @@
 package com.jairaj.janglegmail.motioneye.activities
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Patterns
+import android.view.HapticFeedbackConstants
 import android.view.View
-import android.webkit.URLUtil
-import android.widget.TextView
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityAddDeviceDetailBinding
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.showKeyboard
 import com.jairaj.janglegmail.motioneye.utils.Constants
 import com.jairaj.janglegmail.motioneye.utils.Constants.DEVICE_ADDITION_CANCELLED_RESULT_CODE
 import com.jairaj.janglegmail.motioneye.utils.Constants.DEVICE_ADDITION_DONE_RESULT_CODE
@@ -694,23 +697,16 @@ import com.jairaj.janglegmail.motioneye.utils.Constants.EDIT
 import com.jairaj.janglegmail.motioneye.utils.Constants.LABEL
 import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
 
-//import com.google.android.gms.ads.AdView;
-//import com.google.android.gms.ads.MobileAds;
+//TODO: Check RTSP support
+
 class AddDeviceDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddDeviceDetailBinding
 
-    private lateinit var myDb: DataBaseHelper
+    private lateinit var databaseHelper: DataBaseHelper
     private var editMode = 0
-    private var editLabel: String? = ""
-    private var editPort = ""
-    private var editUrl = ""
-    private var editDriveLink = ""
+    private var prevLabel: String = ""
 
-    //private AdView mAdView;
     private var canProceed = false
-
-    //AdRequest adRequest;
-    //AdListener adListener;
     private lateinit var previousScreen: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -719,38 +715,43 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        myDb = DataBaseHelper(this)
+        databaseHelper = DataBaseHelper(this)
 
         val bundle = intent.extras
         //Extract the data…
         if (bundle != null) {
             editMode = bundle.getInt(EDIT)
-            editLabel = bundle.getString(LABEL)
+            prevLabel = bundle.getString(LABEL) ?: ""
         }
-        //MobileAds.initialize(this, "ca-app-pub-7081069887552324~4679468464");
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        val saveButton: TextView = findViewById(R.id.text_save)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         window.decorView.importantForAutofill =
             View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
         previousScreen = Intent(baseContext, MainActivity::class.java)
 
-        //display_ad();
-        setSupportActionBar(toolbar)
-
         if (editMode == Constants.EDIT_MODE_EXIST_DEV) {
-            editUrl = myDb.urlFromLabel(editLabel!!)
-            editPort = myDb.portFromLabel(editLabel!!)
-            editDriveLink = myDb.driveFromLabel(editLabel!!)
+            val editUrl = databaseHelper.urlFromLabel(prevLabel)
+            val editPort = databaseHelper.portFromLabel(prevLabel)
+            val editDriveLink = databaseHelper.driveFromLabel(prevLabel)
+            val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(prevLabel)
+
             binding.urlInput.setText(editUrl)
             binding.portInput.setText(editPort)
-            binding.labelInput.setText(editLabel)
+            binding.labelInput.setText(prevLabel)
             binding.driveInput.setText(editDriveLink)
+
+            if (encryptedCredJSONStr.isEmpty()) {
+                binding.usernameInput.setText("")
+                binding.passwordInput.setText("")
+            } else {
+                val usernamePasswordPair = databaseHelper.getDecryptedCred(encryptedCredJSONStr)
+                binding.usernameInput.setText(usernamePasswordPair.first)
+                binding.passwordInput.setText(usernamePasswordPair.second)
+            }
         }
-        saveButton.setOnClickListener {
+        binding.buttonSave.setOnClickListener {
             saveToFile()
             if (canProceed) {
                 setResult(DEVICE_ADDITION_DONE_RESULT_CODE, previousScreen)
@@ -759,6 +760,26 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             //1 to make changes on editing
             //2 to cancel edit
         }
+
+        // On pressing Keyboard Done button on password input field
+        binding.passwordInput.setOnEditorActionListener(
+            OnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    binding.buttonSave.performClick()
+                    return@OnEditorActionListener true
+                }
+                false
+            })
+
+        binding.passwordInput.setOnFocusChangeListener { _, b ->
+            if (b) {
+                binding.addDetailsSv.post(Runnable {
+                    binding.addDetailsSv.scrollTo(0, binding.addDetailsSv.bottom);
+                })
+            }
+        }
+
+        binding.urlInput.showKeyboard()
     }
 
     private fun saveToFile() {
@@ -766,34 +787,67 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         val portInputString: String = binding.portInput.text.toString()
         val labelInputString: String = binding.labelInput.text.toString()
         val driveLinkInputString: String = binding.driveInput.text.toString()
+        val usernameInputString: String = binding.usernameInput.text.toString()
+        val passwordInputString: String = binding.passwordInput.text.toString()
 
-        val isValidDriveURL = URLUtil.isValidUrl(driveLinkInputString)
+        val isValidDriveURL = Patterns.WEB_URL.matcher(driveLinkInputString).matches() || driveLinkInputString.isEmpty()
+        val isValidCameraServerURL = Patterns.WEB_URL.matcher(urlInputString).matches()
+        val isAllValidEntries = (
+                isValidCameraServerURL
+                        && labelInputString != ""
+                        && isValidDriveURL
+                )
 
-        //TODO: Check RTSP support
-        if ((URLUtil.isValidUrl(urlInputString) || urlInputString.startsWith("rtsp://"))
-            && labelInputString != ""
-            && (isValidDriveURL || driveLinkInputString == "")
-        ) {
+        // If all mandatory entries are valid
+        if (isAllValidEntries) {
+            val isLabelAlreadyPresent = databaseHelper.hasLabel(labelInputString)
+
+            // For EDIT_MODE_NEW_DEV, this condition will anyway be true as prevLabel = ""
+            val isLabelChanged = prevLabel != labelInputString
+
+            // Prevent user from adding an already existing label
+            if (isLabelAlreadyPresent && isLabelChanged) {
+                binding.labelInput.error = getString(R.string.warning_duplicate_label)
+
+                canProceed = false
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    binding.buttonSave.performHapticFeedback(HapticFeedbackConstants.REJECT)
+                }
+
+                return
+            }
+
             previousScreen.putExtra("IS_DRIVE_ADDED", isValidDriveURL)
+
+            val encryptedCredJSONStr =
+                databaseHelper.getEncryptedCredJSONStr(usernameInputString, passwordInputString)
 
             when (editMode) {
                 Constants.EDIT_MODE_NEW_DEV -> {
-                    val isInserted = myDb.insertData(
+                    val isInserted = databaseHelper.insertData(
                         labelInputString, urlInputString, portInputString,
-                        driveLinkInputString, "1"
+                        driveLinkInputString, "1",
+                        encryptedCredJSONStr
                     )
-                    if (isInserted) Toast.makeText(
-                        baseContext, R.string.toast_added,
-                        Toast.LENGTH_SHORT
-                    ).show() else Toast.makeText(
-                        baseContext, R.string.error_try_again,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    if (isInserted) {
+                        Toast.makeText(
+                            baseContext, R.string.toast_added,
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+
+                    } else {
+                        Toast.makeText(
+                            baseContext, R.string.error_try_again,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
                 Constants.EDIT_MODE_EXIST_DEV -> {
-                    val isUpdate = myDb.updateData(
-                        editLabel!!, labelInputString, urlInputString,
-                        portInputString, driveLinkInputString
+                    val isUpdate = databaseHelper.updateData(
+                        prevLabel, labelInputString, urlInputString,
+                        portInputString, driveLinkInputString,
+                        encryptedCredJSONStr
                     )
                     if (!isUpdate) Toast.makeText(
                         this@AddDeviceDetailsActivity,
@@ -802,33 +856,41 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                 }
             }
             canProceed = true
-        } else if (!(URLUtil.isValidUrl(urlInputString) || urlInputString.startsWith("rtsp://"))) {
-            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
-                baseContext,
-                R.string.warning_invalid_url,
-                Toast.LENGTH_SHORT
-            ).show()
+        }
+        // Invalid Camera URL Error
+        if (!isValidCameraServerURL) {
+            if (editMode != Constants.EDIT_CANCELLED)
+                binding.urlInput.error = getString(R.string.warning_invalid_url)
+
             canProceed = false
-        } else if (urlInputString == "") {
-            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
-                baseContext,
-                R.string.warning_empty_url,
-                Toast.LENGTH_SHORT
-            ).show()
+        }
+        // Empty Camera URL Error
+        if (urlInputString == "") {
+            if (editMode != Constants.EDIT_CANCELLED)
+                binding.urlInput.error = getString(R.string.warning_empty_url)
+
             canProceed = false
-        } else if (labelInputString == "") {
-            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
-                baseContext,
-                R.string.warning_empty_label,
-                Toast.LENGTH_SHORT
-            ).show()
+        }
+        // Empty Label Error
+        if (labelInputString == "") {
+            if (editMode != Constants.EDIT_CANCELLED)
+                binding.labelInput.error = getString(R.string.warning_empty_label)
+
             canProceed = false
-        } else if (!URLUtil.isValidUrl(driveLinkInputString)) {
-            if (editMode != Constants.EDIT_CANCELLED) Toast.makeText(
-                baseContext, R.string.invalid_drive_warning,
-                Toast.LENGTH_SHORT
-            ).show()
+        }
+        // Invalid Cloud Storage URL Error
+        if (!isValidDriveURL) {
+            if (editMode != Constants.EDIT_CANCELLED)
+                binding.driveInput.error = getString(R.string.invalid_cloud_storage_url_warning)
+
             canProceed = false
+        }
+        if (editMode != Constants.EDIT_CANCELLED) {
+            if (!canProceed) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    binding.buttonSave.performHapticFeedback(HapticFeedbackConstants.REJECT)
+                }
+            }
         }
     }
 
@@ -848,106 +910,13 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        Toast.makeText(this@AddDeviceDetailsActivity, "Cancelled", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this@AddDeviceDetailsActivity,
+            "Cancelled",
+            Toast.LENGTH_SHORT
+        )
+            .show()
+
         finish()
     }
-
-    /*public void display_tutorial(int call_number)
-    {
-//        / * call_number usage
-//         * 1 = First Time App Opened
-//         * 2 = First Time Device added
-//         * 3 = Not First Time for Device addition but First Time for Drive
-//         * 4 = First Time for device addition as well as drive
-//
-
-        if(call_number == 1)
-        {
-            new MaterialTapTargetPrompt.Builder(add_device_detail.this)
-                    .setTarget(R.id.dummy_show_case_button)
-                    .setFocalColour(Color.argb(0, 0, 0, 0))
-                    .setPrimaryText(R.string.tut_title_device_list)
-                    .setSecondaryText(R.string.tut_sub_device_list)
-                    .setBackgroundColour(Color.argb(255, 30, 90, 136))
-                    .setPromptBackground(new RectanglePromptBackground())
-                    .setPromptFocal(new RectanglePromptFocal())
-                    .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
-                    {
-                        @Override
-                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
-                        {
-                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
-                            {
-                                //display_ad();
-                            }
-                            if (state == MaterialTapTargetPrompt.STATE_DISMISSED)
-                            {
-                                //display_ad();
-                            }
-                        }
-                    })
-                    .show();
-        }
-
-        if(call_number == 2)
-        {
-            new MaterialTapTargetPrompt.Builder(add_device_detail.this)
-                    .setTarget(R.id.fab)
-                    .setPrimaryText(R.string.tut_title_add_button)
-                    .setSecondaryText(R.string.tut_sub_add_button)
-                    .setBackgroundColour(Color.argb(255, 30, 90, 136))
-                    .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
-                    {
-                        @Override
-                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
-                        {
-                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
-                            {
-                                //display_ad();
-                                // User has pressed the prompt target
-                            }
-                            if(state == MaterialTapTargetPrompt.STATE_DISMISSED)
-                            {
-                                //display_ad();
-                            }
-                        }
-                    })
-                    .show();
-        }
-    }*/
-    /*public void display_ad()
-    {
-        mAdView = findViewById(R.id.adView);
-        adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-        adListener = new AdListener();
-
-
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                mAdView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
-            public void onAdClosed() {
-                mAdView.setVisibility(View.GONE);
-            }
-        });
-    }*/
 }

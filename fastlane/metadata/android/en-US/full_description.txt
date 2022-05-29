@@ -10,4 +10,4 @@ The motionEye app - Home Surveillance System offers a native motionEye interface
 <li>Stay tuned for the next update, more awesome features are on their way.</li></ul>
 
 Please let us know what more cool features do you want by sending feedback in the about section of the app.
-¹ This feature is available when you link Google Drive with motionEye
+¹ This feature is available when you link Cloud Storage with motionEye
