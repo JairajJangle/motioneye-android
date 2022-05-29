@@ -753,7 +753,7 @@ class MainActivity : AppCompatActivity() {
         instance = this
 
         setSupportActionBar(binding.toolbar)
-        binding.toolbar.setTitle(R.string.Camera_List)
+        binding.toolbar.setTitle(R.string.motioneye_servers)
 
         binding.deviceListRv.setHasFixedSize(true)
 
@@ -1006,7 +1006,7 @@ class MainActivity : AppCompatActivity() {
         actionHelpFaq.isVisible = true
         actionSettings.isVisible = true
 
-        binding.toolbar.setTitle(R.string.Camera_List)
+        binding.toolbar.setTitle(R.string.motioneye_servers)
 
         binding.fab.show()
 
@@ -1153,7 +1153,7 @@ class MainActivity : AppCompatActivity() {
         buttonEdit.isVisible = !buttonEdit.isVisible
 
         if (binding.toolbar.title == "")
-            binding.toolbar.setTitle(R.string.Camera_List)
+            binding.toolbar.setTitle(R.string.motioneye_servers)
         else
             binding.toolbar.title = ""
         if (binding.fab.visibility == View.GONE)

@@ -14,7 +14,7 @@
     <string name="title_activity_web_motion_eye">web_motion_eye</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="Camera_List">Camera List</string>
+    <string name="motioneye_servers">motionEye Servers</string>
     <string name="add_camera_title">Add Camera</string>
     <string name="action_about">About</string>
     <string name="tut_sub_device_list">Tap once to view full-screen, Hold to reveal edit and delete options\n\n

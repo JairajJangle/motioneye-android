@@ -14,7 +14,7 @@
     <string name="title_activity_web_motion_eye">web_motion_eye</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="Camera_List">Kameraliste</string>
+    <string name="motioneye_servers">motionEye-Server</string>
     <string name="add_camera_title">Kamera hinzufügen</string>
     <string name="action_about">Über</string>
     <string name="tut_sub_device_list">Tippen Sie einmal, um den Vollbildmodus anzuzeigen. Halten Sie gedrückt, um die Bearbeitungs- und Löschoptionen anzuzeigen.\n\n

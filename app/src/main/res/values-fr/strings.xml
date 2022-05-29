@@ -14,7 +14,7 @@
     <string name="title_activity_web_motion_eye">web_motion_eye</string>
     <string name="dummy_button">Bouton factice</string>
     <string name="dummy_content">CONTENU\nFACTICE</string>
-    <string name="Camera_List">Liste de caméras</string>
+    <string name="motioneye_servers">Serveurs motionEye</string>
     <string name="add_camera_title">Ajouter une caméra</string>
     <string name="action_about">À propos</string>
     <string name="tut_sub_device_list">Appuyez une fois pour afficher en plein écran, maintenez enfoncé pour afficher les options de modification et de suppression\n\n

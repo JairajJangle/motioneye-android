@@ -23,7 +23,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MainActivity"
-            android:label="Camera List"
+            android:label="@string/motioneye_servers"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
