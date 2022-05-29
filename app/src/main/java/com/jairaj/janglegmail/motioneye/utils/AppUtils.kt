@@ -699,7 +699,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.activities.MainActivity
-import com.jairaj.janglegmail.motioneye.utils.AppUtils.showKeyboard
 import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_DEVICE_ADDED_BEFORE
 import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_DRIVE_ADDED_BEFORE
 import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_IS_APP_OPENED_BEFORE
@@ -766,11 +765,34 @@ object AppUtils {
         return url_port.contains("8081")
     }
 
-    fun askToRate(context: Context?) {
+    fun askToRate(context: Context) {
         Log.d(logTAG, "askToRate called")
 
-        val customDialogClass = CustomDialogClass(context as Activity)
-        customDialogClass.dialogType(Constants.DialogType.RATE_DIALOG)
+        fun requestAppRating() {
+            showRateDialog(context, true)
+        }
+
+        fun requestFeedback() {
+            sendFeedback(context)
+        }
+
+        val customDialogClass =
+            CustomDialogClass(
+                context as Activity,
+
+                null,
+                null,
+                context.getString(R.string.are_you_enjoying),
+
+                context.getString(R.string.yes),
+                ::requestAppRating,
+
+                context.getString(R.string.no),
+                ::requestFeedback,
+
+                null,
+                null
+            )
         customDialogClass.show()
     }
 
@@ -996,14 +1018,16 @@ object AppUtils {
 
     fun View.showKeyboard() {
         this.requestFocus()
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         Handler(Looper.getMainLooper()).postDelayed({
             inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
         }, 1000)
     }
 
     fun View.hideKeyboard() {
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
 

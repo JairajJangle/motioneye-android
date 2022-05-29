@@ -717,7 +717,7 @@ object Constants {
 
     //Enum for selecting Custom Dialog Box type
     internal enum class DialogType {
-        RATE_DIALOG, WEB_PAGE_ERROR_DIALOG,
+        RATE_DIALOG, WEB_PAGE_ERROR_DIALOG, DELETE_CONFIRMATION
     }
 
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)

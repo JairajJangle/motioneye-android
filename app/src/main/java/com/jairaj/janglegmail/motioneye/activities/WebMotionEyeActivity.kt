@@ -684,6 +684,7 @@ import android.app.DownloadManager
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -715,7 +716,7 @@ import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
 import java.io.File
 
 
-class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.OnRefreshListener
+class WebMotionEyeActivity : AppCompatActivity
     () {
     private val logTAG = WebMotionEyeActivity::class.java.name
     private lateinit var binding: ActivityWebMotionEyeBinding
@@ -731,7 +732,6 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
     private var label: String = ""
     private var urlPort: String = ""
     internal var mode = -1
-    //private SwipeRefreshLayout swipe;
 
     private val mHidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
@@ -751,34 +751,13 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
         }
     }
 
-    //    private View mControlsView;
     private val mShowPart2Runnable = Runnable {
         // Delayed display of UI elements
         val actionBar = supportActionBar
         actionBar?.show()
-        //            mControlsView.setVisibility(View.VISIBLE);
     }
 
     private val mHideRunnable = Runnable { hide() }
-
-    //    @Override
-    //    public void onRefresh()
-    //    {
-    //        if(mContentView.getScrollY() == 0)
-    //        {
-    //            swipe.setRefreshing(true);
-    //            ReLoadWebView(url_port);
-    //        }
-    //        else
-    //        {
-    //            swipe.setRefreshing(false);
-    //        }
-    //    }
-
-    //    private void ReLoadWebView(String currentURL)
-    //    {
-    //        mContentView.loadUrl(currentURL);
-    //    }
 
     //permission is automatically granted on sdk<23 upon installation
     private val isStoragePermissionGranted: Boolean
@@ -998,50 +977,36 @@ class WebMotionEyeActivity : AppCompatActivity //implements SwipeRefreshLayout.O
     }
 
     internal fun showWebPageErrorDialog() {
-        val cdd = CustomDialogClass(this@WebMotionEyeActivity)
-        cdd.dialogType(Constants.DialogType.WEB_PAGE_ERROR_DIALOG)
+        fun onCheckHelpFAQPress() {
+            val intent = Intent(this, HelpFAQActivity::class.java)
+            this.finish()
+            this.startActivity(intent)
+        }
+
+        fun onSubmitFeedback() {
+            AppUtils.sendFeedback(this)
+            this.finish()
+        }
+
+        val cdd =
+            CustomDialogClass(
+                this@WebMotionEyeActivity,
+
+                android.R.drawable.ic_dialog_alert,
+                getString(R.string.uh_oh),
+                getString(R.string.page_error_dialog_message),
+
+                getString(R.string.check_help_faq),
+                ::onCheckHelpFAQPress,
+
+                getString(R.string.cancel),
+                null,
+
+                getString(R.string.send_feedback),
+                ::onSubmitFeedback
+            )
         cdd.setCancelable(false)
         cdd.show()
-
-        //        cdd.negative.setOnClickListener(new View.OnClickListener()
-        //        {
-        //            public void onClick(View view)
-        //            {
-        //                Intent i = new Intent(web_motion_eye.this, Help_FAQ.class);
-        //                finish();  //Kill the activity from which you will go to next activity
-        //                startActivity(i);
-        //            }
-        //        });
-
-        //        new AlertDialog.Builder(web_motion_eye.this)
-        //                .setTitle(page_error_title)
-        //                .setMessage("Please help us fix the issue by letting us know by sending a feedback")
-        //
-        //                .setPositiveButton("Send Feedback", new DialogInterface.OnClickListener() {
-        //                    public void onClick(DialogInterface dialog, int which)
-        //                    {
-        //                        Utils.sendFeedback(web_motion_eye.this);
-        //                    }
-        //
-        //                })
-        //
-        //                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-        //                    public void onClick(DialogInterface dialog, int which)
-        //                    {
-        //                    }
-        //                })
-        //                .setNegativeButton("Check Help and FAQ", new DialogInterface.OnClickListener()
-        //                {
-        //                    public void onClick(DialogInterface dialog, int which)
-        //                    {
-        //                        Intent i = new Intent(web_motion_eye.this, Help_FAQ.class);
-        //                        finish();  //Kill the activity from which you will go to next activity
-        //                        startActivity(i);
-        //                    }
-        //                })
-        //                .setCancelable(false)
-        //                .setIcon(android.R.drawable.ic_dialog_alert)
-        //                .show();
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

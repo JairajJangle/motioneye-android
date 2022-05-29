@@ -790,12 +790,12 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         val usernameInputString: String = binding.usernameInput.text.toString()
         val passwordInputString: String = binding.passwordInput.text.toString()
 
-        val isValidDriveURL = Patterns.WEB_URL.matcher(driveLinkInputString).matches()
+        val isValidDriveURL = Patterns.WEB_URL.matcher(driveLinkInputString).matches() || driveLinkInputString.isEmpty()
         val isValidCameraServerURL = Patterns.WEB_URL.matcher(urlInputString).matches()
         val isAllValidEntries = (
                 isValidCameraServerURL
                         && labelInputString != ""
-                        && (isValidDriveURL || driveLinkInputString == "")
+                        && isValidDriveURL
                 )
 
         // If all mandatory entries are valid

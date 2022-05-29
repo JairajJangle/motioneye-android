@@ -78,6 +78,9 @@
     <string name="are_you_enjoying">Gefällt dir die App?</string>
     <string name="cancel">Abbrechen</string>
 
+    <string name="delete_confirm_title">Löschen bestätigen?</string>
+    <string name="delete_confirm_message">Möchten Sie diesen Server wirklich aus der App löschen?</string>
+
     <!--Setting Screen related strings below-->
     <string name="summary_support">Irgendwelche Fragen? Wir sind froh, helfen zu können!</string>
     <string name="choose_email_client">E-Mail-Client auswählen</string>

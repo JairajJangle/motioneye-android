@@ -78,6 +78,9 @@
     <string name="are_you_enjoying">Appréciez-vous l\'application ?</string>
     <string name="cancel">Annuler</string>
 
+    <string name="delete_confirm_title">Confirmation de la suppression?</string>
+    <string name="delete_confirm_message">Voulez-vous vraiment supprimer ce serveur de l\'application ?</string>
+
     <!--Setting Screen related strings below-->
     <string name="summary_support">Une demande ? Nous sommes heureux de vous aider !</string>
     <string name="choose_email_client">Choisissez un client mail</string>
