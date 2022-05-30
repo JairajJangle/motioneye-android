@@ -1,0 +1,5 @@
+• Added Username and Password Authentication feature.
+• Authentication credentials are stored in an encrypted format and only the user's device can access and decrypt the credentials.
+• Removed trailing semicolon from motionEye downloaded files.
+• Improved support for newer Android versions.
+• Improved performance.
