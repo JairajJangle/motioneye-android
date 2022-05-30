@@ -1,4 +1,5 @@
-The motionEye app is an interface to interact with the motionEye powered, all in one app. This app is completely free to use.
+The motionEye app is an interface to interact with all of your motionEye servers, all in one app.
+
 The motionEye app - Home Surveillance System offers a native motionEye interface which unlike other motionEye client apps maintains a consistent motionEye UI.
 
 <b>Prominent features:</b><ul>
@@ -6,8 +7,11 @@ The motionEye app - Home Surveillance System offers a native motionEye interface
 <li>Add multiple network cameras in the app. Though it is natively designed to work with motionEye and motionEye OS powered cameras, it also supports other network cameras.</li>
 <li>View all your network stream at once on the motionEye app's home screen itself.</li>
 <li>We got your back, navigate to Help and FAQ section of our app to fix app-related issues faster.</li>
-<li>Be a developer: the motionEye app is open-source.</li>
+<li>Be a contributor: the motionEye app is open-source.</li>
 <li>Stay tuned for the next update, more awesome features are on their way.</li></ul>
 
 Please let us know what more cool features do you want by sending feedback in the about section of the app.
-¹ This feature is available when you link Cloud Storage with motionEye
+
+
+
+¹ This feature is available when you link Google Drive with motionEye
