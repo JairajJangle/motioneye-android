@@ -27,6 +27,7 @@
   <a href="https://play.google.com/store/apps/details?id=com.jairaj.janglegmail.motioneye">
     <img src="app/src/main/res/drawable/google_play_badge.png" alt="Google Play Store Link" width="200">
   </a>
+
 ## Gallery
 
 <p align="center">
