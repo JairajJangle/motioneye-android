@@ -83,6 +83,10 @@ the [GNU GPL v3 License](https://github.com/JairajJangle/Open-CV-Catalogue/blob/
 </p>
 
 
+*You might also want to support the development of motionEye server
+project; [Link](https://github.com/motioneye-project/motioneye/wiki). This App wouldn't have existed
+without the motionEye-project*
+
 &nbsp;&nbsp;
 
 <!-- MARKDOWN LINKS & IMAGES -->
