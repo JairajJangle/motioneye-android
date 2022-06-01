@@ -7,49 +7,100 @@
     <img src="https://lh3.googleusercontent.com/oP-cPUAKRhaikPnu6FI3EISNcypEbyxZej3P9xNHvJSzk1F00ArtnYbotDvpEGDCJzJB=s180-rw" alt="Logo" width="160">
   </a>
 
+<h3 align="center">motionEye Android app</h3>
+
+<p align="center">
+    Android app to interact with all of your motionEye servers as well as other network cameras, all in one app
+    <br />
+    <a href="https://github.com/motioneye-project/motioneye/wiki/Installation"><strong>Setup motionEye server »</strong></a>
+    <br />
+    <br />
+    <a href="https://play.google.com/console/u/0/developers/8840100126138543829/app/4973513331933856680/main-store-listing">Get it on Google Play Store</a>
+    ·
+    <a href="https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/issues">Request Feature</a>
+  </p>
+
+
 <p align="center">
   <a href="https://play.google.com/store/apps/details?id=com.jairaj.janglegmail.motioneye">
     <img src="app/src/main/res/drawable/google_play_badge.png" alt="Google Play Store Link" width="200">
   </a>
+## Gallery
 
-
----
-
-
-
-# motionEye app - HomeSurveillance System
-git repository for motionEye app - Home Surveillance System, available on Google Play Store
-Beta Release here: [Beta Release Branch Link](https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/tree/beta-main)
-
-###### Want to contribute?
-If you are a developer and you wish to contribute to the app please fork the project and submit a pull request on the dev branch. Here are some user requested features that are still yet to be introduced.
-
-1. Username and password authentication
-2. Zoom and Pan ability in camera stream
-3. Android TV support
-4. Design Layout for Tablet
-5. Add support for RTSP network cameras
-
----
-###### Licensing
-motionEye app - Home Surveillance System application is licensed under [GNU GPL v3](https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE)
-
-<p align="left">
-  <a href="https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE">
-    <img src="https://www.gnu.org/graphics/gplv3-with-text-136x68.png" alt="License Logo" width="140">
+<p align="center">
+    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Chain_Ops" width="1028" >
+    <p align="center"/>
+    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" alt="Chain_Ops" width="512" >
+    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="Chain_Ops" width="512" >
+    <p align="center"/>
+	<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="Chain_Ops" width="512" >
+    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" alt="Chain_Ops" width="512" >
+    <p align="center"/>
+	<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" alt="Chain_Ops" width="512" >
+    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" alt="Chain_Ops" width="512" >
   </a>
+</p>
+<p align="center">
+  <em>motionEye Android app showcase</em>
+</p>
 
-------
+## Want to contribute?
+
+If you are a developer and you wish to contribute to the app please fork the project and submit a
+pull request on the dev branch.
+
+Here are some user requested features that are yet to be introduced.
+
+1. Local network switching when Home network is detected to save data
+2. Android TV support
+3. Make UI Tablet friendly
+4. Add support for RTSP network cameras
+
+## License
+
+Distributed under
+the [GNU GPL v3 License](https://github.com/JairajJangle/Open-CV-Catalogue/blob/master/LICENSE.txt).
+
+## Support the project development
+
+&nbsp;
+
+<p align="center" valign="center">
+  <a href="https://liberapay.com/FutureJJ/donate">
+    <img src="https://liberapay.com/assets/widgets/donate.svg" alt="LiberPay_Donation_Button" width="100" > 
+  </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href=".github/Jairaj_Jangle_Google_Pay_UPI_QR_Code.jpg">
+    <img src=".github/upi.png" alt="Paypal_Donation_Button" width="100" >
+  </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://www.paypal.com/paypalme/jairajjangle001/usd">
+    <img src=".github/paypal_donate.png" alt="Paypal_Donation_Button" width="100" >
+  </a>
+</p>
+
+
+&nbsp;&nbsp;
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
 [contributors-shield]: https://img.shields.io/github/contributors/JairajJangle/motionEye_app_HomeSurveillanceSystem?style=flat-square
+
 [contributors-url]: https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/graphs/contributors
+
 [forks-shield]: https://img.shields.io/github/forks/JairajJangle/motionEye_app_HomeSurveillanceSystem.svg?style=flat-square
+
 [forks-url]: https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/network/members
+
 [stars-shield]: https://img.shields.io/github/stars/JairajJangle/motionEye_app_HomeSurveillanceSystem.svg?style=flat-square
+
 [stars-url]: https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/stargazers
+
 [issues-shield]: https://img.shields.io/github/issues/JairajJangle/motionEye_app_HomeSurveillanceSystem.svg?style=flat-square
 [issues-url]: https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/issues
+
 [license-shield]: https://img.shields.io/github/license/JairajJangle/motionEye_app_HomeSurveillanceSystem.svg?style=flat-square
-[license-url]: https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE.txt 
+
+[license-url]: https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE.txt
