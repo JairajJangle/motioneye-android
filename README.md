@@ -31,21 +31,21 @@
 ## Gallery
 
 <p align="center">
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Chain_Ops" width="1028" >
-    <p align="center"/>
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" alt="Chain_Ops" width="512" >
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="Chain_Ops" width="512" >
-    <p align="center"/>
-	<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="Chain_Ops" width="512" >
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" alt="Chain_Ops" width="512" >
-    <p align="center"/>
-	<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" alt="Chain_Ops" width="512" >
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" alt="Chain_Ops" width="512" >
-  </a>
+    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Chain_Ops" width="964" >
+    <p align="center" >
+    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" alt="Chain_Ops" width="480" >
+    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="Chain_Ops" width="480" >
+    <p align="center" >
+	<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="Chain_Ops" width="480" >
+    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" alt="Chain_Ops" width="480" >
+    <p align="center" >
+	<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" alt="Chain_Ops" width="480" >
+    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" alt="Chain_Ops" width="480" >
 </p>
 <p align="center">
   <em>motionEye Android app showcase</em>
 </p>
+
 
 ## Want to contribute?
 
@@ -70,17 +70,18 @@ the [GNU GPL v3 License](https://github.com/JairajJangle/Open-CV-Catalogue/blob/
 
 <p align="center" valign="center">
   <a href="https://liberapay.com/FutureJJ/donate">
-    <img src="https://liberapay.com/assets/widgets/donate.svg" alt="LiberPay_Donation_Button" width="100" > 
+    <img src="https://liberapay.com/assets/widgets/donate.svg" alt="LiberPay_Donation_Button" height="50" > 
   </a>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <a href=".github/Jairaj_Jangle_Google_Pay_UPI_QR_Code.jpg">
-    <img src=".github/upi.png" alt="Paypal_Donation_Button" width="100" >
+    <img src=".github/upi.png" alt="Paypal_Donation_Button" height="50" >
   </a>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <a href="https://www.paypal.com/paypalme/jairajjangle001/usd">
-    <img src=".github/paypal_donate.png" alt="Paypal_Donation_Button" width="100" >
+    <img src=".github/paypal_donate.png" alt="Paypal_Donation_Button" height="50" >
   </a>
 </p>
+
 
 
 *You might also want to support the development of motionEye server
