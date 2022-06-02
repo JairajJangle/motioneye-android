@@ -31,16 +31,13 @@
 ## Gallery
 
 <p align="center">
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Chain_Ops" width="964" >
-    <p align="center" >
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" alt="Chain_Ops" width="480" >
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="Chain_Ops" width="480" >
-    <p align="center" >
-	<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="Chain_Ops" width="480" >
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" alt="Chain_Ops" width="480" >
-    <p align="center" >
-	<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" alt="Chain_Ops" width="480" >
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" alt="Chain_Ops" width="480" >
+    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Chain_Ops" width="960" >
+    <img style="margin-top:10px" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" alt="Chain_Ops" width="960" >
+    <img style="margin-top:10px" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="Chain_Ops" width="960" >
+	<img style="margin-top:10px" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="Chain_Ops" width="960" >
+    <img style="margin-top:10px" src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" alt="Chain_Ops" width="960" >
+	<img style="margin-top:10px" src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" alt="Chain_Ops" width="960" >
+    <img style="margin-top:10px" src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" alt="Chain_Ops" width="960" >
 </p>
 <p align="center">
   <em>motionEye Android app showcase</em>
