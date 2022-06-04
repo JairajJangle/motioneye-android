@@ -680,6 +680,8 @@ package com.jairaj.janglegmail.motioneye.utils
 import androidx.annotation.IntDef
 
 object Constants {
+    const val SPLASH_SCREEN_TIME: Long = 300 // ms
+
     //Bundle Keys
     const val KEY_LABEL = "label"
     const val KEY_URL_PORT = "url_port"

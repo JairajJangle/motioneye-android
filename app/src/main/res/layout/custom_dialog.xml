@@ -679,7 +679,7 @@
     android:id="@+id/parentPanel"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/motioneye_darkerish_grey"
+    android:background="@color/motioneye_mid_dark_grey"
     android:minWidth="300dp"
     android:orientation="vertical"
     android:paddingStart="3dip"

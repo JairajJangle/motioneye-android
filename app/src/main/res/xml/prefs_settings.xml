@@ -8,7 +8,7 @@
         app:iconSpaceReserved="false">
 
         <SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="@string/key_fullscreen"
             android:summary="@string/fullscreen_summary"
             android:title="Fullscreen streaming"

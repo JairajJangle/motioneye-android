@@ -13,14 +13,14 @@
         <item name="colorPrimaryVariant">#000000</item>
         <item name="colorOnPrimary">#FFFFFF</item>
         <item name="colorSecondary">#2962FF</item>
-        <item name="colorSecondaryVariant">#0039CB</item>
+        <item name="colorSecondaryVariant">@color/motioneye_blue</item>
         <item name="colorOnSecondary">#FFFFFF</item>
         <item name="colorError">#F44336</item>
         <item name="colorOnError">#FFFFFF</item>
         <item name="colorSurface">#FFFFFF</item>
         <item name="colorOnSurface">#212121</item>
         <item name="colorOnBackground">#212121</item>
-        s
+
         <item name="materialButtonStyle">@style/AppButton</item>
         <item name="textInputStyle">@style/AppTextField</item>
     </style>
@@ -31,6 +31,8 @@
     </style>
 
     <style name="AppTextField" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.TextInputEditText.FilledBox
+        </item>
         <item name="boxBackgroundColor">@color/motioneye_dark_grey</item>
         <item name="hintTextColor">@color/motioneye_blue</item>
         <item name="android:textColorHint">@android:color/darker_gray</item>
@@ -39,6 +41,11 @@
         <item name="boxCornerRadiusTopEnd">6dp</item>
         <item name="helperTextTextColor">@color/motioneye_blue</item>
         <item name="helperTextTextAppearance">@style/HelperTextFont</item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.TextInputEditText.FilledBox" parent="ThemeOverlay.MaterialComponents.TextInputEditText.FilledBox">
+        <item name="colorControlActivated">@color/motioneye_blue</item>
+        <item name="android:textColorPrimary">@color/white</item>
     </style>
 
     <style name="HelperTextFont">
@@ -89,9 +96,11 @@
         <item name="fontFamily">@font/mavenpro_variable</item>
         <item name="android:textColorSecondary">@color/text_light_gray</item>
         <item name="android:divider">@color/divider_dark_grey</item>
-        <item name="android:windowBackground">@color/motioneye_grey</item>
+        <item name="android:windowBackground">@color/motioneye_dark_grey</item>
         <item name="android:colorAccent">@color/motioneye_blue</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
         <item name="android:colorControlActivated">@color/motioneye_blue</item>
+        <item name="android:colorEdgeEffect">@color/motioneye_blue</item>
     </style>
 
     <style name="AlertDialogCustom" parent="Theme.MaterialComponents.Dialog.Alert">
@@ -99,7 +108,7 @@
         <item name="android:textColorSecondary">@color/white</item>
         <item name="android:fontFamily">@font/mavenpro_variable</item>
         <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:background">@color/motioneye_darkerish_grey</item>
+        <item name="android:background">@color/motioneye_mid_dark_grey</item>
         <item name="android:backgroundDimAmount">0.3</item>
     </style>
 

@@ -774,9 +774,9 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
 
         binding.passwordInput.setOnFocusChangeListener { _, b ->
             if (b) {
-                binding.addDetailsSv.post(Runnable {
-                    binding.addDetailsSv.scrollTo(0, binding.addDetailsSv.bottom);
-                })
+                binding.addDetailsSv.post {
+                    binding.addDetailsSv.scrollTo(0, binding.addDetailsSv.bottom)
+                }
             }
         }
 

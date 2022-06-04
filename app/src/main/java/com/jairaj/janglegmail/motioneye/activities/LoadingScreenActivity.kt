@@ -686,6 +686,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.jairaj.janglegmail.motioneye.databinding.ActivityLoadingScreenBinding
+import com.jairaj.janglegmail.motioneye.utils.Constants.SPLASH_SCREEN_TIME
 
 class LoadingScreenActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoadingScreenBinding
@@ -713,6 +714,6 @@ class LoadingScreenActivity : AppCompatActivity() {
 
             // close this activity
             finish()
-        }, 300)
+        }, SPLASH_SCREEN_TIME)
     }
 }

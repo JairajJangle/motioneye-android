@@ -17,7 +17,7 @@
             app:layout_constraintTop_toTopOf="@+id/textView5" />
 
         <Button
-            android:id="@+id/join_dev"
+            android:id="@+id/button_be_contributor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -30,7 +30,7 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/send_feedb"
+            app:layout_constraintBottom_toTopOf="@+id/button_send_feedback"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -50,12 +50,12 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/join_dev"
+            app:layout_constraintBottom_toTopOf="@id/button_be_contributor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/send_feedb"
+            android:id="@+id/button_send_feedback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"

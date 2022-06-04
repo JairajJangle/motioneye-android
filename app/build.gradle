@@ -10,8 +10,8 @@ android {
         applicationId "com.jairaj.janglegmail.motioneye"
         minSdkVersion 27
         targetSdkVersion 32
-        versionCode 91
-        versionName "0.9.9.2.1"
+        versionCode 92
+        versionName "0.9.9.2.2"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs 'en', 'fr', 'de'
@@ -44,13 +44,13 @@ android {
 
 repositories {
     mavenCentral()
+
+    //noinspection JcenterRepositoryObsolete
     jcenter()
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.browser:browser:1.4.0'
