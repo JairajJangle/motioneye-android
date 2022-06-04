@@ -924,7 +924,7 @@ class DataBaseHelper internal constructor(context: Context?) :
     }
 
     fun getEncryptedCredJSONStr(username: String, password: String): String {
-        val encryptedDataHandler = EncryptedDataHandler();
+        val encryptedDataHandler = EncryptedDataHandler()
         val encryptedUsername = encryptedDataHandler.getEncryptedData(username)
         val encryptedPassword = encryptedDataHandler.getEncryptedData(password)
 
@@ -959,7 +959,7 @@ class DataBaseHelper internal constructor(context: Context?) :
             Log.i("TAG", "Stored JSON is empty, keeping username and password as blank")
             return Pair("", "")
         } else {
-            val encryptedDataHandler = EncryptedDataHandler();
+            val encryptedDataHandler = EncryptedDataHandler()
             val storedJSON = JSONObject(encryptedCredJSONStr)
 
             val extractedUserNamePair =
@@ -968,7 +968,7 @@ class DataBaseHelper internal constructor(context: Context?) :
                         .decode(storedJSON.getJSONObject("user").get("1").toString()),
                     Base64.getDecoder()
                         .decode(storedJSON.getJSONObject("user").get("2").toString()),
-                );
+                )
 
             val extractedPasswordPair =
                 Pair(
@@ -976,7 +976,7 @@ class DataBaseHelper internal constructor(context: Context?) :
                         .decode(storedJSON.getJSONObject("pass").get("1").toString()),
                     Base64.getDecoder()
                         .decode(storedJSON.getJSONObject("pass").get("2").toString()),
-                );
+                )
 
             val decryptedUserName =
                 encryptedDataHandler.getDecryptedData(
@@ -1032,7 +1032,7 @@ class DataBaseHelper internal constructor(context: Context?) :
         private const val TABLE_NAME = "device_detail_table"
 
         // Column names in sequence 
-        private const val ID = "ID";
+        private const val ID = "ID"
         private const val LABEL = "LABEL"
         private const val URL = "URL"
         private const val PORT = "PORT"
