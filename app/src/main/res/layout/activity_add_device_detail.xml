@@ -86,9 +86,7 @@
                         android:inputType="textUri|textWebEditText"
                         android:nextFocusForward="@+id/port_input"
 
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textCursorDrawable="@null" />
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -120,9 +118,7 @@
                         android:inputType="number"
                         android:nextFocusForward="@+id/label_input"
 
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textCursorDrawable="@null" />
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -153,9 +149,7 @@
                         android:inputType="text"
                         android:nextFocusForward="@+id/drive_input"
 
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textCursorDrawable="@null" />
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -186,9 +180,7 @@
                         android:inputType="textUri|textWebEditText"
                         android:nextFocusForward="@id/username_input"
 
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textCursorDrawable="@null" />
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -219,9 +211,7 @@
                         android:inputType="text"
                         android:nextFocusForward="@id/password_input"
 
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textCursorDrawable="@null" />
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -256,9 +246,7 @@
 
                         android:inputType="textPassword"
 
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textCursorDrawable="@null" />
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
