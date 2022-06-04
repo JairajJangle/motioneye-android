@@ -684,6 +684,7 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.utils.Constants.SPLASH_SCREEN_TIME
 
 class LoadingScreenTvActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -701,6 +702,6 @@ class LoadingScreenTvActivity : AppCompatActivity() {
 
             // close this activity
             finish()
-        }, 300)
+        }, SPLASH_SCREEN_TIME)
     }
 }

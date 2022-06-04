@@ -710,9 +710,9 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
     private fun init() {
         window.navigationBarColor = getColor(R.color.motioneye_dark_grey)
 
-        binding.sendFeedb.setOnClickListener(this)
+        binding.buttonSendFeedback.setOnClickListener(this)
         binding.buttonInstallSteps.setOnClickListener(this)
-        binding.joinDev.setOnClickListener(this)
+        binding.buttonBeContributor.setOnClickListener(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -739,12 +739,13 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v) {
-            binding.sendFeedb -> sendFeedback(this@AboutActivity)
+            binding.buttonSendFeedback -> sendFeedback(this@AboutActivity)
             binding.buttonInstallSteps -> {
-                val motionEyeSteps = "https://github.com/motioneye-project/motioneye/wiki/Installation"
+                val motionEyeSteps =
+                    "https://github.com/motioneye-project/motioneye/wiki/Installation"
                 openInChrome(motionEyeSteps, this@AboutActivity)
             }
-            binding.joinDev -> {
+            binding.buttonBeContributor -> {
                 val motionEyeSteps =
                     "https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem"
                 openInChrome(motionEyeSteps, this@AboutActivity)

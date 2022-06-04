@@ -731,7 +731,7 @@ class MainActivity : AppCompatActivity() {
     internal var isListViewCheckboxEnabled = false
 
     // Flag to store if Auto Open is enabled in Settings
-    private var isAutoOpenCamEnabled = true
+    private var isAutoOpenCamEnabled: Boolean = true
 
     // UI Elements
     private lateinit var buttonDelete: MenuItem

@@ -44,13 +44,13 @@ android {
 
 repositories {
     mavenCentral()
+
+    //noinspection JcenterRepositoryObsolete
     jcenter()
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.browser:browser:1.4.0'
@@ -59,6 +59,9 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.2.0"
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.google.android.material:material:1.6.0'
+
+    implementation 'com.google.android.play:review:2.0.0'
+    implementation 'com.google.android.play:review-ktx:2.0.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
