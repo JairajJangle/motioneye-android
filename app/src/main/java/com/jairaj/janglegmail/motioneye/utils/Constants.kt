@@ -717,11 +717,6 @@ object Constants {
         PRIVACY_POLICY, TNC
     }
 
-    //Enum for selecting Custom Dialog Box type
-    internal enum class DialogType {
-        RATE_DIALOG, WEB_PAGE_ERROR_DIALOG, DELETE_CONFIRMATION
-    }
-
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     @IntDef(MODE_CAMERA, MODE_DRIVE)
     internal annotation class ServerMode
