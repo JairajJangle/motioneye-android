@@ -874,10 +874,10 @@ object AppUtils {
         label: String,
         view: WebView
     ) {
-        val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(label)
-
         var username = ""
         var password = ""
+
+        val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(label)
         if (encryptedCredJSONStr.isNotEmpty()) {
             val usernamePasswordPair = databaseHelper.getDecryptedCred(encryptedCredJSONStr)
             username = usernamePasswordPair.first

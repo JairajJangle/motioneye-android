@@ -770,11 +770,11 @@ class DataBaseHelper internal constructor(context: Context?) :
 
             // getColumnIndex() gives us the index (0 to ...) of the column - otherwise we get a -1
             mCursor.getColumnIndex(columnToCheck) != -1
-        } catch (Exp: Exception) {
+        } catch (e: Exception) {
             // Something went wrong. Missing the database? The table?
             Log.d(
                 logTAG,
-                "When checking whether a column exists in the table, an error occurred: " + Exp.message
+                "When checking whether a column exists in the table, an error occurred: $e"
             )
             false
         } finally {
@@ -829,6 +829,9 @@ class DataBaseHelper internal constructor(context: Context?) :
                 url = cursor.getString(cursor.getColumnIndexOrThrow(URL))
             }
             url
+        } catch (e: Exception) {
+            Log.e(logTAG, "Error while reading URL from Database: $e")
+            ""
         } finally {
             cursor?.close()
             db?.close()
@@ -850,6 +853,9 @@ class DataBaseHelper internal constructor(context: Context?) :
                 port = cursor.getString(cursor.getColumnIndexOrThrow(PORT))
             }
             port ?: ""
+        } catch (e: Exception) {
+            Log.e(logTAG, "Error while reading Port from Database: $e")
+            ""
         } finally {
             cursor?.close()
             db?.close()
@@ -875,6 +881,9 @@ class DataBaseHelper internal constructor(context: Context?) :
             } else {
                 ""
             }
+        } catch (e: Exception) {
+            Log.e(logTAG, "Error while reading Drive URL from Database: $e")
+            ""
         } finally {
             cursor?.close()
             db?.close()
@@ -896,13 +905,16 @@ class DataBaseHelper internal constructor(context: Context?) :
                 prev = cursor.getString(cursor.getColumnIndexOrThrow(PREVIEW))
             }
             prev ?: ""
+        } catch (e: Exception) {
+            Log.e(logTAG, "Error while reading Preview Status from Database: $e")
+            ""
         } finally {
             cursor?.close()
             db?.close()
         }
     }
 
-    fun credJSONFromLabel(searchedlabel: String): String {
+    fun credJSONFromLabel(searchedLabel: String): String {
         val db = this.writableDatabase
         var cursor: Cursor? = null
         var cred = ""
@@ -910,13 +922,16 @@ class DataBaseHelper internal constructor(context: Context?) :
             cursor =
                 db.rawQuery(
                     "select $CRED from $TABLE_NAME where $LABEL=?",
-                    arrayOf(searchedlabel + "")
+                    arrayOf(searchedLabel + "")
                 )
             if (cursor.count > 0) {
                 cursor.moveToFirst()
                 cred = cursor.getString(cursor.getColumnIndexOrThrow(CRED))
             }
             cred
+        } catch (e: Exception) {
+            Log.e(logTAG, "Error while reading Credential JSON from Database: $e")
+            ""
         } finally {
             cursor?.close()
             db?.close()
@@ -924,7 +939,7 @@ class DataBaseHelper internal constructor(context: Context?) :
     }
 
     fun getEncryptedCredJSONStr(username: String, password: String): String {
-        val encryptedDataHandler = EncryptedDataHandler();
+        val encryptedDataHandler = EncryptedDataHandler()
         val encryptedUsername = encryptedDataHandler.getEncryptedData(username)
         val encryptedPassword = encryptedDataHandler.getEncryptedData(password)
 
@@ -959,7 +974,7 @@ class DataBaseHelper internal constructor(context: Context?) :
             Log.i("TAG", "Stored JSON is empty, keeping username and password as blank")
             return Pair("", "")
         } else {
-            val encryptedDataHandler = EncryptedDataHandler();
+            val encryptedDataHandler = EncryptedDataHandler()
             val storedJSON = JSONObject(encryptedCredJSONStr)
 
             val extractedUserNamePair =
@@ -968,7 +983,7 @@ class DataBaseHelper internal constructor(context: Context?) :
                         .decode(storedJSON.getJSONObject("user").get("1").toString()),
                     Base64.getDecoder()
                         .decode(storedJSON.getJSONObject("user").get("2").toString()),
-                );
+                )
 
             val extractedPasswordPair =
                 Pair(
@@ -976,7 +991,7 @@ class DataBaseHelper internal constructor(context: Context?) :
                         .decode(storedJSON.getJSONObject("pass").get("1").toString()),
                     Base64.getDecoder()
                         .decode(storedJSON.getJSONObject("pass").get("2").toString()),
-                );
+                )
 
             val decryptedUserName =
                 encryptedDataHandler.getDecryptedData(
@@ -1032,7 +1047,7 @@ class DataBaseHelper internal constructor(context: Context?) :
         private const val TABLE_NAME = "device_detail_table"
 
         // Column names in sequence 
-        private const val ID = "ID";
+        private const val ID = "ID"
         private const val LABEL = "LABEL"
         private const val URL = "URL"
         private const val PORT = "PORT"
