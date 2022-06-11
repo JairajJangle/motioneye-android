@@ -85,6 +85,7 @@
         <item name="android:windowBackground">@null</item>
         <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
         <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+        <item name="android:colorEdgeEffect">@color/motioneye_blue</item>
     </style>
 
     <style name="FullscreenActionBarStyle" parent="Widget.Material3.ActionBar.Solid">
@@ -105,6 +106,7 @@
 
     <style name="AlertDialogCustom" parent="Theme.MaterialComponents.Dialog.Alert">
         <item name="android:textColor">@color/motioneye_blue</item>
+        <item name="android:colorAccent">@color/motioneye_blue</item>
         <item name="android:textColorSecondary">@color/white</item>
         <item name="android:fontFamily">@font/mavenpro_variable</item>
         <item name="android:textColorPrimary">@color/white</item>
