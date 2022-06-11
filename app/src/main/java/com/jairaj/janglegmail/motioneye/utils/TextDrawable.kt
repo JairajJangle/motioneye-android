@@ -710,12 +710,12 @@ class TextDrawable(context: Context, text: CharSequence) : Drawable() {
         )
         mPaint.textSize = textSize
         mDrawable = AppCompatResources.getDrawable(context, R.drawable.circle_shortcut)
-        mDrawable!!.setBounds(0, 0, mDrawable.intrinsicWidth, mDrawable.intrinsicHeight)
+        mDrawable?.setBounds(0, 0, mDrawable.intrinsicWidth, mDrawable.intrinsicHeight)
     }
 
     override fun draw(canvas: Canvas) {
         val bounds = bounds
-        mDrawable!!.draw(canvas)
+        mDrawable?.draw(canvas)
         mPaint.getTextBounds(text.toString(), 0, text.length, mTextBounds)
         val textHeight = mTextBounds.bottom - mTextBounds.top
         canvas.drawText(
@@ -725,9 +725,10 @@ class TextDrawable(context: Context, text: CharSequence) : Drawable() {
         )
     }
 
+    @Deprecated("Deprecated in Java")
     override fun getOpacity(): Int = mPaint.alpha
-    override fun getIntrinsicWidth(): Int = mDrawable!!.intrinsicWidth
-    override fun getIntrinsicHeight(): Int = mDrawable!!.intrinsicHeight
+    override fun getIntrinsicWidth(): Int = mDrawable?.intrinsicWidth ?: 0
+    override fun getIntrinsicHeight(): Int = mDrawable?.intrinsicHeight ?: 0
 
     override fun setAlpha(alpha: Int) {
         mPaint.alpha = alpha

@@ -804,8 +804,10 @@ class WebMotionEyeActivity : AppCompatActivity
         binding.fullscreenContent.settings.domStorageEnabled = true
 
         binding.fullscreenContent.settings.builtInZoomControls = true
-        binding.fullscreenContent.settings.setSupportZoom(true)
-        binding.fullscreenContent.settings.displayZoomControls = true
+        binding.fullscreenContent.settings.displayZoomControls = false
+
+        binding.fullscreenContent.settings.loadWithOverviewMode = true
+        binding.fullscreenContent.settings.useWideViewPort = true
 
         CookieManager.getInstance().setAcceptCookie(true)
 
@@ -853,8 +855,11 @@ class WebMotionEyeActivity : AppCompatActivity
         }
 
         binding.fullscreenContent.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                view.loadUrl(url)
+            override fun shouldOverrideUrlLoading(
+                view: WebView,
+                request: WebResourceRequest
+            ): Boolean {
+                view.loadUrl(request.url.toString())
                 return true
             }
 
@@ -879,6 +884,7 @@ class WebMotionEyeActivity : AppCompatActivity
                 super.onLoadResource(view, url)
             }
 
+            // FIXME: On using new method signature for onReceivedError, playing video gives net::ERR_FAILED error
             override fun onReceivedError(
                 view: WebView,
                 errorCode: Int,

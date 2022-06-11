@@ -874,10 +874,10 @@ object AppUtils {
         label: String,
         view: WebView
     ) {
-        val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(label)
-
         var username = ""
         var password = ""
+
+        val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(label)
         if (encryptedCredJSONStr.isNotEmpty()) {
             val usernamePasswordPair = databaseHelper.getDecryptedCred(encryptedCredJSONStr)
             username = usernamePasswordPair.first
@@ -1024,11 +1024,4 @@ object AppUtils {
             inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
         }, 1000)
     }
-
-    fun View.hideKeyboard() {
-        val inputMethodManager =
-            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
-    }
-
 }

@@ -688,7 +688,7 @@ import android.widget.TextView
 import com.jairaj.janglegmail.motioneye.R
 
 internal class CustomDialogClass constructor(
-    private val activity: Activity,
+    activity: Activity,
 
     private val dialogIconResId: Int?,
     private val dialogTitleText: String?,
