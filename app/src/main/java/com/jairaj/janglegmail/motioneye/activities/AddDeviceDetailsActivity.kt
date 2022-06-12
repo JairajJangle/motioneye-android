@@ -704,8 +704,8 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddDeviceDetailBinding
 
     private lateinit var databaseHelper: DataBaseHelper
-    private var editMode = 0
-    private var prevLabel: String = ""
+    private var editMode = Constants.EDIT_MODE_NEW_DEV
+    private var previousLabel: String = ""
 
     private var canProceed = false
     private lateinit var previousScreen: Intent
@@ -722,7 +722,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         //Extract the data…
         if (bundle != null) {
             editMode = bundle.getInt(EDIT)
-            prevLabel = bundle.getString(LABEL) ?: ""
+            previousLabel = bundle.getString(LABEL) ?: ""
         }
 
         setSupportActionBar(binding.toolbar)
@@ -733,14 +733,14 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         previousScreen = Intent(baseContext, MainActivity::class.java)
 
         if (editMode == Constants.EDIT_MODE_EXIST_DEV) {
-            val editUrl = databaseHelper.urlFromLabel(prevLabel)
-            val editPort = databaseHelper.portFromLabel(prevLabel)
-            val editDriveLink = databaseHelper.driveFromLabel(prevLabel)
-            val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(prevLabel)
+            val editUrl = databaseHelper.urlFromLabel(previousLabel)
+            val editPort = databaseHelper.portFromLabel(previousLabel)
+            val editDriveLink = databaseHelper.driveFromLabel(previousLabel)
+            val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(previousLabel)
 
             binding.urlInput.setText(editUrl)
             binding.portInput.setText(editPort)
-            binding.labelInput.setText(prevLabel)
+            binding.labelInput.setText(previousLabel)
             binding.driveInput.setText(editDriveLink)
 
             if (encryptedCredJSONStr.isEmpty()) {
@@ -804,16 +804,17 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             val isLabelAlreadyPresent = databaseHelper.hasLabel(labelInputString)
 
             // For EDIT_MODE_NEW_DEV, this condition will anyway be true as prevLabel = ""
-            val isLabelChanged = prevLabel != labelInputString
+            val isLabelChanged = previousLabel != labelInputString
 
             // Prevent user from adding an already existing label
             if (isLabelAlreadyPresent && isLabelChanged) {
                 binding.labelInput.error = getString(R.string.warning_duplicate_label)
 
-                canProceed = false
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     binding.buttonSave.performHapticFeedback(HapticFeedbackConstants.REJECT)
                 }
+
+                canProceed = false
 
                 return
             }
@@ -826,8 +827,11 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             when (editMode) {
                 Constants.EDIT_MODE_NEW_DEV -> {
                     val isInserted = databaseHelper.insertData(
-                        labelInputString, urlInputString, portInputString,
-                        driveLinkInputString, "1",
+                        labelInputString,
+                        urlInputString,
+                        portInputString,
+                        driveLinkInputString,
+                        Constants.PREVIEW_ON,
                         encryptedCredJSONStr
                     )
                     if (isInserted) {
@@ -846,8 +850,11 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                 }
                 Constants.EDIT_MODE_EXIST_DEV -> {
                     val isUpdate = databaseHelper.updateData(
-                        prevLabel, labelInputString, urlInputString,
-                        portInputString, driveLinkInputString,
+                        previousLabel,
+                        labelInputString,
+                        urlInputString,
+                        portInputString,
+                        driveLinkInputString,
                         encryptedCredJSONStr
                     )
                     if (!isUpdate) Toast.makeText(

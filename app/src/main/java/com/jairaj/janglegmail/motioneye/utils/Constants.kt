@@ -735,4 +735,7 @@ object Constants {
 
     const val RATE_CRITERIA_INSTALL_DAYS = 14
     const val RATE_CRITERIA_LAUNCH_TIMES = 20
+
+    const val PREVIEW_ON = "1"
+    const val PREVIEW_OFF = "0"
 }

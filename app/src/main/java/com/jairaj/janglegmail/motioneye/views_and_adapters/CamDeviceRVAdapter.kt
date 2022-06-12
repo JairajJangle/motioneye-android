@@ -846,7 +846,8 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
 
         var visibilityState = false
         if (checkAll)
-            visibilityState = MainActivity.instance.dataBaseHelper.prevStatFromLabel(label) != "0"
+            visibilityState =
+                MainActivity.instance.dataBaseHelper.prevStatFromLabel(label) != Constants.PREVIEW_OFF
         else {
             if (holder.previewView.visibility == View.GONE)
                 visibilityState = true
@@ -934,7 +935,8 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
                     basicAuthTryCounter++
                 }
             }
-            val isUpdate = MainActivity.instance.dataBaseHelper.updatePrevStat(label, "1")
+            val isUpdate =
+                MainActivity.instance.dataBaseHelper.updatePrevStat(label, Constants.PREVIEW_ON)
 
             if (!isUpdate)
                 Toast.makeText(
@@ -944,7 +946,8 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
                 )
                     .show()
         } else {
-            val isUpdate = MainActivity.instance.dataBaseHelper.updatePrevStat(label, "0")
+            val isUpdate =
+                MainActivity.instance.dataBaseHelper.updatePrevStat(label, Constants.PREVIEW_OFF)
 
             if (!isUpdate)
                 Toast.makeText(
