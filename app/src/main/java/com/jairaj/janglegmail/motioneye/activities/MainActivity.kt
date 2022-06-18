@@ -734,11 +734,11 @@ class MainActivity : AppCompatActivity() {
     private var isAutoOpenCamEnabled: Boolean = true
 
     // UI Elements
-    private lateinit var buttonDelete: MenuItem
-    private lateinit var buttonEdit: MenuItem
-    private lateinit var actionAbout: MenuItem
-    private lateinit var actionHelpFaq: MenuItem
-    private lateinit var actionSettings: MenuItem
+    private var buttonDelete: MenuItem? = null
+    private var buttonEdit: MenuItem? = null
+    private var actionAbout: MenuItem? = null
+    private var actionHelpFaq: MenuItem? = null
+    private var actionSettings: MenuItem? = null
 
     private val deviceList: MutableList<CamDevice> = mutableListOf()
 
@@ -1001,11 +1001,11 @@ class MainActivity : AppCompatActivity() {
     private var resultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
-        buttonDelete.isVisible = false
-        buttonEdit.isVisible = false
-        actionAbout.isVisible = true
-        actionHelpFaq.isVisible = true
-        actionSettings.isVisible = true
+        buttonDelete?.isVisible = false
+        buttonEdit?.isVisible = false
+        actionAbout?.isVisible = true
+        actionHelpFaq?.isVisible = true
+        actionSettings?.isVisible = true
 
         binding.toolbar.setTitle(R.string.motioneye_servers)
 
@@ -1172,11 +1172,11 @@ class MainActivity : AppCompatActivity() {
 
     // Toggle visibility of action bar elements
     internal fun toggleActionbarElements() {
-        actionAbout.isVisible = !actionAbout.isVisible
-        actionHelpFaq.isVisible = !actionHelpFaq.isVisible
-        actionSettings.isVisible = !actionSettings.isVisible
-        buttonDelete.isVisible = !buttonDelete.isVisible
-        buttonEdit.isVisible = !buttonEdit.isVisible
+        actionAbout?.isVisible = !(actionAbout?.isVisible ?: true)
+        actionHelpFaq?.isVisible = !(actionHelpFaq?.isVisible ?: true)
+        actionSettings?.isVisible = !(actionSettings?.isVisible ?: true)
+        buttonDelete?.isVisible = !(buttonDelete?.isVisible ?: true)
+        buttonEdit?.isVisible = !(buttonEdit?.isVisible ?: true)
 
         if (binding.toolbar.title == "")
             binding.toolbar.setTitle(R.string.motioneye_servers)
