@@ -714,6 +714,7 @@ import com.jairaj.janglegmail.motioneye.utils.AppUtils.showRateDialog
 import com.jairaj.janglegmail.motioneye.utils.Constants
 import com.jairaj.janglegmail.motioneye.utils.Constants.DATA_IS_DRIVE_ADDED
 import com.jairaj.janglegmail.motioneye.utils.Constants.EDIT
+import com.jairaj.janglegmail.motioneye.utils.Constants.EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE
 import com.jairaj.janglegmail.motioneye.utils.Constants.LABEL
 import com.jairaj.janglegmail.motioneye.utils.Constants.ServerMode
 import com.jairaj.janglegmail.motioneye.utils.CustomDialogClass
@@ -1220,9 +1221,5 @@ class MainActivity : AppCompatActivity() {
 
             finish()
         }
-    }
-
-    companion object {
-        private const val EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1
     }
 }
