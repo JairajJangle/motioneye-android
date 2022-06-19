@@ -722,6 +722,7 @@ import com.jairaj.janglegmail.motioneye.utils.TextDrawable
 import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter
 
 class MainActivity : AppCompatActivity() {
+    internal lateinit var instance: MainActivity
     internal val logTAG = MainActivity::class.java.name
     internal lateinit var binding: ActivityMainBinding
     internal lateinit var dataBaseHelper: DataBaseHelper
@@ -748,8 +749,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
         instance = this
 
@@ -949,7 +949,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val camDevicesRvAdapter = CamDeviceRVAdapter(deviceList)
+        val camDevicesRvAdapter = CamDeviceRVAdapter(deviceList, instance)
         binding.deviceListRv.adapter = camDevicesRvAdapter
 
         try {
@@ -1059,7 +1059,7 @@ class MainActivity : AppCompatActivity() {
 
     // Inflate the menu; this adds items to the action bar if it is present.
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_add__cam, menu)
+        menuInflater.inflate(R.menu.menu_add_cam, menu)
         buttonDelete = menu.findItem(R.id.delete)
         buttonEdit = menu.findItem(R.id.edit)
         actionAbout = menu.findItem(R.id.action_about)
@@ -1223,9 +1223,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        lateinit var instance: MainActivity
-
         private const val EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1
-
     }
 }

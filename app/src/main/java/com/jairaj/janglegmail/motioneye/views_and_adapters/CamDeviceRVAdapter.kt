@@ -698,9 +698,10 @@ import com.jairaj.janglegmail.motioneye.utils.AppUtils
 import com.jairaj.janglegmail.motioneye.utils.Constants
 import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter.MyViewHolder
 
-class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<CamDevice>) :
-    RecyclerView.Adapter<MyViewHolder>() {
-
+class CamDeviceRVAdapter internal constructor(
+    private val camDeviceList: List<CamDevice>,
+    private val mainActivity: MainActivity
+) : RecyclerView.Adapter<MyViewHolder>() {
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val labelText: TextView = view.findViewById(R.id.title_label_text)
@@ -724,30 +725,30 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
             holder.driveButton.visibility = View.GONE
         } else {
             holder.driveButton.visibility = View.VISIBLE
-            MainActivity.instance.tutorialTargetDriveIcon = holder.driveButton
+            mainActivity.tutorialTargetDriveIcon = holder.driveButton
             Log.i(
                 "CDRA",
-                "tutorialTargetDriveIcon = ${MainActivity.instance.tutorialTargetDriveIcon}"
+                "tutorialTargetDriveIcon = ${mainActivity.tutorialTargetDriveIcon}"
             )
         }
 
         handlePreviewView(holder, camDevice, true)
 
         holder.itemView.setOnClickListener {
-            MainActivity.instance.camViewClickListener(camDevice, holder.itemView)
+            mainActivity.camViewClickListener(camDevice, holder.itemView)
         }
 
         holder.itemView.setOnLongClickListener {
-            MainActivity.instance.camViewAddOnLongClickListener(position)
+            mainActivity.camViewAddOnLongClickListener(position)
             true
         }
 
         holder.prevTouch.setOnClickListener {
-            MainActivity.instance.onPreviewClick(holder.itemView, camDevice)
+            mainActivity.onPreviewClick(holder.itemView, camDevice)
         }
 
         holder.prevTouch.setOnLongClickListener {
-            MainActivity.instance.camViewAddOnLongClickListener(position)
+            mainActivity.camViewAddOnLongClickListener(position)
             true
         }
 
@@ -757,7 +758,7 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
         }
 
         holder.driveButton.setOnClickListener {
-            MainActivity.instance.goToWebMotionEye(
+            mainActivity.goToWebMotionEye(
                 camDevice.label,
                 camDevice.driveLink,
                 Constants.MODE_DRIVE
@@ -847,14 +848,14 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
         var visibilityState = false
         if (checkAll)
             visibilityState =
-                MainActivity.instance.dataBaseHelper.prevStatFromLabel(label) != Constants.PREVIEW_OFF
+                mainActivity.dataBaseHelper.prevStatFromLabel(label) != Constants.PREVIEW_OFF
         else {
             if (holder.previewView.visibility == View.GONE)
                 visibilityState = true
         }
 
         if (forceCollapse) {
-            Log.d(MainActivity.instance.logTAG, "Force Collapse = True")
+            Log.d(mainActivity.logTAG, "Force Collapse = True")
             visibilityState = false
         }
 
@@ -909,7 +910,7 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
                 // Inject Javascript to load credentials and press Login Button
                 override fun onPageFinished(view: WebView, url: String) {
                     AppUtils.handleMotionEyeUILogin(
-                        MainActivity.instance.dataBaseHelper,
+                        mainActivity.dataBaseHelper,
                         label,
                         view
                     )
@@ -921,14 +922,14 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
                 ) {
                     if (basicAuthTryCounter > 2) {
                         Toast.makeText(
-                            MainActivity.instance,
+                            mainActivity,
                             "Incorrect Username/Password for $label",
                             Toast.LENGTH_SHORT
                         ).show()
                         return
                     }
                     AppUtils.handleHttpBasicAuthentication(
-                        MainActivity.instance.dataBaseHelper,
+                        mainActivity.dataBaseHelper,
                         label,
                         handler
                     )
@@ -936,22 +937,22 @@ class CamDeviceRVAdapter internal constructor(private val camDeviceList: List<Ca
                 }
             }
             val isUpdate =
-                MainActivity.instance.dataBaseHelper.updatePrevStat(label, Constants.PREVIEW_ON)
+                mainActivity.dataBaseHelper.updatePrevStat(label, Constants.PREVIEW_ON)
 
             if (!isUpdate)
                 Toast.makeText(
-                    MainActivity.instance,
+                    mainActivity,
                     R.string.error_try_delete,
                     Toast.LENGTH_LONG
                 )
                     .show()
         } else {
             val isUpdate =
-                MainActivity.instance.dataBaseHelper.updatePrevStat(label, Constants.PREVIEW_OFF)
+                mainActivity.dataBaseHelper.updatePrevStat(label, Constants.PREVIEW_OFF)
 
             if (!isUpdate)
                 Toast.makeText(
-                    MainActivity.instance,
+                    mainActivity,
                     R.string.error_try_delete,
                     Toast.LENGTH_LONG
                 )
