@@ -796,7 +796,7 @@ class WebMotionEyeActivity : AppCompatActivity
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-        fullScreenPref = prefs.getBoolean(getString(R.string.key_fullscreen), true)
+        fullScreenPref = prefs.getBoolean(getString(R.string.key_fullscreen), false)
 
         binding.fullscreenContent.settings.javaScriptEnabled = true
         binding.fullscreenContent.settings.javaScriptCanOpenWindowsAutomatically = true
