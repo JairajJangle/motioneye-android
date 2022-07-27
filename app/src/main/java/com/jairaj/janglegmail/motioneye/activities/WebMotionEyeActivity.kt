@@ -885,6 +885,7 @@ class WebMotionEyeActivity : AppCompatActivity
             }
 
             // FIXME: On using new method signature for onReceivedError, playing video gives net::ERR_FAILED error
+            @Deprecated("Deprecated in Java")
             override fun onReceivedError(
                 view: WebView,
                 errorCode: Int,

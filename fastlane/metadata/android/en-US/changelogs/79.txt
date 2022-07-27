@@ -1,6 +1,6 @@
 * Added German and French Translation
 * Optimized app and bug fixes
-* Converted Java project to Koltin
+* Converted Java project to Kotlin
 * Added settings screen to change
 * Default fullscreen view mode
 * Auto open camera option.

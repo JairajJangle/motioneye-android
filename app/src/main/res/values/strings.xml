@@ -67,7 +67,7 @@
     <string name="button_to_collapse_and_expand_stream_preview">Button to collapse and expand stream preview</string>
     <string name="checkbox_to_select_specific_network_camera">Checkbox to select specific network camera</string>
     <string name="help_and_faq">Help and FAQ</string>
-    <string name="materialtaptargetprompt">MaterialTapTargetPrompt</string>
+    <string name="material_tap_target_prompt">MaterialTapTargetPrompt</string>
     <string name="apache_license">Apache License</string>
     <string name="icons">Icons</string>
     <string name="app_version_text">App Version</string>
