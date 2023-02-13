@@ -695,12 +695,13 @@ class DataBaseHelper internal constructor(context: Context?) :
             "create table " + TABLE_NAME
                     + "(" +
                     "$ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "$LABEL TEXT," +
+                    "$LABEL TEXT NOT NULL UNIQUE," +
                     "$URL TEXT," +
                     "$PORT TEXT," +
                     "$DRIVE TEXT," +
                     "$PREVIEW TEXT" +
                     "$CRED TEXT" +
+                    "$SORT_INDEX NUMBER" +
                     ")"
         )
     }
@@ -711,6 +712,7 @@ class DataBaseHelper internal constructor(context: Context?) :
         if (newVersion > oldVersion) {
             db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $PREVIEW TEXT")
             db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $CRED TEXT")
+            db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $SORT_INDEX NUMBER")
         }
     }
 
@@ -732,6 +734,14 @@ class DataBaseHelper internal constructor(context: Context?) :
         ) {
             db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $CRED TEXT  DEFAULT ''")
         }
+        if (!existsColumnInTable(
+                db,
+                TABLE_NAME,
+                SORT_INDEX
+            )
+        ) {
+            db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $SORT_INDEX NUMBER  DEFAULT -1")
+        }
     }
 
     fun insertData(
@@ -740,6 +750,7 @@ class DataBaseHelper internal constructor(context: Context?) :
         port: String?,
         drive: String?,
         prev: String?,
+        sortIndex: Int?,
 
         // Get Cred Encrypted JSON Str from getEncryptedCredJSONStr(...)
         credEncryptedJSONStr: String?
@@ -752,9 +763,24 @@ class DataBaseHelper internal constructor(context: Context?) :
         contentValues.put(PORT, port)
         contentValues.put(DRIVE, drive)
         contentValues.put(PREVIEW, prev)
+        contentValues.put(SORT_INDEX, sortIndex)
         contentValues.put(CRED, credEncryptedJSONStr)
         val result = db.insert(TABLE_NAME, null, contentValues)
         return result != -1L
+    }
+
+    fun getHighestSortIndex(): Int {
+        val db = this.writableDatabase
+
+        val cursor = db.rawQuery("SELECT MAX($SORT_INDEX) FROM $TABLE_NAME", null)
+        var highestValue = 0
+
+        if (cursor.moveToFirst()) {
+            highestValue = cursor.getInt(0)
+        }
+        cursor.close()
+
+        return highestValue
     }
 
     @Suppress("SameParameterValue")
@@ -811,7 +837,10 @@ class DataBaseHelper internal constructor(context: Context?) :
     val allData: Cursor
         get() {
             val db = this.writableDatabase
-            return db.rawQuery("select * from $TABLE_NAME", null)
+            return db.rawQuery(
+                "select * from $TABLE_NAME ORDER BY $SORT_INDEX ASC;",
+                null
+            )
         }
 
     fun urlFromLabel(searchedLabel: String): String {
@@ -914,6 +943,36 @@ class DataBaseHelper internal constructor(context: Context?) :
         }
     }
 
+    fun sortIndexFromLabel(searchedLabel: String): Int {
+        val db = this.writableDatabase
+        var cursor: Cursor? = null
+        var sortIndex: Int? = -1
+        return try {
+            cursor =
+                db.rawQuery(
+                    "select $SORT_INDEX from $TABLE_NAME where $LABEL=?",
+                    arrayOf(searchedLabel + "")
+                )
+            if (cursor.count > 0) {
+                cursor.moveToFirst()
+                sortIndex = cursor.getInt(cursor.getColumnIndexOrThrow(SORT_INDEX))
+            }
+            sortIndex ?: -1
+        } catch (e: Exception) {
+            Log.e(logTAG, "Error while reading Sort Index from Database: $e")
+            -1
+        } finally {
+            cursor?.close()
+            db?.close()
+        }
+    }
+
+    fun updateSortIndexForLabel(targetLabel: String, sortIndex: Int) {
+        val sql = "UPDATE $TABLE_NAME SET SORT_INDEX = ? WHERE LABEL = ?"
+        val db = this.writableDatabase
+        db.execSQL(sql, arrayOf(sortIndex, targetLabel))
+    }
+
     fun credJSONFromLabel(searchedLabel: String): String {
         val db = this.writableDatabase
         var cursor: Cursor? = null
@@ -1014,6 +1073,7 @@ class DataBaseHelper internal constructor(context: Context?) :
         url: String?,
         port: String?,
         drive: String?,
+        sortIndex: Int?,
 
         // Get Cred Encrypted JSON Str from getEncryptedCredJSONStr(...)
         credEncryptedJSONStr: String?
@@ -1024,6 +1084,7 @@ class DataBaseHelper internal constructor(context: Context?) :
         contentValues.put(URL, url)
         contentValues.put(PORT, port)
         contentValues.put(DRIVE, drive)
+        contentValues.put(SORT_INDEX, sortIndex)
         contentValues.put(CRED, credEncryptedJSONStr)
         db.update(TABLE_NAME, contentValues, "$LABEL = ?", arrayOf(old_label))
         return true
@@ -1054,5 +1115,6 @@ class DataBaseHelper internal constructor(context: Context?) :
         private const val DRIVE = "DRIVE"
         private const val PREVIEW = "PREV"
         private const val CRED = "CRED"
+        private const val SORT_INDEX = "SORT_INDEX"
     }
 }

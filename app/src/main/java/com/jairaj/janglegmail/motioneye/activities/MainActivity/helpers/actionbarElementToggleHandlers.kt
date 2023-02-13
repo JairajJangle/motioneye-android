@@ -675,353 +675,135 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.jairaj.janglegmail.motioneye.utils
+package com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers
 
-import android.app.Activity
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.graphics.Color
-import android.graphics.Typeface
-import android.net.Uri
-import android.os.Build
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.View
-import android.view.ViewTreeObserver
-import android.view.inputmethod.InputMethodManager
-import android.webkit.HttpAuthHandler
-import android.webkit.WebView
-import androidx.core.content.res.ResourcesCompat
-import androidx.recyclerview.widget.RecyclerView
+import android.widget.ImageView
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.activities.MainActivity.MainActivity
-import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_DEVICE_ADDED_BEFORE
-import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_DRIVE_ADDED_BEFORE
-import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_IS_APP_OPENED_BEFORE
-import com.jairaj.janglegmail.motioneye.utils.Constants.RATE_CRITERIA_INSTALL_DAYS
-import com.jairaj.janglegmail.motioneye.utils.Constants.RATE_CRITERIA_LAUNCH_TIMES
-import com.kobakei.ratethisapp.RateThisApp
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
-import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground
-import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal
+import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter
 
+/**
+ * Toggle list editing/deleting: on/of
+ *
+ * @param isEditDeleteEnabled true if edit/delete is enabled
+ */
+internal fun MainActivity.toggleEditDeleteActionbarElements(isEditDeleteEnabled: Boolean) {
+    buttonReorderList?.isVisible = !isEditDeleteEnabled
+    buttonApplyListOrder?.isVisible = false
+    buttonCancelListOrder?.isVisible = false
 
-object AppUtils {
-    private val logTAG = AppUtils::class.java.name
+    setKebabMenuState(!isEditDeleteEnabled)
 
-    fun sendFeedback(context: Context) {
-        val body: String = try {
-            val appInfo = context.packageManager.getPackageInfo(context.packageName, 0).versionName
-            "\n\n-----------------------------\n" +
-                    "Please don't remove this information\n\n" +
-                    "Device OS: Android \n" +
-                    "Device OS version: ${Build.VERSION.RELEASE}\n" +
-                    "App Version: $appInfo\n" +
-                    "Device Brand: ${Build.BRAND}\n" +
-                    "Device Model: ${Build.MODEL}\n" +
-                    "Device Manufacturer: ${Build.MANUFACTURER}\n" +
-                    "-----------------------------\n"
+    buttonDelete?.isVisible = isEditDeleteEnabled
+    buttonEdit?.isVisible = isEditDeleteEnabled
 
-        } catch (e: Exception) {
-            Log.e(logTAG, "Exception occurred while framing the feedback mail body: $e")
-            ""
+    updateToolbarAndFabVisibility(!isEditDeleteEnabled)
+
+    isListViewCheckboxEnabled = !isListViewCheckboxEnabled
+
+    val adapter = binding.deviceListRv.adapter
+    if (adapter is CamDeviceRVAdapter) {
+        val items = adapter.getItems()
+
+        for ((index, item) in items.withIndex()) {
+            item.reorderHandleVisibility = false
+            item.expandCollapseButtonVisibility = true
+
+            adapter.notifyItemChanged(index)
         }
-
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "message/rfc822"
-        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("systems.sentinel@gmail.com"))
-        intent.putExtra(Intent.EXTRA_SUBJECT, "motionEye app Feedback")
-        intent.putExtra(Intent.EXTRA_TEXT, body)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(
-            Intent.createChooser(
-                intent,
-                context.getString(R.string.choose_email_client)
-            )
-        )
     }
 
-    fun openInChrome(url: String, context: Context) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.setPackage("com.android.chrome")
-        try {
-            context.startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
-            // Chrome browser presumably not installed so allow user to choose instead
-            Log.e(logTAG, "Exception while opening url in chrome: $e")
+    setLongTouchToReorder(false)
+}
 
-            intent.setPackage(null)
-            context.startActivity(intent)
-        }
+/**
+ * Toggle list reordering: on/off
+ *
+ * @param isReorderingEnabled true if long hold to reorder list is enabled
+ *                            false if reordering is disabled
+ */
+internal fun MainActivity.toggleListSortActionbarElements(
+    isReorderingEnabled: Boolean
+) {
+    this.isReorderingEnabled = isReorderingEnabled
 
-    }
+    // Enable long touch to reorder listener if reordering is enabled
+    setLongTouchToReorder(isReorderingEnabled)
 
-    fun checkWhetherStream(url_port: String): Boolean {
-        return url_port.contains("8081")
-    }
+    // Reorder list app bar icon is visible if reordering is disabled
+    buttonReorderList?.isVisible = !isReorderingEnabled
 
-    fun askToRate(context: Context) {
-        Log.d(logTAG, "askToRate called")
+    // Apply and cancel reorder button are visible if reordering is enabled
+    buttonApplyListOrder?.isVisible = isReorderingEnabled
+    buttonCancelListOrder?.isVisible = isReorderingEnabled
 
-        fun requestAppRating() {
-            showRateDialog(context, true)
-        }
+    // Kebab menu icon is visible if reordering is disabled
+    setKebabMenuState(!isReorderingEnabled)
 
-        fun requestFeedback() {
-            sendFeedback(context)
-        }
+    // List edit and delete buttons are kept invisible when reordering is toggled: on/off
+    buttonDelete?.isVisible = false
+    buttonEdit?.isVisible = false
+    // Also keep the list checkbox disabled when reordering is toggled on/off
+    isListViewCheckboxEnabled = false
 
-        val customDialogClass =
-            CustomDialogClass(
-                context as Activity,
+    // Toolbar title is invisible if reordering is enabled to make enough room for apply/cancel buttons
+    updateToolbarAndFabVisibility(!isReorderingEnabled)
 
-                null,
-                null,
-                context.getString(R.string.are_you_enjoying),
+    // TODO: Change from here
+    val adapter = binding.deviceListRv.adapter
+    if (adapter is CamDeviceRVAdapter) {
+        val items = adapter.getItems()
 
-                context.getString(R.string.yes),
-                ::requestAppRating,
+        for ((index, item) in items.withIndex()) {
+            item.reorderHandleVisibility = isReorderingEnabled
 
-                context.getString(R.string.no),
-                ::requestFeedback,
-
-                null,
-                null
-            )
-        customDialogClass.show()
-    }
-
-    fun showRateDialog(context: Context, showRightAway: Boolean) {
-        // Custom condition: x days and y launches
-        val config = RateThisApp.Config(RATE_CRITERIA_INSTALL_DAYS, RATE_CRITERIA_LAUNCH_TIMES)
-        RateThisApp.init(config)
-
-        // Monitor launch times and interval from installation
-        RateThisApp.onCreate(context)
-        // If the condition is satisfied, "Rate this app" dialog will be shown
-        if (showRightAway)
-            RateThisApp.showRateDialog(context, R.style.AlertDialogCustom)
-        else
-            RateThisApp.showRateDialogIfNeeded(context, R.style.AlertDialogCustom)
-    }
-
-    fun getVersionName(context: Context): String {
-        val manager: PackageManager = context.packageManager
-        val info: PackageInfo = manager.getPackageInfo(
-            context.packageName, 0
-        )
-
-        return info.versionName
-    }
-
-    // return true if for the first time drive/cloud storage link is added
-    fun isFirstTimeDrive(activity: Activity): Boolean {
-        val preferences = activity.getPreferences(Context.MODE_PRIVATE)
-        val isDriveAddedBefore = preferences.getBoolean(KEY_DRIVE_ADDED_BEFORE, false)
-
-        if (!isDriveAddedBefore) {
-            // first time
-            val editor = preferences.edit()
-            editor.putBoolean(KEY_DRIVE_ADDED_BEFORE, true)
-            editor.apply()
-        }
-        return !isDriveAddedBefore
-    }
-
-    // returns true if for the first time any device is added
-    fun isFirstTimeDevice(activity: Activity): Boolean {
-        val preferences = activity.getPreferences(Context.MODE_PRIVATE)
-        val isDeviceAddedBefore = preferences.getBoolean(KEY_DEVICE_ADDED_BEFORE, false)
-        if (!isDeviceAddedBefore) {
-            // first time
-            val editor = preferences.edit()
-            editor.putBoolean(KEY_DEVICE_ADDED_BEFORE, true)
-            editor.apply()
-        }
-        return !isDeviceAddedBefore
-    }
-
-    // return true if ap is opened for the first time
-    fun isFirstTimeAppOpened(activity: Activity): Boolean {
-        val preferences = activity.getPreferences(Context.MODE_PRIVATE)
-        val ranBefore = preferences.getBoolean(KEY_IS_APP_OPENED_BEFORE, false)
-        if (!ranBefore) {
-            // first time
-            val editor = preferences.edit()
-            editor.putBoolean(KEY_IS_APP_OPENED_BEFORE, true)
-            editor.apply()
-        }
-        return !ranBefore
-    }
-
-    fun RecyclerView.runWhenReady(action: () -> Unit) {
-        val globalLayoutListener = object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                action()
-                viewTreeObserver.removeOnGlobalLayoutListener(this)
+            if (isReorderingEnabled) {
+                item.expandCollapseButtonVisibility = false
+                item.previewVisibility = false
             }
-        }
-        viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
-    }
 
-    fun handleMotionEyeUILogin(
-        databaseHelper: DataBaseHelper,
-        label: String,
-        view: WebView
-    ) {
-        var username = ""
-        var password = ""
-
-        val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(label)
-        if (encryptedCredJSONStr.isNotEmpty()) {
-            val usernamePasswordPair = databaseHelper.getDecryptedCred(encryptedCredJSONStr)
-            username = usernamePasswordPair.first
-            password = usernamePasswordPair.second
-        }
-
-        var jsToInject = "javascript: (function() {"
-
-        if (username.isNotEmpty())
-            jsToInject += "     document.getElementById('usernameEntry').value= '$username';"
-
-        if (password.isNotEmpty())
-            jsToInject += "     document.getElementById('passwordEntry').value= '$password';"
-        jsToInject += "         document.getElementById('rememberCheck').click();"
-
-        if (username.isNotEmpty() && password.isNotEmpty()) {
-            jsToInject += "     document.querySelector(" +
-                    "               'div.button.dialog.mouse-effect.default'" +
-                    "           ).click();\n"
-        }
-
-        jsToInject += "   }) ();"
-
-        view.loadUrl(jsToInject)
-    }
-
-    fun handleHttpBasicAuthentication(
-        databaseHelper: DataBaseHelper,
-        label: String,
-        handler: HttpAuthHandler
-    ) {
-        val encryptedCredJSONStr = databaseHelper.credJSONFromLabel(label)
-
-        var username = ""
-        var password = ""
-        if (encryptedCredJSONStr.isNotEmpty()) {
-            val usernamePasswordPair = databaseHelper.getDecryptedCred(encryptedCredJSONStr)
-            username = usernamePasswordPair.first
-            password = usernamePasswordPair.second
-        }
-
-        if (username.isNotEmpty() && password.isNotEmpty()) {
-            handler.proceed(username, password)
+            adapter.notifyItemChanged(index)
         }
     }
+}
 
-    fun displayMainActivityTutorial(
-        mainActivity: MainActivity,
-        mode: Constants.DisplayTutorialMode,
-        isNextDriveTutorial: Boolean = false
-    ) {
-        val font = ResourcesCompat.getFont(mainActivity, R.font.mavenpro_variable)
-        /* call_number usage
-         * 1 = First Time App Opened
-         * 2 = First Time Device added
-         * 3 = Not First Time for Device addition but First Time for Drive
-         * 4 = First Time for device addition as well as drive
-         */
-        when (mode) {
-            Constants.DisplayTutorialMode.FirstTimeAppOpened -> {
-                MaterialTapTargetPrompt.Builder(mainActivity)
-                    .setTarget(R.id.fab)
-                    .setPrimaryText(R.string.tut_title_add_button)
-                    .setSecondaryText(R.string.tut_sub_add_button)
-                    .setBackgroundColour(Color.argb(255, 30, 90, 136))
-                    .setPromptStateChangeListener { _, _ -> /*
-                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
-                            {
-                                // User has pressed the prompt target
-                            }
-                            if(state == MaterialTapTargetPrompt.STATE_DISMISSED)
-                            {
-                                //display_ad();
-                            }
-                            */
-                    }
-                    .setPrimaryTextTypeface(font, Typeface.NORMAL)
-                    .setSecondaryTextTypeface(font, Typeface.NORMAL)
-                    .show()
-            }
-            Constants.DisplayTutorialMode.FirstTimeDeviceAdded -> {
-                MaterialTapTargetPrompt.Builder(mainActivity)
-                    .setTarget(R.id.dummy_show_case_button)
-                    .setFocalColour(Color.argb(0, 0, 0, 0))
-                    .setPrimaryText(R.string.tut_title_device_list)
-                    .setSecondaryText(R.string.tut_sub_device_list)
-                    .setBackgroundColour(Color.argb(255, 30, 90, 136))
-                    .setPromptBackground(RectanglePromptBackground())
-                    .setPromptFocal(RectanglePromptFocal())
-                    .setPromptStateChangeListener { _, state ->
-                        if (isNextDriveTutorial) {
-                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED
-                                || state == MaterialTapTargetPrompt.STATE_DISMISSED
-                            ) {
-                                Handler(Looper.getMainLooper()).postDelayed({
-                                    displayMainActivityTutorial(
-                                        mainActivity,
-                                        Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive
-                                    )
-                                }, 100)
-                            }
-                        }
-                    }
-                    .setPrimaryTextTypeface(font, Typeface.NORMAL)
-                    .setSecondaryTextTypeface(font, Typeface.NORMAL)
-                    .show()
-            }
-            Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive -> {
+internal fun MainActivity.resetActionbarState() {
+    val adapter = binding.deviceListRv.adapter
+    if (adapter is CamDeviceRVAdapter) {
+        val items = adapter.getItems()
 
-                if (mainActivity.tutorialTargetDriveIcon == null) return
+        for ((index, item) in items.withIndex()) {
+            item.checkBoxVisibility = false
+            item.checkBoxIsChecked = false
+            item.reorderHandleVisibility = false
 
-                Log.i(logTAG, "Displaying Tutorial for Drive Button")
-                val builder = MaterialTapTargetPrompt.Builder(mainActivity)
-                    .setTarget(mainActivity.tutorialTargetDriveIcon)
-                    .setPrimaryText(R.string.tut_title_cloud_storage_icon)
-                    .setSecondaryText(R.string.tut_sub_cloud_storage_icon)
-                    .setBackgroundColour(Color.argb(255, 30, 90, 136))
-                    .setPromptStateChangeListener { _, _ ->
-                    }
-                    .setPrimaryTextTypeface(font, Typeface.NORMAL)
-                    .setSecondaryTextTypeface(font, Typeface.NORMAL)
-
-                Handler(Looper.getMainLooper()).postDelayed(
-                    {
-                        builder.show()
-                    }, 1000
-                )
-            }
-            Constants.DisplayTutorialMode.FirstTimeForDeviceAdditionAsWellAsDrive -> {
-                displayMainActivityTutorial(
-                    mainActivity,
-                    Constants.DisplayTutorialMode.FirstTimeDeviceAdded,
-                    true
-                )
-            }
+            adapter.notifyItemChanged(index)
         }
     }
+    toggleEditDeleteActionbarElements(false)
+    toggleListSortActionbarElements(false)
+}
 
-    fun View.showKeyboard() {
-        this.requestFocus()
-        val inputMethodManager =
-            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        Handler(Looper.getMainLooper()).postDelayed({
-            inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
-        }, 1000)
+private fun setReorderHandleVisibility(
+    listItem: View,
+    isVisible: Boolean
+) {
+    val reorderHandle: ImageView = listItem.findViewById(R.id.reorderHandle)
+    reorderHandle.visibility = if (isVisible) View.VISIBLE else View.GONE
+}
+
+private fun MainActivity.updateToolbarAndFabVisibility(isVisible: Boolean) {
+    if (!isVisible) {
+        binding.toolbar.title = ""
+        binding.fab.hide()
+    } else {
+        binding.toolbar.setTitle(R.string.motioneye_servers)
+        binding.fab.show()
     }
+}
+
+private fun MainActivity.setKebabMenuState(isVisible: Boolean) {
+    val actions = listOf(actionAbout, actionHelpFaq, actionSettings)
+    actions.forEach { it?.isVisible = isVisible }
 }

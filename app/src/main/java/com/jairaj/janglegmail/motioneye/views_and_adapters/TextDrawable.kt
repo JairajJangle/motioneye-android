@@ -675,7 +675,7 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.jairaj.janglegmail.motioneye.utils
+package com.jairaj.janglegmail.motioneye.views_and_adapters
 
 import android.content.Context
 import android.graphics.*

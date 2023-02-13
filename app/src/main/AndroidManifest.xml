@@ -22,7 +22,7 @@
             android:label="Help and FAQ"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.MainActivity.MainActivity"
             android:label="@string/motioneye_servers"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -76,9 +76,5 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
 </manifest>

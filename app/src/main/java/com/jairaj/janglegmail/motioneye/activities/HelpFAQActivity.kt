@@ -683,7 +683,6 @@ import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityHelpFaqBinding
 import com.jairaj.janglegmail.motioneye.dataclass.QandA
 import com.jairaj.janglegmail.motioneye.views_and_adapters.QAndARVAdapter
-import java.util.*
 
 class HelpFAQActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHelpFaqBinding
@@ -700,14 +699,14 @@ class HelpFAQActivity : AppCompatActivity() {
         binding.toolbar.title = R.string.help_and_faq.toString()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.recycleviewHFAQ.setHasFixedSize(true)
+        binding.recyclerviewHFAQ.setHasFixedSize(true)
         val llm = LinearLayoutManager(this)
         llm.orientation = LinearLayoutManager.VERTICAL
-        binding.recycleviewHFAQ.layoutManager = llm
+        binding.recyclerviewHFAQ.layoutManager = llm
         createList()
 
         val qAndARvAdapter = QAndARVAdapter(qAndAList)
-        binding.recycleviewHFAQ.adapter = qAndARvAdapter
+        binding.recyclerviewHFAQ.adapter = qAndARvAdapter
     }
 
     private fun createList() {
