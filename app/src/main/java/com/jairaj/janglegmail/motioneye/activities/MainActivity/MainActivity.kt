@@ -812,7 +812,7 @@ class MainActivity : AppCompatActivity() {
         val recyclerViewItemTouchCallback = RecyclerViewItemTouchHelper(binding)
         touchHelper = ItemTouchHelper(recyclerViewItemTouchCallback)
 
-        toggleListSortActionbarElements(false)
+        toggleListReorder(false)
     }
 
     internal fun setLongTouchToReorder(enable: Boolean) {

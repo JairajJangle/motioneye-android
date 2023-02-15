@@ -677,8 +677,6 @@
 
 package com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers
 
-import android.view.View
-import android.widget.ImageView
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.activities.MainActivity.MainActivity
 import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter
@@ -688,7 +686,7 @@ import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter
  *
  * @param isEditDeleteEnabled true if edit/delete is enabled
  */
-internal fun MainActivity.toggleEditDeleteActionbarElements(isEditDeleteEnabled: Boolean) {
+internal fun MainActivity.toggleEditDeleteMode(isEditDeleteEnabled: Boolean) {
     buttonReorderList?.isVisible = !isEditDeleteEnabled
     buttonApplyListOrder?.isVisible = false
     buttonCancelListOrder?.isVisible = false
@@ -723,7 +721,7 @@ internal fun MainActivity.toggleEditDeleteActionbarElements(isEditDeleteEnabled:
  * @param isReorderingEnabled true if long hold to reorder list is enabled
  *                            false if reordering is disabled
  */
-internal fun MainActivity.toggleListSortActionbarElements(
+internal fun MainActivity.toggleListReorder(
     isReorderingEnabled: Boolean
 ) {
     this.isReorderingEnabled = isReorderingEnabled
@@ -781,16 +779,8 @@ internal fun MainActivity.resetActionbarState() {
             adapter.notifyItemChanged(index)
         }
     }
-    toggleEditDeleteActionbarElements(false)
-    toggleListSortActionbarElements(false)
-}
-
-private fun setReorderHandleVisibility(
-    listItem: View,
-    isVisible: Boolean
-) {
-    val reorderHandle: ImageView = listItem.findViewById(R.id.reorderHandle)
-    reorderHandle.visibility = if (isVisible) View.VISIBLE else View.GONE
+    toggleEditDeleteMode(false)
+    toggleListReorder(false)
 }
 
 private fun MainActivity.updateToolbarAndFabVisibility(isVisible: Boolean) {

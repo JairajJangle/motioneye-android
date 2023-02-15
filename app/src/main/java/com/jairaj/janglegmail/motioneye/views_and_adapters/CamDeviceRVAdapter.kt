@@ -693,7 +693,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.activities.MainActivity.MainActivity
-import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.toggleEditDeleteActionbarElements
+import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.toggleEditDeleteMode
 import com.jairaj.janglegmail.motioneye.activities.MainActivity.utils.itemCheckedCountInDeviceList
 import com.jairaj.janglegmail.motioneye.dataclass.CamDevice
 import com.jairaj.janglegmail.motioneye.utils.AppUtils
@@ -862,7 +862,7 @@ class CamDeviceRVAdapter internal constructor(
                 adapter.notifyItemChanged(index)
             }
         }
-        toggleEditDeleteActionbarElements(!isListViewCheckboxEnabled)
+        toggleEditDeleteMode(!isListViewCheckboxEnabled)
     }
 
     private fun MainActivity.onPreviewClick(view: View, camDevice: CamDevice) {
@@ -897,7 +897,7 @@ class CamDeviceRVAdapter internal constructor(
                     adapter.notifyItemChanged(index)
                 }
             }
-            toggleEditDeleteActionbarElements(false)
+            toggleEditDeleteMode(false)
         }
     }
 

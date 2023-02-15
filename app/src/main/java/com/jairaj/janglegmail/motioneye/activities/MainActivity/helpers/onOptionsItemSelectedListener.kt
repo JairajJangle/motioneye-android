@@ -692,8 +692,8 @@ import com.jairaj.janglegmail.motioneye.activities.AboutActivity
 import com.jairaj.janglegmail.motioneye.activities.HelpFAQActivity
 import com.jairaj.janglegmail.motioneye.activities.MainActivity.MainActivity
 import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.fetchDataAndDisplayList
-import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.toggleEditDeleteActionbarElements
-import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.toggleListSortActionbarElements
+import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.toggleEditDeleteMode
+import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.toggleListReorder
 import com.jairaj.janglegmail.motioneye.activities.MainActivity.utils.itemCheckedCountInDeviceList
 import com.jairaj.janglegmail.motioneye.activities.SettingsActivity
 import com.jairaj.janglegmail.motioneye.utils.Constants
@@ -706,7 +706,7 @@ internal fun MainActivity.onOptionsItemSelectedListener(item: MenuItem) {
         R.id.action_about -> startActivity(this, AboutActivity::class.java)
         R.id.action_help -> startActivity(this, HelpFAQActivity::class.java)
         R.id.action_settings -> startActivity(this, SettingsActivity::class.java)
-        R.id.reorder_list -> toggleListSortActionbarElements(true)
+        R.id.reorder_list -> toggleListReorder(true)
         R.id.apply_list_order -> applyListOrder()
         R.id.cancel_list_order -> cancelListOrder()
     }
@@ -719,12 +719,12 @@ private fun MainActivity.applyListOrder() {
 
         dataBaseHelper.updateSortIndexForLabel(label, index)
     }
-    toggleListSortActionbarElements(false)
+    toggleListReorder(false)
     fetchDataAndDisplayList()
 }
 
 private fun MainActivity.cancelListOrder() {
-    toggleListSortActionbarElements(false)
+    toggleListReorder(false)
     fetchDataAndDisplayList()
 }
 
@@ -761,7 +761,7 @@ private fun MainActivity.handleDeleteAction() {
 
             // Re-fetch the data and disable the edit and delete actionbar elements
             fetchDataAndDisplayList()
-            toggleEditDeleteActionbarElements(false)
+            toggleEditDeleteMode(false)
         }
     }
 
