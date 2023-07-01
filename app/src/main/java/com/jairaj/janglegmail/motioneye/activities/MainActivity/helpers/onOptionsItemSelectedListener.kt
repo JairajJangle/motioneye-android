@@ -760,7 +760,7 @@ private fun MainActivity.handleDeleteAction() {
             }
 
             // Re-fetch the data and disable the edit and delete actionbar elements
-            fetchDataAndDisplayList()
+            fetchDataAndDisplayList(true)
             toggleEditDeleteMode(false)
         }
     }
