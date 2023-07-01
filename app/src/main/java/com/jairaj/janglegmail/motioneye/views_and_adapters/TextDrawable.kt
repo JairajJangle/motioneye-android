@@ -675,551 +675,69 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.jairaj.janglegmail.motioneye.activities
+package com.jairaj.janglegmail.motioneye.views_and_adapters
 
-import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.pm.ShortcutInfo
-import android.content.pm.ShortcutManager
-import android.graphics.drawable.Icon
-import android.os.*
-import android.text.TextUtils
-import android.util.Log
-import android.view.HapticFeedbackConstants
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.CheckBox
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.view.children
-import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.content.Context
+import android.graphics.*
+import android.graphics.drawable.Drawable
+import android.text.TextPaint
+import android.util.TypedValue
+import androidx.appcompat.content.res.AppCompatResources
 import com.jairaj.janglegmail.motioneye.R
-import com.jairaj.janglegmail.motioneye.databinding.ActivityMainBinding
-import com.jairaj.janglegmail.motioneye.dataclass.CamDevice
-import com.jairaj.janglegmail.motioneye.utils.AppUtils.displayMainActivityTutorial
-import com.jairaj.janglegmail.motioneye.utils.AppUtils.isFirstTimeAppOpened
-import com.jairaj.janglegmail.motioneye.utils.AppUtils.isFirstTimeDevice
-import com.jairaj.janglegmail.motioneye.utils.AppUtils.isFirstTimeDrive
-import com.jairaj.janglegmail.motioneye.utils.AppUtils.runWhenReady
-import com.jairaj.janglegmail.motioneye.utils.AppUtils.showRateDialog
-import com.jairaj.janglegmail.motioneye.utils.Constants
-import com.jairaj.janglegmail.motioneye.utils.Constants.DATA_IS_DRIVE_ADDED
-import com.jairaj.janglegmail.motioneye.utils.Constants.EDIT
-import com.jairaj.janglegmail.motioneye.utils.Constants.EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE
-import com.jairaj.janglegmail.motioneye.utils.Constants.LABEL
-import com.jairaj.janglegmail.motioneye.utils.Constants.ServerMode
-import com.jairaj.janglegmail.motioneye.utils.CustomDialogClass
-import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
-import com.jairaj.janglegmail.motioneye.utils.TextDrawable
-import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter
 
-class MainActivity : AppCompatActivity() {
-    internal lateinit var instance: MainActivity
-    internal val logTAG = MainActivity::class.java.name
-    internal lateinit var binding: ActivityMainBinding
-    internal lateinit var dataBaseHelper: DataBaseHelper
-    private var shortcutManager: ShortcutManager? = null
-
-    //Flag to store state of ListView device_list' items: checked or not checked
-    internal var isListViewCheckboxEnabled = false
-
-    // Flag to store if Auto Open is enabled in Settings
-    private var isAutoOpenCamEnabled: Boolean = true
-
-    // UI Elements
-    private var buttonDelete: MenuItem? = null
-    private var buttonEdit: MenuItem? = null
-    private var actionAbout: MenuItem? = null
-    private var actionHelpFaq: MenuItem? = null
-    private var actionSettings: MenuItem? = null
-
-    private val deviceList: MutableList<CamDevice> = mutableListOf()
-
-    // Target Drive Icon Res Id to display Tutorial for
-    internal var tutorialTargetDriveIcon: ImageButton? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        instance = this
-
-        setSupportActionBar(binding.toolbar)
-        binding.toolbar.setTitle(R.string.motioneye_servers)
-
-        binding.deviceListRv.setHasFixedSize(true)
-
-        val llm = LinearLayoutManager(this)
-        llm.orientation = LinearLayoutManager.VERTICAL
-        binding.deviceListRv.layoutManager = llm
-
-        try {
-            shortcutManager = this.getSystemService(ShortcutManager::class.java)
-        } catch (e: Exception) {
-            Log.e(logTAG, "Exception in getting ShortcutManager service: $e")
-        }
-
-        if (!checkWriteExternalPermission())
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE
-            )
-
-        // init DataBase object
-        dataBaseHelper = DataBaseHelper(this)
-
-        //Insert Preview status column in Data Base if the previous version of app didn't have it
-        //TODO: Find if there is better way to handle SQL Table column addition over previous app version
-        dataBaseHelper.insertNewColumn()
-
-        // Check if Auto Open Camera Preference is checked
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        isAutoOpenCamEnabled = prefs.getBoolean(getString(R.string.key_autoopen), true)
-
-        showRateDialog(this, false)
-
-        //If this is the first run of the app show tutorial
-        if (isFirstTimeAppOpened(this)) {
-            displayMainActivityTutorial(
-                this,
-                Constants.DisplayTutorialMode.FirstTimeAppOpened
-            )
-        }
-
-        binding.fab.setOnClickListener {
-            gotoAddDeviceDetail(Constants.EDIT_MODE_NEW_DEV)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                binding.fab.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
-            }
-        }
-
-        //Handler to handle data fetching from SQL in BG
-        val handlerFetchData = object : Handler(Looper.getMainLooper()) {
-            override fun handleMessage(msg: Message) {
-                fetchData()
-            }
-        }
-        val tFetchData: Thread = object : Thread() {
-            override fun run() {
-                handlerFetchData.sendEmptyMessage(0)
-            }
-        }
-        tFetchData.run()
-
-        // Add this Runnable
-        binding.deviceListRv.post {
-            val handler = object : Handler(Looper.getMainLooper()) {
-                override fun handleMessage(msg: Message) {
-                    if (deviceList.size == 1 && isAutoOpenCamEnabled) {
-                        val label = deviceList.elementAt(0).label
-                        val url = deviceList.elementAt(0).urlPort
-                        val mode =
-                            if (TextUtils.isEmpty(
-                                    // FIXME: Fix this blunder
-                                    dataBaseHelper.driveFromLabel(
-                                        deviceList.elementAt(0).label
-                                    )
-                                )
-                            ) {
-                                Constants.MODE_CAMERA
-                            } else {
-                                Constants.MODE_DRIVE
-                            }
-                        goToWebMotionEye(label, url, mode)
-                    }
-                }
-            }
-
-            val threadToggleDrivePrev: Thread = object : Thread() {
-                override fun run() {
-                    handler.sendEmptyMessage(0)
-                }
-            }
-            threadToggleDrivePrev.run()
-        }
+class TextDrawable(context: Context, text: CharSequence) : Drawable() {
+    companion object {
+        private const val DEFAULT_COLOR = Color.WHITE
+        private const val DEFAULT_TEXT_SIZE_IN_DP = 60
     }
 
-    private fun checkWriteExternalPermission(): Boolean {
-        val permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
+    private val mTextBounds = Rect()
+    private val mPaint: TextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
+    private val mDrawable: Drawable?
 
-        return checkCallingOrSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
-    }
-
-    internal fun goToWebMotionEye(label: String, urlPort: String?, @ServerMode mode: Int) {
-        Log.d(logTAG, "In goToWebMotionEye(...)")
-
-        val bundle = Bundle()
-        bundle.putString(Constants.KEY_LABEL, label)
-        bundle.putString(Constants.KEY_URL_PORT, urlPort)
-        bundle.putInt(Constants.KEY_MODE, mode)
-
-        val intentWebMotionEyeActivity = Intent(this@MainActivity, WebMotionEyeActivity::class.java)
-        intentWebMotionEyeActivity.putExtras(bundle)
-
-        startActivity(intentWebMotionEyeActivity)
-    }
-
-    private fun fetchData() {
-        deviceList.clear()
-
-        val data = dataBaseHelper.allData
-
-        binding.noCamBackgroundLayout.root.visibility =
-            if (data.count == 0)
-                View.VISIBLE
-            else
-                View.GONE
-
-        if (data.count != 0) {
-            //isFirstTimeDevice();
-            while (data.moveToNext()) {
-                val label = data.getString(1)
-                val url = data.getString(2)
-                val port = data.getString(3)
-                val driveLink = dataBaseHelper.driveFromLabel(label)
-
-                val urlPort = url +
-                        if (port.isBlank())
-                            ""
-                        else ":$port"
-
-                deviceList.add(CamDevice(label, urlPort, driveLink))
-            }
+    var text: CharSequence = text
+        set(value) {
+            field = value
+            invalidateSelf()
         }
 
-        val handler = object : Handler(Looper.getMainLooper()) {
-            override fun handleMessage(msg: Message) {
-                addToList()
-            }
-        }
-        val threadAddToList: Thread = object : Thread() {
-            override fun run() {
-                handler.sendEmptyMessage(0)
-            }
-        }
-        threadAddToList.run()
-        data.close()
+    init {
+        mPaint.color = DEFAULT_COLOR
+        mPaint.textAlign = Paint.Align.CENTER
+        val textSize = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            DEFAULT_TEXT_SIZE_IN_DP.toFloat(), context.resources.displayMetrics
+        )
+        mPaint.textSize = textSize
+        mDrawable = AppCompatResources.getDrawable(context, R.drawable.circle_shortcut)
+        mDrawable?.setBounds(0, 0, mDrawable.intrinsicWidth, mDrawable.intrinsicHeight)
     }
 
-    private fun addToList() {
-        Log.d(logTAG, "In addToList(...)")
-
-        binding.deviceListRv.adapter = null
-
-        val shortcut: MutableList<ShortcutInfo> = mutableListOf()
-
-        for ((index, camDevice) in deviceList.withIndex()) {
-            try {
-                val bundle = Bundle()
-                bundle.putString(Constants.KEY_URL_PORT, camDevice.urlPort)
-                bundle.putInt(Constants.KEY_MODE, Constants.MODE_CAMERA)
-
-                val webMotionEyeIntent = Intent(this@MainActivity, WebMotionEyeActivity::class.java)
-                webMotionEyeIntent.putExtras(bundle)
-                webMotionEyeIntent.action = Intent.ACTION_VIEW
-
-                val shortcutText = (
-                        if (camDevice.label.length > 1)
-                            "${camDevice.label[0]}${camDevice.label[1]}"
-                        else camDevice.label[0])
-
-
-                val labelShortcutIcon = TextDrawable(this, shortcutText as CharSequence)
-
-                shortcut.add(
-                    ShortcutInfo.Builder(this, "$index")
-                        .setShortLabel(camDevice.label)
-                        .setLongLabel("${camDevice.label} - ${camDevice.urlPort}")
-                        .setIcon(Icon.createWithBitmap(labelShortcutIcon.toBitmap()))
-                        .setIntent(webMotionEyeIntent)
-                        .build()
-                )
-            } catch (e: Exception) {
-                Log.e(logTAG, "Error while creating shortcuts: $e")
-            }
-        }
-
-        val camDevicesRvAdapter = CamDeviceRVAdapter(deviceList, instance)
-        binding.deviceListRv.adapter = camDevicesRvAdapter
-
-        try {
-            if (shortcut.isNotEmpty()) {
-                shortcutManager?.dynamicShortcuts = shortcut
-            }
-        } catch (e: Exception) {
-            Log.e(logTAG, "Error while adding shortcuts: $e")
-        }
+    override fun draw(canvas: Canvas) {
+        val bounds = bounds
+        mDrawable?.draw(canvas)
+        mPaint.getTextBounds(text.toString(), 0, text.length, mTextBounds)
+        val textHeight = mTextBounds.bottom - mTextBounds.top
+        canvas.drawText(
+            text as String, (bounds.right / 2).toFloat(),
+            (bounds.bottom.toFloat() + textHeight + 1) / 2,
+            mPaint
+        )
     }
 
-    private fun gotoAddDeviceDetail(editMode: Int) {
-        Log.d(logTAG, "In gotoAddDeviceDetail(editMode = $editMode)")
+    @Deprecated("Deprecated in Java")
+    override fun getOpacity(): Int = mPaint.alpha
+    override fun getIntrinsicWidth(): Int = mDrawable?.intrinsicWidth ?: 0
+    override fun getIntrinsicHeight(): Int = mDrawable?.intrinsicHeight ?: 0
 
-        var deleteLabel = ""
-        val bundle = Bundle()
-
-        if (editMode == Constants.EDIT_MODE_EXIST_DEV) {
-
-            for (deviceView in binding.deviceListRv.children) {
-                val checkbox = deviceView.findViewById<CheckBox>(R.id.checkBox)
-
-                if (checkbox.isChecked) {
-                    deleteLabel = (deviceView.findViewById<View>(R.id.title_label_text)
-                            as TextView).text.toString()
-
-                    checkbox.isChecked = false
-                }
-
-                checkbox.visibility = View.GONE
-            }
-
-            isListViewCheckboxEnabled = false
-
-            toggleActionbarElements()
-
-            bundle.putString(LABEL, deleteLabel)
-        }
-
-        bundle.putInt(EDIT, editMode)
-        val intentForAddDevice = Intent(this, AddDeviceDetailsActivity::class.java)
-            .apply {
-                putExtras(bundle)
-            }
-        resultLauncher.launch(intentForAddDevice)
-        Log.d(logTAG, "opening Add device!!!")
+    override fun setAlpha(alpha: Int) {
+        mPaint.alpha = alpha
+        invalidateSelf()
     }
 
-    private var resultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result: ActivityResult ->
-        buttonDelete?.isVisible = false
-        buttonEdit?.isVisible = false
-        actionAbout?.isVisible = true
-        actionHelpFaq?.isVisible = true
-        actionSettings?.isVisible = true
-
-        binding.toolbar.setTitle(R.string.motioneye_servers)
-
-        binding.fab.show()
-
-        isListViewCheckboxEnabled = false
-
-        fetchData()
-
-        binding.deviceListRv.post {
-            if (
-                result.resultCode == Constants.DEVICE_ADDITION_CANCELLED_RESULT_CODE
-                || result.resultCode != Constants.DEVICE_ADDITION_DONE_RESULT_CODE
-            )
-                return@post
-
-            val isDriveAdded = result.data?.extras?.getBoolean(
-                DATA_IS_DRIVE_ADDED, false
-            ) ?: false
-
-            val flagIsFirstDevice: Boolean = isFirstTimeDevice(this)
-
-            var flagIsFirstDrive = false
-            if (isDriveAdded) {
-                flagIsFirstDrive = isFirstTimeDrive(this)
-            }
-
-            Log.d(logTAG, "flagIsFirstDevice = $flagIsFirstDevice")
-            Log.d(logTAG, "flagIsFirstDrive = $flagIsFirstDrive")
-
-            binding.deviceListRv.runWhenReady {
-                Log.i(logTAG, "Device List Recycler View is Ready, Displaying Tutorial")
-                if (flagIsFirstDevice && !flagIsFirstDrive)
-                    displayMainActivityTutorial(
-                        this,
-                        Constants.DisplayTutorialMode.FirstTimeDeviceAdded
-                    )
-                else if (!flagIsFirstDevice && flagIsFirstDrive) {
-                    displayMainActivityTutorial(
-                        this,
-                        Constants.DisplayTutorialMode.NotFirstTimeForDeviceAdditionButFirstTimeForDrive
-                    )
-                } else if (flagIsFirstDevice && flagIsFirstDrive)
-                    displayMainActivityTutorial(
-                        this,
-                        Constants.DisplayTutorialMode.FirstTimeForDeviceAdditionAsWellAsDrive
-                    )
-            }
-        }
+    override fun setColorFilter(filter: ColorFilter?) {
+        mPaint.colorFilter = filter
+        invalidateSelf()
     }
 
-    // Inflate the menu; this adds items to the action bar if it is present.
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_add_cam, menu)
-        buttonDelete = menu.findItem(R.id.delete)
-        buttonEdit = menu.findItem(R.id.edit)
-        actionAbout = menu.findItem(R.id.action_about)
-        actionHelpFaq = menu.findItem(R.id.action_help)
-        actionSettings = menu.findItem(R.id.action_settings)
-
-        return true
-    }
-
-    // Handle action bar item clicks here.
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-
-            R.id.delete -> {
-
-                fun deleteServerEntry() {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        binding.toolbar.performHapticFeedback(HapticFeedbackConstants.REJECT)
-                    }
-
-                    if (itemCheckedCountInDeviceList > 0 && isListViewCheckboxEnabled) {
-
-                        for (deviceView in binding.deviceListRv.children) {
-                            val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
-                            if (checkbox.isChecked) {
-                                val delLabel =
-                                    (deviceView.findViewById<View>(R.id.title_label_text) as TextView).text.toString()
-                                deleteData(delLabel)
-                                checkbox.isChecked = false
-                            }
-                        }
-
-                        fetchData()
-                        toggleActionbarElements()
-                    }
-                }
-
-                val cdd = CustomDialogClass(
-                    this@MainActivity,
-                    null,
-
-                    getString(R.string.delete_confirm_title),
-                    getString(R.string.delete_confirm_message),
-
-                    getString(R.string.yes),
-                    ::deleteServerEntry,
-
-                    getString(R.string.no),
-                    null,
-
-                    null,
-                    null,
-                )
-                cdd.setCancelable(true)
-                cdd.show()
-            }
-
-            R.id.edit -> {
-                if (isListViewCheckboxEnabled) {
-                    val f = itemCheckedCountInDeviceList
-                    if (f > 1) {
-                        Toast.makeText(
-                            baseContext,
-                            "Select only one entry to edit",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else gotoAddDeviceDetail(Constants.EDIT_MODE_EXIST_DEV)
-                }
-            }
-
-            R.id.action_about -> {
-                val intentAboutPage = Intent(this@MainActivity, AboutActivity::class.java)
-                intentAboutPage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intentAboutPage)
-            }
-
-            R.id.action_help -> {
-                val intentHelpFaq = Intent(this@MainActivity, HelpFAQActivity::class.java)
-                intentHelpFaq.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intentHelpFaq)
-            }
-
-            R.id.action_settings -> {
-                val intentSettings = Intent(this@MainActivity, SettingsActivity::class.java)
-                startActivity(intentSettings)
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun deleteData(delLabel: String) {
-        val deletedRows = dataBaseHelper.deleteData(delLabel)
-
-        if (deletedRows <= 0) {
-            Log.e(logTAG, "Failed to delete device with label = $delLabel")
-            Toast.makeText(this@MainActivity, "Failed to delete", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    internal val itemCheckedCountInDeviceList: Int
-        get() {
-            var checkedItemCount = 0
-
-            for (deviceView in binding.deviceListRv.children) {
-                val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
-                if (checkbox.isChecked) checkedItemCount++
-            }
-            return checkedItemCount
-        }
-
-    // Toggle visibility of action bar elements
-    internal fun toggleActionbarElements() {
-        actionAbout?.isVisible = !(actionAbout?.isVisible ?: true)
-        actionHelpFaq?.isVisible = !(actionHelpFaq?.isVisible ?: true)
-        actionSettings?.isVisible = !(actionSettings?.isVisible ?: true)
-        buttonDelete?.isVisible = !(buttonDelete?.isVisible ?: true)
-        buttonEdit?.isVisible = !(buttonEdit?.isVisible ?: true)
-
-        if (binding.toolbar.title == "")
-            binding.toolbar.setTitle(R.string.motioneye_servers)
-        else
-            binding.toolbar.title = ""
-        if (binding.fab.visibility == View.GONE)
-            binding.fab.show()
-        else
-            binding.fab.hide()
-
-        isListViewCheckboxEnabled = !isListViewCheckboxEnabled
-    }
-
-    override fun onBackPressed() {
-        val f = itemCheckedCountInDeviceList
-        if (f != 0) {
-
-            for (deviceView in binding.deviceListRv.children) {
-                val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
-                checkbox.isChecked = false
-                checkbox.visibility = View.GONE
-            }
-            toggleActionbarElements()
-        } else {
-
-            /*
-            NOTE: To save Floating button position
-
-            int[] fab_pos=new int[2];
-            fab.getLocationOnScreen(fab_pos);
-
-            int pos_fab_x = fab_pos[0];
-            int pos_fab_y = fab_pos[1];
-
-            SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt("Fab_x", Integer.parseInt(Integer.toString(pos_fab_x)));
-            editor.putInt("Fab_y", Integer.parseInt(Integer.toString(pos_fab_y)));
-            editor.apply();
-            */
-
-            finish()
-        }
-    }
 }

@@ -688,6 +688,7 @@ import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.jairaj.janglegmail.motioneye.R
+import com.jairaj.janglegmail.motioneye.activities.MainActivity.MainActivity
 import com.jairaj.janglegmail.motioneye.databinding.ActivityAddDeviceDetailBinding
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.showKeyboard
 import com.jairaj.janglegmail.motioneye.utils.Constants
@@ -790,6 +791,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         val driveLinkInputString: String = binding.driveInput.text.toString()
         val usernameInputString: String = binding.usernameInput.text.toString()
         val passwordInputString: String = binding.passwordInput.text.toString()
+        val sortIndex = databaseHelper.sortIndexFromLabel(previousLabel)
 
         val isValidDriveURL = Patterns.WEB_URL.matcher(driveLinkInputString)
             .matches() || driveLinkInputString.isEmpty()
@@ -824,6 +826,8 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
             val encryptedCredJSONStr =
                 databaseHelper.getEncryptedCredJSONStr(usernameInputString, passwordInputString)
 
+            val highestSortIndex = databaseHelper.getHighestSortIndex()
+
             when (editMode) {
                 Constants.EDIT_MODE_NEW_DEV -> {
                     val isInserted = databaseHelper.insertData(
@@ -832,6 +836,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                         portInputString,
                         driveLinkInputString,
                         Constants.PREVIEW_ON,
+                        highestSortIndex,
                         encryptedCredJSONStr
                     )
                     if (isInserted) {
@@ -855,6 +860,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
                         urlInputString,
                         portInputString,
                         driveLinkInputString,
+                        sortIndex,
                         encryptedCredJSONStr
                     )
                     if (!isUpdate) Toast.makeText(
@@ -912,6 +918,7 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         return true
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         setResult(DEVICE_ADDITION_CANCELLED_RESULT_CODE, previousScreen)
         finish()

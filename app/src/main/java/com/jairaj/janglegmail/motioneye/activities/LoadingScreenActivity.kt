@@ -685,6 +685,7 @@ import android.os.Looper
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.jairaj.janglegmail.motioneye.activities.MainActivity.MainActivity
 import com.jairaj.janglegmail.motioneye.databinding.ActivityLoadingScreenBinding
 import com.jairaj.janglegmail.motioneye.utils.Constants.SPLASH_SCREEN_TIME
 

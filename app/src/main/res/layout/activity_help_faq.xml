@@ -9,7 +9,7 @@
         tools:context=".activities.HelpFAQActivity">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleview_HFAQ"
+            android:id="@+id/recyclerview_HFAQ"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="2dp"

@@ -677,7 +677,6 @@
 
 package com.jairaj.janglegmail.motioneye.activities
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DownloadManager
@@ -685,7 +684,6 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -699,7 +697,6 @@ import android.webkit.*
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -715,9 +712,7 @@ import com.jairaj.janglegmail.motioneye.utils.CustomDialogClass
 import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
 import java.io.File
 
-
-class WebMotionEyeActivity : AppCompatActivity
-    () {
+class WebMotionEyeActivity : AppCompatActivity() {
     private val logTAG = WebMotionEyeActivity::class.java.name
     private lateinit var binding: ActivityWebMotionEyeBinding
 
@@ -758,23 +753,6 @@ class WebMotionEyeActivity : AppCompatActivity
     }
 
     private val mHideRunnable = Runnable { hide() }
-
-    //permission is automatically granted on sdk<23 upon installation
-    private val isStoragePermissionGranted: Boolean
-        get() {
-            return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.v(TAG, "Permission is granted")
-                true
-            } else {
-                Log.v(TAG, "Permission is revoked")
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    1
-                )
-                false
-            }
-        }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -885,6 +863,7 @@ class WebMotionEyeActivity : AppCompatActivity
             }
 
             // FIXME: On using new method signature for onReceivedError, playing video gives net::ERR_FAILED error
+            @Deprecated("Deprecated in Java")
             override fun onReceivedError(
                 view: WebView,
                 errorCode: Int,
@@ -916,35 +895,30 @@ class WebMotionEyeActivity : AppCompatActivity
         binding.fullscreenContent.setDownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
             val request = DownloadManager.Request(Uri.parse(url))
 
-            if (isStoragePermissionGranted) {
-                request.setMimeType(mimeType)
-                //------------------------COOKIE!!------------------------
-                val cookies = CookieManager.getInstance().getCookie(url)
-                request.addRequestHeader("cookie", cookies)
-                //------------------------COOKIE!!------------------------
-                request.addRequestHeader("User-Agent", userAgent)
-                request.setDescription("Downloading file...")
+            request.setMimeType(mimeType)
+            //------------------------COOKIE!!------------------------
+            val cookies = CookieManager.getInstance().getCookie(url)
+            request.addRequestHeader("cookie", cookies)
+            //------------------------COOKIE!!------------------------
+            request.addRequestHeader("User-Agent", userAgent)
+            request.setDescription("Downloading file...")
 
-                var fileName = URLUtil.guessFileName(url, contentDisposition, mimeType)
-                fileName = "${label}_${fileName.replace(";+$".toRegex(), "")}"
+            var fileName = URLUtil.guessFileName(url, contentDisposition, mimeType)
+            fileName = "${label}_${fileName.replace(";+$".toRegex(), "")}"
 
-                Log.d(logTAG, "Downloading filename = $fileName")
+            Log.d(logTAG, "Downloading filename = $fileName")
 
-                request.setTitle(fileName)
-                request.allowScanningByMediaScanner()
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                request.setDestinationInExternalPublicDir(
-                    Environment.DIRECTORY_DOWNLOADS,
-                    File.separator + downloadFolderName + File.separator + fileName
-                )
-                val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-                dm.enqueue(request)
-                Toast.makeText(baseContext, "Downloading to Downloads/motionEye", Toast.LENGTH_LONG)
-                    .show()
-            } else {
-                Toast.makeText(baseContext, "Storage Permission not granted", Toast.LENGTH_SHORT)
-                    .show()
-            }
+            request.setTitle(fileName)
+            request.allowScanningByMediaScanner()
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            request.setDestinationInExternalPublicDir(
+                Environment.DIRECTORY_DOWNLOADS,
+                File.separator + downloadFolderName + File.separator + fileName
+            )
+            val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            dm.enqueue(request)
+            Toast.makeText(baseContext, "Downloading to Downloads/motionEye", Toast.LENGTH_LONG)
+                .show()
         }
 
         mHandler.postDelayed({
@@ -1014,7 +988,7 @@ class WebMotionEyeActivity : AppCompatActivity
         super.onPostCreate(savedInstanceState)
 
         // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
+        // created, to briefly hint the user that UI controls
         // are available.
         delayedHide(100)
     }
@@ -1030,32 +1004,18 @@ class WebMotionEyeActivity : AppCompatActivity
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
     }
 
-    @SuppressLint("InlinedApi")
-    private/*
+    /*
      * Schedules a call to hide() in delay milliseconds, canceling any
      * previously scheduled calls.
-     */ fun delayedHide(delayMillis: Int) {
+     */
+    @Suppress("SameParameterValue")
+    @SuppressLint("InlinedApi")
+    private fun delayedHide(delayMillis: Int) {
         mHideHandler.removeCallbacks(mHideRunnable)
         mHideHandler.postDelayed(mHideRunnable, delayMillis.toLong())
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0])
-            Toast.makeText(baseContext, "Storage permission granted", Toast.LENGTH_SHORT).show()
-            //resume tasks needing this permission
-        } else
-            Toast.makeText(baseContext, "Storage permission denied", Toast.LENGTH_SHORT).show()
-    }
-
     companion object {
-        private const val TAG = "WebMotionEyeActivity"
-
         private const val UI_ANIMATION_DELAY = 300
     }
 }
