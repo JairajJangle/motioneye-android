@@ -15,7 +15,7 @@
     <a href="https://github.com/motioneye-project/motioneye/wiki/Installation"><strong>Setup motionEye server »</strong></a>
     <br />
     <br />
-    <a href="https://play.google.com/console/u/0/developers/8840100126138543829/app/4973513331933856680/main-store-listing">Get it on Google Play Store</a>
+    <a href="https://play.google.com/store/apps/details?id=com.jairaj.janglegmail.motioneye">Get it on Google Play Store</a>
     ·
     <a href="https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/issues">Report Bug</a>
     ·
@@ -59,7 +59,7 @@ Here are some user requested features that are yet to be introduced.
 ## License
 
 Distributed under
-the [GNU GPL v3 License](https://github.com/JairajJangle/Open-CV-Catalogue/blob/master/LICENSE.txt).
+the [GNU GPL v3 License](https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE).
 
 ## Support the project development
 
