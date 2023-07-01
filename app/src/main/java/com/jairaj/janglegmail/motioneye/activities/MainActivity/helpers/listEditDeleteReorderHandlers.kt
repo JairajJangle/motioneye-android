@@ -688,7 +688,10 @@ import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter
  *
  * @param isEditDeleteEnabled true if edit/delete is enabled
  */
-internal fun MainActivity.toggleEditDeleteMode(isEditDeleteEnabled: Boolean) {
+internal fun MainActivity.toggleEditDeleteMode(
+    isEditDeleteEnabled: Boolean,
+    position: Int? = null
+) {
     buttonReorderList?.isVisible = !isEditDeleteEnabled
     buttonApplyListOrder?.isVisible = false
     buttonCancelListOrder?.isVisible = false
@@ -701,19 +704,23 @@ internal fun MainActivity.toggleEditDeleteMode(isEditDeleteEnabled: Boolean) {
 
     isListViewCheckboxEnabled = !isListViewCheckboxEnabled
 
-    val adapter = binding.deviceListRv.adapter
-    if (adapter is CamDeviceRVAdapter) {
-        val items = adapter.getItems()
+    val handler = Handler(Looper.getMainLooper())
+    handler.post {
+        val adapter = binding.deviceListRv.adapter
+        if (adapter is CamDeviceRVAdapter) {
+            val items = adapter.getItems()
 
-        // Run the code in a background thread using a Handler
-        Handler(Looper.getMainLooper()).post {
             for ((index, item) in items.withIndex()) {
                 item.reorderHandleVisibility = false
                 item.expandCollapseButtonVisibility = true
 
+                item.checkBoxVisibility = isEditDeleteEnabled
+
+                if (index == position)
+                    item.checkBoxIsChecked = isEditDeleteEnabled
+
                 adapter.notifyItemChanged(index)
             }
-
             setLongTouchToReorder(false)
         }
     }
