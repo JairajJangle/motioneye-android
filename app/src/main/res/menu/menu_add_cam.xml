@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.jairaj.janglegmail.motioneye.activities.MainActivity">
+    tools:context="com.jairaj.janglegmail.motioneye.activities.MainActivity.MainActivity">
 
     <item
         android:id="@+id/action_settings"
@@ -32,6 +32,29 @@
         android:id="@+id/edit"
         android:icon="@drawable/edit_ic"
         android:title=""
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/reorder_list"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title=""
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/apply_list_order"
+        android:icon="@drawable/check"
+        android:title=""
+        android:iconTint="@color/motioneye_blue"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/cancel_list_order"
+        android:icon="@drawable/cancel"
+        android:title=""
+        android:iconTint="@color/motioneye_blue"
         android:visible="false"
         app:showAsAction="ifRoom" />
 

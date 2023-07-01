@@ -24,8 +24,26 @@
             android:animationCache="true"
             android:descendantFocusability="blocksDescendants">
 
+            <ImageView
+                android:id="@+id/reorderHandle"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="6dp"
+                android:clickable="false"
+                android:contentDescription="@string/reorder_item_handle_image"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/subtitle_url_port_text"
+                app:layout_constraintEnd_toEndOf="@id/checkBox"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/title_label_text"
+                app:srcCompat="@drawable/reorder_handle" />
+
             <CheckBox
                 android:id="@+id/checkBox"
+                android:tag="checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="62dp"
                 android:layout_marginStart="5dp"
@@ -35,6 +53,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/reorderHandle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,7 +76,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="6dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="4dp"
                 android:contentDescription="@string/button_to_collapse_and_expand_stream_preview"
                 app:layout_constraintEnd_toStartOf="@+id/title_label_text"
                 app:layout_constraintStart_toEndOf="@+id/checkBox"
@@ -79,10 +98,11 @@
 
             <TextView
                 android:id="@+id/title_label_text"
+                android:tag="title_label"
                 android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:includeFontPadding="true"
-                android:paddingStart="10dp"
+                android:layout_marginStart="6dp"
                 android:paddingTop="6dp"
                 android:paddingEnd="5dp"
                 android:text="@string/Eg_custom_list_item_Label"
@@ -98,7 +118,6 @@
                 android:id="@+id/subtitle_url_port_text"
                 android:layout_width="0dp"
                 android:layout_height="29dp"
-                android:paddingStart="10dp"
                 android:maxLines="1"
                 android:paddingEnd="5dp"
                 android:paddingBottom="0dp"

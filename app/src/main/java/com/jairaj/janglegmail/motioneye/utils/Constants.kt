@@ -700,8 +700,6 @@ object Constants {
     const val DEVICE_ADDITION_CANCELLED_RESULT_CODE = 2
     const val DEVICE_ADDITION_DONE_RESULT_CODE = 0
 
-    const val EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1
-
     const val KEYSTORE_ALIAS = "com.jairaj.janglegmail.motioneye"
 
     // Inside Download directory
@@ -719,7 +717,7 @@ object Constants {
         PRIVACY_POLICY, TNC
     }
 
-    @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
+    @Retention(AnnotationRetention.SOURCE)
     @IntDef(MODE_CAMERA, MODE_DRIVE)
     internal annotation class ServerMode
 

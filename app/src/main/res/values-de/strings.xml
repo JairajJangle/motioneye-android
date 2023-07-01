@@ -344,6 +344,7 @@
     <string name="page_error_dialog_message">Bitte helfen Sie uns, das Problem zu beheben, indem Sie uns ein Feedback senden</string>
     <string name="no_camera_added">Keine Kamera hinzugefügt</string>
     <string name="privacy_policy_here">Datenschutzerklärung hier</string>
+    <string name="reorder_item_handle_image">Handle-Bild des Artikels neu anordnen</string>
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">

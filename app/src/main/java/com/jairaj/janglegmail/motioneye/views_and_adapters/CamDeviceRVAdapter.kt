@@ -689,14 +689,17 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.jairaj.janglegmail.motioneye.R
-import com.jairaj.janglegmail.motioneye.activities.MainActivity
+import com.jairaj.janglegmail.motioneye.activities.MainActivity.MainActivity
+import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.toggleEditDeleteMode
+import com.jairaj.janglegmail.motioneye.activities.MainActivity.utils.itemCheckedCountInDeviceList
 import com.jairaj.janglegmail.motioneye.dataclass.CamDevice
 import com.jairaj.janglegmail.motioneye.utils.AppUtils
 import com.jairaj.janglegmail.motioneye.utils.Constants
 import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter.MyViewHolder
+import java.util.*
 
 class CamDeviceRVAdapter internal constructor(
     private val camDeviceList: List<CamDevice>,
@@ -709,9 +712,20 @@ class CamDeviceRVAdapter internal constructor(
         val previewView: WebView = view.findViewById(R.id.preview_webview)
         val prevTouch: View = view.findViewById(R.id.prev_touch_overlay)
         val expandButton: ImageView = view.findViewById(R.id.expand_button)
+        val checkBox: CheckBox = view.findViewById(R.id.checkBox)
         val progressBar: ProgressBar = view.findViewById(R.id.preview_progressBar)
+        val reorderHandle: ImageView = view.findViewById(R.id.reorderHandle)
 
         val driveButton: ImageButton = view.findViewById(R.id.button_drive)
+    }
+
+    fun onItemMove(fromPosition: Int, toPosition: Int) {
+        Collections.swap(camDeviceList, fromPosition, toPosition)
+        notifyItemMoved(fromPosition, toPosition)
+    }
+
+    fun getItems(): List<CamDevice> {
+        return camDeviceList
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -726,10 +740,6 @@ class CamDeviceRVAdapter internal constructor(
         } else {
             holder.driveButton.visibility = View.VISIBLE
             mainActivity.tutorialTargetDriveIcon = holder.driveButton
-            Log.i(
-                "CDRA",
-                "tutorialTargetDriveIcon = ${mainActivity.tutorialTargetDriveIcon}"
-            )
         }
 
         handlePreviewView(holder, camDevice, true)
@@ -764,6 +774,52 @@ class CamDeviceRVAdapter internal constructor(
                 Constants.MODE_DRIVE
             )
         }
+
+        // Toggle visibilities of elements
+        when (camDevice.reorderHandleVisibility) {
+            true -> holder.reorderHandle.visibility = View.VISIBLE
+            false -> holder.reorderHandle.visibility = View.GONE
+            else -> {
+                // Nothing
+            }
+        }
+
+        when (camDevice.expandCollapseButtonVisibility) {
+            true -> holder.expandButton.visibility = View.VISIBLE
+            false -> holder.expandButton.visibility = View.GONE
+            else -> {
+                // Nothing
+            }
+        }
+
+        when (camDevice.previewVisibility) {
+            true -> {}
+            false -> handlePreviewView(
+                holder,
+                camDevice,
+                checkAll = false,
+                forceCollapse = true,
+                saveToDB = false
+            )
+            else -> {
+                // Nothing
+            }
+        }
+
+        when (camDevice.checkBoxVisibility) {
+            true -> holder.checkBox.isVisible = true
+            false -> holder.checkBox.isVisible = false
+            else -> {
+                // Nothing
+            }
+        }
+        when (camDevice.checkBoxIsChecked) {
+            true -> holder.checkBox.isChecked = true
+            false -> holder.checkBox.isChecked = false
+            else -> {
+                // Nothing
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -789,23 +845,11 @@ class CamDeviceRVAdapter internal constructor(
     }
 
     private fun MainActivity.camViewAddOnLongClickListener(position: Int) {
-        if (!isListViewCheckboxEnabled) {
-            for ((index, deviceView) in binding.deviceListRv.children.withIndex()) {
-                val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
-                checkbox.visibility = View.VISIBLE
-
-                if (index == position)
-                    checkbox.isChecked = true
-            }
-            toggleActionbarElements()
-        } else {
-            for ((index, deviceView) in binding.deviceListRv.children.withIndex()) {
-                val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
-                checkbox.visibility = View.GONE
-                if (index == position) checkbox.isChecked = false
-            }
-            toggleActionbarElements()
+        if (isReorderingEnabled) {
+            return
         }
+
+        toggleEditDeleteMode(!isListViewCheckboxEnabled, position)
     }
 
     private fun MainActivity.onPreviewClick(view: View, camDevice: CamDevice) {
@@ -830,23 +874,32 @@ class CamDeviceRVAdapter internal constructor(
         val numberOfCheckedItems = itemCheckedCountInDeviceList
 
         if (numberOfCheckedItems == 0) {
-            for (deviceView in binding.deviceListRv.children) {
-                val checkbox: CheckBox = deviceView.findViewById(R.id.checkBox)
-                checkbox.visibility = View.GONE
+            val adapter = binding.deviceListRv.adapter
+            if (adapter is CamDeviceRVAdapter) {
+                val items = adapter.getItems()
+
+                for ((index, item) in items.withIndex()) {
+                    item.checkBoxVisibility = false
+
+                    adapter.notifyItemChanged(index)
+                }
             }
-            toggleActionbarElements()
+            toggleEditDeleteMode(false)
         }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     internal fun handlePreviewView(
-        holder: MyViewHolder, camDevice: CamDevice, checkAll: Boolean,
-        forceCollapse: Boolean = false
+        holder: MyViewHolder,
+        camDevice: CamDevice,
+        checkAll: Boolean,
+        forceCollapse: Boolean = false,
+        saveToDB: Boolean = true
     ) {
         val label = camDevice.label
 
         var visibilityState = false
-        if (checkAll)
+        if (checkAll && saveToDB)
             visibilityState =
                 mainActivity.dataBaseHelper.prevStatFromLabel(label) != Constants.PREVIEW_OFF
         else {
@@ -947,16 +1000,18 @@ class CamDeviceRVAdapter internal constructor(
                 )
                     .show()
         } else {
-            val isUpdate =
-                mainActivity.dataBaseHelper.updatePrevStat(label, Constants.PREVIEW_OFF)
+            if (saveToDB) {
+                val isUpdate =
+                    mainActivity.dataBaseHelper.updatePrevStat(label, Constants.PREVIEW_OFF)
 
-            if (!isUpdate)
-                Toast.makeText(
-                    mainActivity,
-                    R.string.error_try_delete,
-                    Toast.LENGTH_LONG
-                )
-                    .show()
+                if (!isUpdate)
+                    Toast.makeText(
+                        mainActivity,
+                        R.string.error_try_delete,
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+            }
 
             (holder.previewView.parent as ConstraintLayout).setPadding(0, 0, 0, 0)
             holder.expandButton.setImageResource(R.drawable.expand_down)
