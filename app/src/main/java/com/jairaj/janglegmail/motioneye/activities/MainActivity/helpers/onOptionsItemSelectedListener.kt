@@ -808,6 +808,10 @@ private fun MainActivity.handleEditAction() {
             Toast.makeText(
                 this, "Select only one entry to edit", Toast.LENGTH_SHORT
             ).show()
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                binding.toolbar.performHapticFeedback(HapticFeedbackConstants.REJECT)
+            }
         } else gotoAddDeviceDetail(Constants.EDIT_MODE_EXIST_DEV)
     }
 }
