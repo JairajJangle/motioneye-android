@@ -678,6 +678,8 @@
 package com.jairaj.janglegmail.motioneye.views_and_adapters
 
 import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
@@ -849,20 +851,23 @@ class CamDeviceRVAdapter internal constructor(
             return
         }
 
-        val adapter = binding.deviceListRv.adapter
-        if (adapter is CamDeviceRVAdapter) {
-            val items = adapter.getItems()
+        val handler = Handler(Looper.getMainLooper())
+        handler.post {
+            val adapter = binding.deviceListRv.adapter
+            if (adapter is CamDeviceRVAdapter) {
+                val items = adapter.getItems()
 
-            for ((index, item) in items.withIndex()) {
-                item.checkBoxVisibility = !isListViewCheckboxEnabled
+                for ((index, item) in items.withIndex()) {
+                    item.checkBoxVisibility = !isListViewCheckboxEnabled
 
-                if (index == position)
-                    item.checkBoxIsChecked = !isListViewCheckboxEnabled
+                    if (index == position)
+                        item.checkBoxIsChecked = !isListViewCheckboxEnabled
 
-                adapter.notifyItemChanged(index)
+                    adapter.notifyItemChanged(index)
+                }
             }
+            toggleEditDeleteMode(!isListViewCheckboxEnabled)
         }
-        toggleEditDeleteMode(!isListViewCheckboxEnabled)
     }
 
     private fun MainActivity.onPreviewClick(view: View, camDevice: CamDevice) {

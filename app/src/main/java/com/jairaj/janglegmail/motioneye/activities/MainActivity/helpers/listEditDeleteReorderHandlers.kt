@@ -677,6 +677,8 @@
 
 package com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers
 
+import android.os.Handler
+import android.os.Looper
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.activities.MainActivity.MainActivity
 import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter
@@ -693,8 +695,7 @@ internal fun MainActivity.toggleEditDeleteMode(isEditDeleteEnabled: Boolean) {
 
     setKebabMenuState(!isEditDeleteEnabled)
 
-    buttonDelete?.isVisible = isEditDeleteEnabled
-    buttonEdit?.isVisible = isEditDeleteEnabled
+    setEditDeleteListOptionsState(isEditDeleteEnabled)
 
     updateToolbarAndFabVisibility(!isEditDeleteEnabled)
 
@@ -704,15 +705,18 @@ internal fun MainActivity.toggleEditDeleteMode(isEditDeleteEnabled: Boolean) {
     if (adapter is CamDeviceRVAdapter) {
         val items = adapter.getItems()
 
-        for ((index, item) in items.withIndex()) {
-            item.reorderHandleVisibility = false
-            item.expandCollapseButtonVisibility = true
+        // Run the code in a background thread using a Handler
+        Handler(Looper.getMainLooper()).post {
+            for ((index, item) in items.withIndex()) {
+                item.reorderHandleVisibility = false
+                item.expandCollapseButtonVisibility = true
 
-            adapter.notifyItemChanged(index)
+                adapter.notifyItemChanged(index)
+            }
+
+            setLongTouchToReorder(false)
         }
     }
-
-    setLongTouchToReorder(false)
 }
 
 /**
@@ -740,47 +744,53 @@ internal fun MainActivity.toggleListReorder(
     setKebabMenuState(!isReorderingEnabled)
 
     // List edit and delete buttons are kept invisible when reordering is toggled: on/off
-    buttonDelete?.isVisible = false
-    buttonEdit?.isVisible = false
+    setEditDeleteListOptionsState(false)
     // Also keep the list checkbox disabled when reordering is toggled on/off
     isListViewCheckboxEnabled = false
 
     // Toolbar title is invisible if reordering is enabled to make enough room for apply/cancel buttons
     updateToolbarAndFabVisibility(!isReorderingEnabled)
 
-    // TODO: Change from here
-    val adapter = binding.deviceListRv.adapter
-    if (adapter is CamDeviceRVAdapter) {
-        val items = adapter.getItems()
+    // Run the code in a background thread using a Handler
+    val handler = Handler(Looper.getMainLooper())
+    handler.post {
+        val adapter = binding.deviceListRv.adapter
+        if (adapter is CamDeviceRVAdapter) {
+            val items = adapter.getItems()
 
-        for ((index, item) in items.withIndex()) {
-            item.reorderHandleVisibility = isReorderingEnabled
+            for ((index, item) in items.withIndex()) {
+                item.reorderHandleVisibility = isReorderingEnabled
 
-            if (isReorderingEnabled) {
-                item.expandCollapseButtonVisibility = false
-                item.previewVisibility = false
+                if (isReorderingEnabled) {
+                    item.expandCollapseButtonVisibility = false
+                    item.previewVisibility = false
+                }
+
+                adapter.notifyItemChanged(index)
             }
-
-            adapter.notifyItemChanged(index)
         }
     }
 }
 
 internal fun MainActivity.resetActionbarState() {
-    val adapter = binding.deviceListRv.adapter
-    if (adapter is CamDeviceRVAdapter) {
-        val items = adapter.getItems()
+    // Run the code in a background thread using a Handler
+    val handler = Handler(Looper.getMainLooper())
+    handler.post {
+        val adapter = binding.deviceListRv.adapter
+        if (adapter is CamDeviceRVAdapter) {
+            val items = adapter.getItems()
 
-        for ((index, item) in items.withIndex()) {
-            item.checkBoxVisibility = false
-            item.checkBoxIsChecked = false
-            item.reorderHandleVisibility = false
+            for ((index, item) in items.withIndex()) {
+                item.checkBoxVisibility = false
+                item.checkBoxIsChecked = false
+                item.reorderHandleVisibility = false
 
-            adapter.notifyItemChanged(index)
+                adapter.notifyItemChanged(index)
+            }
         }
+        toggleEditDeleteMode(false)
+        toggleListReorder(false)
     }
-    toggleEditDeleteMode(false)
-    toggleListReorder(false)
 }
 
 private fun MainActivity.updateToolbarAndFabVisibility(isVisible: Boolean) {
@@ -791,6 +801,11 @@ private fun MainActivity.updateToolbarAndFabVisibility(isVisible: Boolean) {
         binding.toolbar.setTitle(R.string.motioneye_servers)
         binding.fab.show()
     }
+}
+
+private fun MainActivity.setEditDeleteListOptionsState(isVisible: Boolean) {
+    buttonDelete?.isVisible = isVisible
+    buttonEdit?.isVisible = isVisible
 }
 
 private fun MainActivity.setKebabMenuState(isVisible: Boolean) {
