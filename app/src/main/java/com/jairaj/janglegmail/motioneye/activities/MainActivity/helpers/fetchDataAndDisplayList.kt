@@ -694,11 +694,14 @@ import com.jairaj.janglegmail.motioneye.utils.Constants
 import com.jairaj.janglegmail.motioneye.views_and_adapters.CamDeviceRVAdapter
 import com.jairaj.janglegmail.motioneye.views_and_adapters.TextDrawable
 
-fun MainActivity.fetchDataAndDisplayList() {
+fun MainActivity.fetchDataAndDisplayList(isDelete: Boolean = false) {
     //Handler to handle data fetching from SQL in BG
     val handlerFetchData = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             fetchData()
+
+            if (isDelete)
+                binding.deviceListRv.adapter?.notifyDataSetChanged()
         }
     }
     val tFetchData: Thread = object : Thread() {
