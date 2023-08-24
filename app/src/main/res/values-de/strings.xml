@@ -8,7 +8,7 @@
     <string name="http_for_local_access">(Optional) Port (normalerweise 8765)</string>
     <string name="username_hint">Benutzername (Optional)</string>
     <string name="password_hint">Passwort (Optional)</string>
-    <string name="save_btn_txt">SPAREN</string>
+    <string name="save_btn_txt">SPEICHERN</string>
     <string name="credential_fact">Gut zu wissen: Die motionEye-App speichert Ihre Zugangsdaten in einem verschlüsselten Format auf Ihrem Telefon. \n\nNur Ihr Telefon kann auf die Anmeldeinformationen zugreifen und sie entschlüsseln.</string>
 
     <string name="title_activity_web_motion_eye">web_motion_eye</string>
