@@ -345,6 +345,9 @@
     <string name="no_camera_added">Aucune caméra ajoutée</string>
     <string name="privacy_policy_here">Politique de confidentialité ici</string>
     <string name="reorder_item_handle_image">Réorganiser l\'image de la poignée de l\'article</string>
+    <string name="permission_denied">Permission refusée</string>
+    <string name="permission_denied_message">Une autorisation de stockage est requise pour télécharger le fichier. \n\nVeuillez réessayer de télécharger le fichier après avoir accordé l\'autorisation.</string>
+    <string name="go_to_settings">Aller aux paramètres</string>
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">

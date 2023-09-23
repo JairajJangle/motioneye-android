@@ -345,6 +345,9 @@
     <string name="no_camera_added">No Camera Added</string>
     <string name="privacy_policy_here">Privacy Policy here</string>
     <string name="reorder_item_handle_image">Reorder item handle image</string>
+    <string name="permission_denied">Permission Denied</string>
+    <string name="permission_denied_message">Storage permission is required to download the file. \n\nPlease retry downloading the file after granting the permission.</string>
+    <string name="go_to_settings">Go to Settings</string>
 
     <!--Elements at even position are questions and at odd positions are answers-->
     <string-array name="QandAs">

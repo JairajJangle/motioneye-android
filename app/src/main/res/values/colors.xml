@@ -22,5 +22,7 @@
     <color name="listview_bg">#212121</color>
     <color name="listview_answer_bg">#313131</color>
 
+    <color name="error">#FF3333</color>
+
     <color name="button_bg">#383838</color>
 </resources>
