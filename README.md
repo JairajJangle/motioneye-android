@@ -3,7 +3,7 @@
 
 
 <p align="center">
-  <a href="https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem">
+  <a href="https://github.com/JairajJangle/motioneye-android">
     <img src="https://lh3.googleusercontent.com/oP-cPUAKRhaikPnu6FI3EISNcypEbyxZej3P9xNHvJSzk1F00ArtnYbotDvpEGDCJzJB=s180-rw" alt="Logo" width="160">
   </a>
 
@@ -15,9 +15,9 @@
     <a href="https://github.com/motioneye-project/motioneye/wiki/Installation"><strong>Setup motionEye server »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/issues">Report Bug</a>
+    <a href="https://github.com/JairajJangle/motioneye-android/issues">Report Bug</a>
     ·
-    <a href="https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/issues">Request Feature</a>
+    <a href="https://github.com/JairajJangle/motioneye-android/issues">Request Feature</a>
   </p>
 
 
@@ -29,7 +29,7 @@
   <a href="https://f-droid.org/de/packages/com.jairaj.janglegmail.motioneye">
     <img src=".github/f_droid_button.png" alt="F-Droid Link" width="200">
   </a>
-  <a href="https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/releases">
+  <a href="https://github.com/JairajJangle/motioneye-android/releases">
     <img src=".github/download_apk_button.png" alt="Download APK Link" width="200">
   </a>
 </p>
@@ -67,7 +67,7 @@ Here are some user requested features that are yet to be introduced.
 ## License
 
 Distributed under
-the [GNU GPL v3 License](https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE).
+the [GNU GPL v3 License](https://github.com/JairajJangle/motioneye-android/blob/master/LICENSE).
 
 ## Support the project development
 
@@ -96,23 +96,23 @@ without the motionEye-project*
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/JairajJangle/motionEye_app_HomeSurveillanceSystem?style=flat-square
+[contributors-shield]: https://img.shields.io/github/contributors/JairajJangle/motioneye-android?style=flat-square
 
-[contributors-url]: https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/graphs/contributors
+[contributors-url]: https://github.com/JairajJangle/motioneye-android/graphs/contributors
 
-[forks-shield]: https://img.shields.io/github/forks/JairajJangle/motionEye_app_HomeSurveillanceSystem.svg?style=flat-square
+[forks-shield]: https://img.shields.io/github/forks/JairajJangle/motioneye-android.svg?style=flat-square
 
-[forks-url]: https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/network/members
+[forks-url]: https://github.com/JairajJangle/motioneye-android/network/members
 
-[stars-shield]: https://img.shields.io/github/stars/JairajJangle/motionEye_app_HomeSurveillanceSystem.svg?style=flat-square
+[stars-shield]: https://img.shields.io/github/stars/JairajJangle/motioneye-android.svg?style=flat-square
 
-[stars-url]: https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/stargazers
+[stars-url]: https://github.com/JairajJangle/motioneye-android/stargazers
 
-[issues-shield]: https://img.shields.io/github/issues/JairajJangle/motionEye_app_HomeSurveillanceSystem.svg?style=flat-square
-[issues-url]: https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/issues
+[issues-shield]: https://img.shields.io/github/issues/JairajJangle/motioneye-android.svg?style=flat-square
+[issues-url]: https://github.com/JairajJangle/motioneye-android/issues
 
-[license-shield]: https://img.shields.io/github/license/JairajJangle/motionEye_app_HomeSurveillanceSystem.svg?style=flat-square
+[license-shield]: https://img.shields.io/github/license/JairajJangle/motioneye-android.svg?style=flat-square
 
-[license-url]: https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE
+[license-url]: https://github.com/JairajJangle/motioneye-android/blob/master/LICENSE
 
 [play-store-url]: https://play.google.com/store/apps/details?id=com.jairaj.janglegmail.motioneye

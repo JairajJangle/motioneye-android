@@ -747,7 +747,7 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
             }
             binding.buttonBeContributor -> {
                 val motionEyeSteps =
-                    "https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem"
+                    "https://github.com/JairajJangle/motioneye-android"
                 openInChrome(motionEyeSteps, this@AboutActivity)
             }
         }
