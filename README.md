@@ -24,7 +24,7 @@
 <p align="center">
   <!-- Google Play Store link -->
   <a href="https://play.google.com/store/apps/details?id=com.jairaj.janglegmail.motioneye">
-    <img src="app/src/main/res/drawable/google_play_badge.png" alt="Google Play Store Link" width="200">
+    <img src=".github/google-play-badge.png" alt="Google Play Store Link" width="200">
   </a>
   <a href="https://f-droid.org/de/packages/com.jairaj.janglegmail.motioneye">
     <img src=".github/f_droid_button.png" alt="F-Droid Link" width="200">
@@ -33,6 +33,7 @@
     <img src=".github/download_apk_button.png" alt="Download APK Link" width="200">
   </a>
 </p>
+
 
 
 ## Gallery
