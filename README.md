@@ -1,4 +1,4 @@
-![Google Play Downloads](https://img.shields.io/badge/Google%20Play-100k%2B%20downloads-brightgreen) ![Google Play Rating](https://img.shields.io/badge/Google%20Play-4.9%20stars-blue) [![Contributors][contributors-shield]][contributors-url] [![Forks][forks-shield]][forks-url] [![Stargazers][stars-shield]][stars-url] [![Issues][issues-shield]][issues-url] [![MIT License][license-shield]][license-url]
+[![Google Play Downloads](https://img.shields.io/badge/Google%20Play-100k%2B%20downloads-brightgreen)][play-store-url] [![Google Play Rating](https://img.shields.io/badge/Google%20Play-4.9%20stars-blue)][play-store-url] [![Contributors][contributors-shield]][contributors-url] [![Forks][forks-shield]][forks-url] [![Stargazers][stars-shield]][stars-url] [![Issues][issues-shield]][issues-url] [![MIT License][license-shield]][license-url]
 
 
 
@@ -113,4 +113,6 @@ without the motionEye-project*
 
 [license-shield]: https://img.shields.io/github/license/JairajJangle/motionEye_app_HomeSurveillanceSystem.svg?style=flat-square
 
-[license-url]: https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE.txt
+[license-url]: https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/blob/master/LICENSE
+
+[play-store-url]: https://play.google.com/store/apps/details?id=com.jairaj.janglegmail.motioneye
