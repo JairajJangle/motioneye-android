@@ -15,8 +15,6 @@
     <a href="https://github.com/motioneye-project/motioneye/wiki/Installation"><strong>Setup motionEye server »</strong></a>
     <br />
     <br />
-    <a href="https://play.google.com/store/apps/details?id=com.jairaj.janglegmail.motioneye">Get it on Google Play Store</a>
-    ·
     <a href="https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/issues">Report Bug</a>
     ·
     <a href="https://github.com/JairajJangle/motionEye_app_HomeSurveillanceSystem/issues">Request Feature</a>
