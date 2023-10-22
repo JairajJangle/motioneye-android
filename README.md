@@ -26,7 +26,7 @@
   <a href="https://play.google.com/store/apps/details?id=com.jairaj.janglegmail.motioneye">
     <img src=".github/google-play-badge.png" alt="Google Play Store Link" width="200">
   </a>
-  <a href="https://f-droid.org/de/packages/com.jairaj.janglegmail.motioneye">
+  <a href="https://f-droid.org/en/packages/com.jairaj.janglegmail.motioneye">
     <img src=".github/f_droid_button.png" alt="F-Droid Link" width="200">
   </a>
   <a href="https://github.com/JairajJangle/motioneye-android/releases">
