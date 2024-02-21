@@ -690,6 +690,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
@@ -708,7 +709,8 @@ import com.kobakei.ratethisapp.RateThisApp
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal
-
+import java.net.InetAddress
+import java.util.regex.Pattern
 
 object AppUtils {
     private val logTAG = AppUtils::class.java.name
@@ -1023,5 +1025,43 @@ object AppUtils {
         Handler(Looper.getMainLooper()).postDelayed({
             inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
         }, 1000)
+    }
+
+    /**
+     * Checks if the provided URL is valid. This function supports both standard URLs
+     * (including those with IPv4 addresses) and URLs specifically containing IPv6 addresses.
+     *
+     * @param urlInputString The URL string to be validated.
+     * @param allowEmpty Specifies whether an empty string should be considered as a valid URL.
+     * @return True if the URL is valid or allowed to be empty, false otherwise.
+     */
+    fun isValidURL(urlInputString: String, allowEmpty: Boolean = false): Boolean {
+        // First, check if the URL matches the standard URL pattern or if it's allowed to be empty.
+        // The Patterns.WEB_URL.matcher provides a broad validation for URLs, including those with IPv4 addresses.
+        val isValidStandardURL = Patterns.WEB_URL.matcher(urlInputString)
+            .matches() || (allowEmpty && urlInputString.isEmpty())
+
+        // Prepare a pattern to find IPv6 addresses within URLs. IPv6 addresses in URLs are enclosed in square brackets.
+        val ipv6URLPattern = Pattern.compile("\\[([0-9a-fA-F:]+)\\]")
+        val matcher = ipv6URLPattern.matcher(urlInputString)
+        var isValidIPv6URL = false
+
+        // Attempt to find an IPv6 address within the URL using the prepared regex pattern.
+        if (matcher.find()) {
+            // If an IPv6 address is found, extract it from the matcher.
+            val ipv6Address = matcher.group(1)
+
+            // Validate the extracted IPv6 address by trying to create an InetAddress object.
+            // InetAddress.getByName will throw an UnknownHostException if the address is invalid.
+            isValidIPv6URL = try {
+                InetAddress.getByName(ipv6Address) is InetAddress
+                true // The presence of an InetAddress object means the IPv6 address is valid.
+            } catch (e: Exception) {
+                false // Catch any exceptions, indicating the IPv6 address is not valid.
+            }
+        }
+
+        // The URL is considered valid if it either matches the standard URL pattern or contains a valid IPv6 address.
+        return isValidStandardURL || isValidIPv6URL
     }
 }

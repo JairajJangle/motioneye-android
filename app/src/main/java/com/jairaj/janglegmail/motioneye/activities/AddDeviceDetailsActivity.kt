@@ -680,7 +680,6 @@ package com.jairaj.janglegmail.motioneye.activities
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Patterns
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -690,6 +689,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.activities.MainActivity.MainActivity
 import com.jairaj.janglegmail.motioneye.databinding.ActivityAddDeviceDetailBinding
+import com.jairaj.janglegmail.motioneye.utils.AppUtils.isValidURL
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.showKeyboard
 import com.jairaj.janglegmail.motioneye.utils.Constants
 import com.jairaj.janglegmail.motioneye.utils.Constants.DATA_IS_DRIVE_ADDED
@@ -793,9 +793,8 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         val passwordInputString: String = binding.passwordInput.text.toString()
         val sortIndex = databaseHelper.sortIndexFromLabel(previousLabel)
 
-        val isValidDriveURL = Patterns.WEB_URL.matcher(driveLinkInputString)
-            .matches() || driveLinkInputString.isEmpty()
-        val isValidCameraServerURL = Patterns.WEB_URL.matcher(urlInputString).matches()
+        val isValidDriveURL = isValidURL(driveLinkInputString, true)
+        val isValidCameraServerURL = isValidURL(urlInputString)
         val isAllValidEntries =
             labelInputString.isNotBlank()
                     && isValidCameraServerURL
