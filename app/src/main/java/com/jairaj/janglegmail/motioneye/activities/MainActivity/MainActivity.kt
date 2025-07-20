@@ -693,13 +693,17 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.activities.AddDeviceDetailsActivity
-import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.*
+import com.jairaj.janglegmail.motioneye.activities.BaseActivity
+import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.RecyclerViewItemTouchHelper
+import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.checkAndAutoOpenIfOnlyOneCam
+import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.fetchDataAndDisplayList
+import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.resetActionbarState
+import com.jairaj.janglegmail.motioneye.activities.MainActivity.helpers.toggleListReorder
 import com.jairaj.janglegmail.motioneye.activities.MainActivity.utils.itemCheckedCountInDeviceList
 import com.jairaj.janglegmail.motioneye.activities.WebMotionEyeActivity
 import com.jairaj.janglegmail.motioneye.databinding.ActivityMainBinding
@@ -718,7 +722,7 @@ import com.jairaj.janglegmail.motioneye.utils.Constants.LABEL
 import com.jairaj.janglegmail.motioneye.utils.Constants.ServerMode
 import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private lateinit var instance: MainActivity
     internal val logTAG = MainActivity::class.java.name
     internal lateinit var binding: ActivityMainBinding
@@ -750,6 +754,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupEdgeToEdgeAppBar(binding.appBarLayout2)
 
         instance = this
 

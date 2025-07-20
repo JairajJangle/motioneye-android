@@ -679,12 +679,11 @@ package com.jairaj.janglegmail.motioneye.activities
 import android.os.Bundle
 import android.text.Html
 import android.text.method.ScrollingMovementMethod
-import androidx.appcompat.app.AppCompatActivity
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityLegalDocShowBinding
 import com.jairaj.janglegmail.motioneye.utils.Constants
 
-class LegalDocShowActivity : AppCompatActivity() {
+class LegalDocShowActivity : BaseActivity() {
     private lateinit var binding: ActivityLegalDocShowBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -692,6 +691,8 @@ class LegalDocShowActivity : AppCompatActivity() {
         binding = ActivityLegalDocShowBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        setupEdgeToEdgeAppBar(binding.appBarLayoutLegalDoc)
 
         val bundle = intent.extras
         var htmlLegalDoc = ""

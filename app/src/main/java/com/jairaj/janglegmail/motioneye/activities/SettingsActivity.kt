@@ -681,7 +681,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
@@ -690,11 +691,28 @@ import com.jairaj.janglegmail.motioneye.utils.AppUtils.askToRate
 import com.jairaj.janglegmail.motioneye.utils.AppUtils.sendFeedback
 import com.jairaj.janglegmail.motioneye.utils.Constants
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.decorView.setBackgroundColor(
+            ContextCompat.getColor(
+                this,
+                R.color.motioneye_dark_grey
+            )
+        )
+
+        // Handle edge-to-edge insets for the root view
+        setupEdgeToEdgeAppBar(findViewById(android.R.id.content))
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setBackgroundDrawable(
+            ContextCompat.getColor(
+                this,
+                R.color.motioneye_dark_grey
+            ).toDrawable()
+        )
 
         // load settings fragment
         supportFragmentManager.beginTransaction()

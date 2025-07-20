@@ -686,6 +686,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
@@ -773,12 +774,13 @@ class WebMotionEyeActivity : AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         super.onCreate(savedInstanceState)
         binding = ActivityWebMotionEyeBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
+        
         databaseHelper = DataBaseHelper(this)
 
         val bundle = intent.extras

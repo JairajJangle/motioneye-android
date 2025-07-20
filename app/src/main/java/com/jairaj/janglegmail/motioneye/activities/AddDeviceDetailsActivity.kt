@@ -685,7 +685,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.activities.MainActivity.MainActivity
 import com.jairaj.janglegmail.motioneye.databinding.ActivityAddDeviceDetailBinding
@@ -701,7 +700,7 @@ import com.jairaj.janglegmail.motioneye.utils.DataBaseHelper
 
 //TODO: Check RTSP support
 
-class AddDeviceDetailsActivity : AppCompatActivity() {
+class AddDeviceDetailsActivity : BaseActivity() {
     private lateinit var binding: ActivityAddDeviceDetailBinding
 
     private lateinit var databaseHelper: DataBaseHelper
@@ -716,6 +715,8 @@ class AddDeviceDetailsActivity : AppCompatActivity() {
         binding = ActivityAddDeviceDetailBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        setupEdgeToEdgeAppBar(binding.appBarLayout)
 
         databaseHelper = DataBaseHelper(this)
 

@@ -9,7 +9,6 @@
         android:animateLayoutChanges="true"
         android:background="@color/motioneye_grey"
         android:contentDescription="@string/constraintlayout_for_list_ad_and_etc"
-        android:fitsSystemWindows="true"
         android:labelFor="@+id/device_list"
         tools:context=".activities.MainActivity.MainActivity"
         tools:ignore="ContentDescription">

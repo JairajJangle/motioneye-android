@@ -817,7 +817,7 @@ object AppUtils {
             context.packageName, 0
         )
 
-        return info.versionName
+        return info.versionName ?: "N/A"
     }
 
     // return true if for the first time drive/cloud storage link is added

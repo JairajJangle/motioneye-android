@@ -677,14 +677,13 @@
 package com.jairaj.janglegmail.motioneye.activities
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jairaj.janglegmail.motioneye.R
 import com.jairaj.janglegmail.motioneye.databinding.ActivityHelpFaqBinding
 import com.jairaj.janglegmail.motioneye.dataclass.QandA
 import com.jairaj.janglegmail.motioneye.views_and_adapters.QAndARVAdapter
 
-class HelpFAQActivity : AppCompatActivity() {
+class HelpFAQActivity : BaseActivity() {
     private lateinit var binding: ActivityHelpFaqBinding
 
     private val qAndAList: MutableList<QandA> = ArrayList()
@@ -693,6 +692,8 @@ class HelpFAQActivity : AppCompatActivity() {
         binding = ActivityHelpFaqBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        setupEdgeToEdgeAppBar(binding.appBarLayout)
 
         setSupportActionBar(binding.toolbar)
 
