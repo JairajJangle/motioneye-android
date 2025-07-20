@@ -24,6 +24,14 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    kotlin {
+        jvmToolchain(17)
+    }
+
     applicationVariants.configureEach { variant ->
         variant.resValue "string", "versionName", variant.versionName
     }
@@ -68,7 +76,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     implementation 'uk.co.samuelwall:material-tap-target-prompt:3.3.2'
-    implementation 'io.github.kobakei:ratethisapp:1.2.0'
 
     //implementation 'com.google.android.gms:play-services-ads:15.0.1'
     //implementation 'com.google.firebase:firebase-ads:15.0.1'

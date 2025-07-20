@@ -705,7 +705,6 @@ import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_DRIVE_ADDED_BEFORE
 import com.jairaj.janglegmail.motioneye.utils.Constants.KEY_IS_APP_OPENED_BEFORE
 import com.jairaj.janglegmail.motioneye.utils.Constants.RATE_CRITERIA_INSTALL_DAYS
 import com.jairaj.janglegmail.motioneye.utils.Constants.RATE_CRITERIA_LAUNCH_TIMES
-import com.kobakei.ratethisapp.RateThisApp
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal
