@@ -119,6 +119,7 @@
 
         <Preference
             android:clickable="false"
+            android:selectable="false"
             android:layout="@layout/preference_bottom_margin" />
 
     </PreferenceCategory>
