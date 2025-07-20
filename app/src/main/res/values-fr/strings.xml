@@ -382,4 +382,11 @@
         <item>Q: Je suis confronté à un problème non mentionné</item>
         <item>R: N\'hésitez pas à nous contacter sur notre courrier électronique dans la section "À propos" avant de noter l\'application, nous corrigerons le problème dès que possible</item>
     </string-array>
+
+    <!-- Rate Dialog Strings -->
+    <string name="rate_dialog_title">Évaluer %1$s</string>
+    <string name="rate_dialog_message">Si vous appréciez %1$s, pourriez-vous prendre un moment pour l\'évaluer ? Cela ne prendra pas plus d\'une minute. Merci pour votre soutien !</string>
+    <string name="rate_dialog_rate_now">ÉVALUER MAINTENANT</string>
+    <string name="rate_dialog_later">PLUS TARD</string>
+    <string name="rate_dialog_no_thanks">NON MERCI</string>
 </resources>

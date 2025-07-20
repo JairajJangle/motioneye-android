@@ -6,7 +6,7 @@
         android:id="@+id/webview_FL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#0099cc"
+        android:background="@color/motioneye_dark_grey"
         android:fitsSystemWindows="true"
         tools:context=".activities.WebMotionEyeActivity">
 

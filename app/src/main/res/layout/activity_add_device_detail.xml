@@ -8,7 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/motioneye_grey"
-        android:fitsSystemWindows="true"
         tools:context=".activities.AddDeviceDetailsActivity">
 
         <com.google.android.material.appbar.AppBarLayout

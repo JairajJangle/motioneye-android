@@ -375,4 +375,11 @@
         <item>F: I am facing an unmentioned problem</item>
         <item>A: Please consider contacting us on our feedback mail in the About section before rating the app, we will fix the issue as soon as possible</item>
     </string-array>
+
+    <!-- Rate Dialog Strings -->
+    <string name="rate_dialog_title">%1$s bewerten</string>
+    <string name="rate_dialog_message">Wenn Ihnen %1$s gefällt, würden Sie sich einen Moment Zeit nehmen, um es zu bewerten? Es dauert nicht länger als eine Minute. Vielen Dank für Ihre Unterstützung!</string>
+    <string name="rate_dialog_rate_now">JETZT BEWERTEN</string>
+    <string name="rate_dialog_later">SPÄTER</string>
+    <string name="rate_dialog_no_thanks">NEIN DANKE</string>
 </resources>
